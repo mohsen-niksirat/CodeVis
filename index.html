@@ -40,7 +40,10 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 .step-indicator{font-size:.8rem;color:#8b949e;margin-left:auto}
 [dir="rtl"] .step-indicator{margin-left:0;margin-right:auto}
 .calendar{width:100%;max-width:900px;padding:0 20px 40px}
-.calendar h3{font-size:1rem;margin-bottom:12px;color:var(--accent2)}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-header h3{font-size:1rem;color:var(--accent2);margin:0}
+.cal-nav{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:4px 12px;border-radius:6px;cursor:pointer;font-size:.85rem}
+.cal-nav:hover{opacity:.7}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-day{aspect-ratio:1;border-radius:4px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#484f58}
 .cal-day.done{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -83,7 +86,11 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 </div>
 </div>
 <div class="calendar">
+<div class="cal-header">
+<button class="cal-nav" id="calPrev">&lt;</button>
 <h3 id="progressTitle"></h3>
+<button class="cal-nav" id="calNext">&gt;</button>
+</div>
 <div class="cal-grid" id="calGrid"></div>
 </div>
 <canvas id="shareCanvas" width="1200" height="675"></canvas>
@@ -257,19 +264,25 @@ let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
 canvas.width=800;canvas.height=600;
 const doneDays=JSON.parse(localStorage.getItem("cv_done")||"[]");
-const today=new Date().toISOString().split("T")[0];
+function getLocalToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+const today=getLocalToday();
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
 function getStreak(){let s=0,d=new Date();while(true){const ds=d.toISOString().split("T")[0];if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
 function updateStreak(){document.getElementById("streak").textContent=getStreak()+" "+t("streak")}
 function buildCalendar(){
 const grid=document.getElementById("calGrid");grid.innerHTML="";
-const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),1);
+const start=new Date(calYear,calMonth,1);
+const monthNames={en:["January","February","March","April","May","June","July","August","September","October","November","December"],fa:["ژانویه","فوریه","مارس","آوریل","مه","ژوئن","ژوئیه","اوت","سپتامبر","اکتبر","نوامبر","دسامبر"]};
+document.getElementById("progressTitle").textContent=(t("progress")+" - "+(monthNames[lang]||monthNames.en)[calMonth]+" "+calYear);
 for(let i=0;i<(start.getDay()+6)%7;i++){const d=document.createElement("div");d.className="cal-day";grid.appendChild(d)}
-for(let i=1;i<=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();i++){
-const d=document.createElement("div"),ds=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
+for(let i=1;i<=new Date(calYear,calMonth+1,0).getDate();i++){
+const d=document.createElement("div"),ds=`${calYear}-${String(calMonth+1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
 d.className="cal-day"+(doneDays.includes(ds)?" done":"")+(ds===today?" today":"");
 d.textContent=i;grid.appendChild(d);
 }}
+document.getElementById("calPrev").onclick=()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--}buildCalendar()};
+document.getElementById("calNext").onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}buildCalendar()};
 function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays));updateStreak();buildCalendar()}}
 
 function loadConcept(c){
