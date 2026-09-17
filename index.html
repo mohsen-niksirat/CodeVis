@@ -157,7 +157,87 @@ steps:[{type:"build",tag:"html"},{type:"build",tag:"body"},{type:"build",tag:"di
 {id:"closure",title:{en:"Closure",fa:"بسته (کلوژر)"},category:"pattern",level:"advanced",
 desc:{en:"A closure is a function that retains access to its lexical scope even when executed outside that scope.",fa:"بسته تابعی است که حتی وقتی خارج از اسکوپ اصلی اجرا شود، به اسکوپ لغوی خود دسترسی دارد."},
 code:"function counter() {\n  let count = 0;\n  return {\n    inc: () => ++count,\n    get: () => count\n  };\n}\nconst c = counter();\nc.inc(); c.inc(); c.get(); // 2",
-steps:[{type:"create",scope:"outer"},{type:"capture",var:"count"},{type:"call",fn:"inc"},{type:"call",fn:"inc"},{type:"call",fn:"get"}]}
+steps:[{type:"create",scope:"outer"},{type:"capture",var:"count"},{type:"call",fn:"inc"},{type:"call",fn:"inc"},{type:"call",fn:"get"}]},
+{id:"bintree",title:{en:"Binary Tree",fa:"درخت دودویی"},category:"ds",level:"intermediate",
+desc:{en:"A tree data structure where each node has at most two children: left and right.",fa:"ساختمان داده درختی که هر گره حداکثر دو فرزند دارد: چپ و راست."},
+code:"class TreeNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n  }\n}\nconst root = new TreeNode(1);\nroot.left = new TreeNode(2);\nroot.right = new TreeNode(3);",
+steps:[{type:"root",val:1},{type:"left",val:2},{type:"right",val:3},{type:"traverse"},{type:"done"}]},
+{id:"bfs",title:{en:"Graph BFS",fa:"پیمایش سطحی گراف"},category:"algo",level:"intermediate",
+desc:{en:"Breadth-First Search explores all neighbors at the current depth before moving deeper.",fa:"جستجوی سطحی تمام همسایه‌ها را در عمق فعلی قبل از رفتن به عمق بیشتر بررسی می‌کند."},
+code:"function bfs(graph, start) {\n  const visited = new Set();\n  const queue = [start];\n  while (queue.length) {\n    const node = queue.shift();\n    if (!visited.has(node)) {\n      visited.add(node);\n      for (const n of graph[node]) queue.push(n);\n    }\n  }\n}",
+steps:[{type:"visit",val:"A"},{type:"enqueue",val:"B,C"},{type:"visit",val:"B"},{type:"visit",val:"C"},{type:"done"}]},
+{id:"dfs",title:{en:"Graph DFS",fa:"پیمایش عمقی گراف"},category:"algo",level:"intermediate",
+desc:{en:"Depth-First Search goes as deep as possible along each branch before backtracking.",fa:"جستجوی عمقی تا حد ممکن در هر شاخه پیش می‌رود قبل از بازگشت."},
+code:"function dfs(graph, node, visited = new Set()) {\n  if (visited.has(node)) return;\n  visited.add(node);\n  for (const n of graph[node]) dfs(graph, n, visited);\n}",
+steps:[{type:"visit",val:"A"},{type:"go",val:"B"},{type:"go",val:"D"},{type:"backtrack"},{type:"go",val:"C"}]},
+{id:"mergesort",title:{en:"Merge Sort",fa:"مرتب‌سازی ادغامی"},category:"algo",level:"intermediate",
+desc:{en:"Divides the array in half, recursively sorts each half, then merges them back together.",fa:"آرایه را نصف می‌کند، هر نیمه را مرتب و سپس ادغام می‌کند."},
+code:"function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}",
+steps:[{type:"split",val:"[5,3,8,1]"},{type:"split",val:"[5,3][8,1]"},{type:"sort",val:"[3,5][1,8]"},{type:"merge",val:"[1,3,5,8]"},{type:"done"}]},
+{id:"quicksort",title:{en:"Quick Sort",fa:"مرتب‌سازی سریع"},category:"algo",level:"advanced",
+desc:{en:"Selects a pivot element and partitions the array so elements less than pivot go left, greater go right.",fa:"یک محور انتخاب و آرایه را طوری تقسیم می‌کند که کوچکترها چپ و بزرگترها راست بروند."},
+code:"function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = arr.slice(1).filter(x => x < pivot);\n  const right = arr.slice(1).filter(x => x >= pivot);\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}",
+steps:[{type:"pivot",val:5},{type:"partition"},{type:"left",val:"[3,1]"},{type:"right",val:"[8,7]"},{type:"done"}]},
+{id:"singleton",title:{en:"Singleton Pattern",fa:"الگوی تک‌نمونه"},category:"pattern",level:"beginner",
+desc:{en:"Ensures a class has only one instance and provides a global point of access to it.",fa:"تضمین می‌کند کلاس فقط یک نمونه داشته باشد و دسترسی سراسری به آن فراهم شود."},
+code:"class Singleton {\n  static #instance = null;\n  static getInstance() {\n    if (!Singleton.#instance)\n      Singleton.#instance = new Singleton();\n    return Singleton.#instance;\n  }\n}",
+steps:[{type:"call1"},{type:"create"},{type:"call2"},{type:"same"},{type:"done"}]},
+{id:"factory",title:{en:"Factory Pattern",fa:"الگوی کارخانه"},category:"pattern",level:"intermediate",
+desc:{en:"Provides an interface for creating objects without specifying their exact class.",fa:"رابطی برای ساخت اشیاء بدون مشخص کردن کلاس دقیق آن‌ها فراهم می‌کند."},
+code:"function createAnimal(type) {\n  const animals = { dog: Dog, cat: Cat };\n  return new animals[type]();\n}\nconst a = createAnimal('dog');\na.speak();",
+steps:[{type:"input",val:"dog"},{type:"lookup"},{type:"create"},{type:"return"},{type:"use"}]},
+{id:"promise",title:{en:"Promise / Async",fa:"پرامیس / ناهمگام"},category:"web",level:"intermediate",
+desc:{en:"A Promise represents a value that may be available now, later, or never. Used for async operations.",fa:"پرامیس مقداری را نشان می‌دهد که الان، بعداً یا هیچوقت موجود است. برای عملیات ناهمگام استفاده می‌شود."},
+code:"fetch('/api/data')\n  .then(res => res.json())\n  .then(data => console.log(data))\n  .catch(err => console.error(err));",
+steps:[{type:"pending"},{type:"fetch"},{type:"resolve"},{type:"then"},{type:"done"}]},
+{id:"eventloop",title:{en:"Event Loop",fa:"حلقه رویداد"},category:"web",level:"advanced",
+desc:{en:"The event loop continuously checks the call stack and task queue, pushing tasks to execute.",fa:"حلقه رویداد به طور مداوم پشته فراخوانی و صف وظایف را بررسی و وظایف را اجرا می‌کند."},
+code:"console.log('1');\nsetTimeout(() => console.log('2'), 0);\nconsole.log('3');\n// Output: 1, 3, 2",
+steps:[{type:"sync",val:"1"},{type:"queue",val:"setTimeout"},{type:"sync",val:"3"},{type:"dequeue"},{type:"exec",val:"2"}]},
+{id:"http",title:{en:"HTTP Request",fa:"درخواست HTTP"},category:"web",level:"beginner",
+desc:{en:"Client sends an HTTP request to a server, which processes it and returns a response.",fa:"کلاینت درخواست HTTP به سرور می‌فرستد، سرور پردازش و پاسخ برمی‌گرداند."},
+code:"const res = await fetch('https://api.example.com/users', {\n  method: 'GET',\n  headers: { 'Content-Type': 'application/json' }\n});\nconst data = await res.json();",
+steps:[{type:"client"},{type:"request"},{type:"server"},{type:"response"},{type:"render"}]},
+{id:"array",title:{en:"Array",fa:"آرایه"},category:"ds",level:"beginner",
+desc:{en:"An ordered collection of elements accessed by numeric index. O(1) random access.",fa:"مجموعه مرتبی از عناصر که با اندیس عددی دسترسی می‌شوند. دسترسی تصادفی O(1)."},
+code:"const arr = [10, 20, 30, 40];\narr[0]; // 10\narr.push(50);\narr.splice(1, 1);",
+steps:[{type:"init"},{type:"access",idx:2},{type:"push",val:50},{type:"splice",idx:1},{type:"done"}]},
+{id:"deque",title:{en:"Deque",fa:"صف دوطرفه"},category:"ds",level:"intermediate",
+desc:{en:"A double-ended queue allowing insertion and deletion at both front and back.",fa:"صف دوطرفه که امکان درج و حذف از ابتدا و انتها را فراهم می‌کند."},
+code:"class Deque {\n  constructor() { this.items = {}; this.head = 0; this.tail = 0; }\n  addFront(val) { this.items[--this.head] = val; }\n  addBack(val) { this.items[this.tail++] = val; }\n  removeFront() { return this.items[this.head++]; }\n  removeBack() { return this.items[--this.tail]; }\n}",
+steps:[{type:"addBack",val:"A"},{type:"addBack",val:"B"},{type:"addFront",val:"Z"},{type:"removeFront"},{type:"removeBack"}]},
+{id:"heap",title:{en:"Heap",fa:"هیپ"},category:"ds",level:"advanced",
+desc:{en:"A complete binary tree where parent is always smaller (min-heap) or larger (max-heap) than children.",fa:"درخت دودویی کامل که والد همیشه کوچکتر (مین-هیپ) یا بزرگتر (مکس-هیپ) از فرزندان است."},
+code:"class MinHeap {\n  constructor() { this.data = []; }\n  insert(val) {\n    this.data.push(val);\n    this.bubbleUp(this.data.length - 1);\n  }\n  extractMin() {\n    const min = this.data[0];\n    const last = this.data.pop();\n    if (this.data.length) { this.data[0] = last; this.sinkDown(0); }\n    return min;\n  }\n}",
+steps:[{type:"insert",val:5},{type:"insert",val:3},{type:"insert",val:7},{type:"extract"},{type:"rebalance"}]},
+{id:"trie",title:{en:"Trie",fa:"درخت پیشوندی"},category:"ds",level:"advanced",
+desc:{en:"A tree-like data structure for efficient prefix searching, commonly used for autocomplete.",fa:"ساختمان داده شبه‌درختی برای جستجوی کارآمد پیشوند، معمولاً برای تکمیل خودکار استفاده می‌شود."},
+code:"class TrieNode {\n  constructor() { this.children = {}; this.isEnd = false; }\n}\nclass Trie {\n  insert(word) {\n    let node = this.root;\n    for (const ch of word) {\n      if (!node.children[ch]) node.children[ch] = new TrieNode();\n      node = node.children[ch];\n    }\n    node.isEnd = true;\n  }\n}",
+steps:[{type:"insert",val:"cat"},{type:"insert",val:"car"},{type:"insert",val:"card"},{type:"search",val:"car"},{type:"found"}]},
+{id:"insertionsort",title:{en:"Insertion Sort",fa:"مرتب‌سازی درجی"},category:"algo",level:"beginner",
+desc:{en:"Builds the sorted array one element at a time by inserting each element into its correct position.",fa:"آرایه مرتب را عنصر به عنصر با درج هر عنصر در جایگاه صحیحش می‌سازد."},
+code:"function insertionSort(arr) {\n  for (let i = 1; i < arr.length; i++) {\n    const key = arr[i];\n    let j = i - 1;\n    while (j >= 0 && arr[j] > key) { arr[j+1] = arr[j]; j--; }\n    arr[j+1] = key;\n  }\n  return arr;\n}",
+steps:[{type:"pick",val:3},{type:"compare"},{type:"shift"},{type:"insert"},{type:"done"}]},
+{id:"selectionsort",title:{en:"Selection Sort",fa:"مرتب‌سازی انتخابی"},category:"algo",level:"beginner",
+desc:{en:"Repeatedly finds the minimum element from the unsorted part and places it at the beginning.",fa:"به طور مکرر کمینه عنصر بخش نامرتب را پیدا و در ابتدا قرار می‌دهد."},
+code:"function selectionSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    let minIdx = i;\n    for (let j = i + 1; j < arr.length; j++)\n      if (arr[j] < arr[minIdx]) minIdx = j;\n    [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];\n  }\n  return arr;\n}",
+steps:[{type:"findmin"},{type:"swap"},{type:"findmin2"},{type:"swap2"},{type:"done"}]},
+{id:"strategy",title:{en:"Strategy Pattern",fa:"الگوی استراتژی"},category:"pattern",level:"advanced",
+desc:{en:"Defines a family of algorithms, encapsulates each one, and makes them interchangeable at runtime.",fa:"خانواده‌ای از الگوریتم‌ها را تعریف، هر کدام را محصور و در زمان اجرا قابل تعویض می‌کند."},
+code:"class Sorter {\n  setStrategy(strategy) { this.strategy = strategy; }\n  sort(arr) { return this.strategy.sort(arr); }\n}\nconst s = new Sorter();\ns.setStrategy(new QuickSort());\ns.sort([3,1,2]);",
+steps:[{type:"context"},{type:"setA"},{type:"execute"},{type:"setB"},{type:"execute"}]},
+{id:"decorator",title:{en:"Decorator Pattern",fa:"الگوی تزئین‌کننده"},category:"pattern",level:"advanced",
+desc:{en:"Attaches additional responsibilities to an object dynamically without modifying its structure.",fa:"مسئولیت‌های اضافی را به صورت پویا بدون تغییر ساختار شیء به آن اضافه می‌کند."},
+code:"function withLogging(fn) {\n  return function(...args) {\n    console.log('Calling:', fn.name);\n    return fn(...args);\n  };\n}\nconst loggedAdd = withLogging(add);",
+steps:[{type:"original"},{type:"wrap"},{type:"call"},{type:"log"},{type:"result"}]},
+{id:"boxmodel",title:{en:"CSS Box Model",fa:"مدل جعبه CSS"},category:"web",level:"beginner",
+desc:{en:"Every HTML element is a box consisting of content, padding, border, and margin layers.",fa:"هر عنصر HTML یک جعبه شامل لایه‌های محتوا، فاصله داخلی، حاشیه و فاصله خارجی است."},
+code:"div {\n  width: 200px;\n  padding: 20px;\n  border: 5px solid;\n  margin: 10px;\n}\n/* Total width = 200 + 40 + 10 + 20 = 270px */",
+steps:[{type:"content"},{type:"padding"},{type:"border"},{type:"margin"},{type:"total"}]},
+{id:"flexbox",title:{en:"Flexbox",fa:"فلکس‌باکس"},category:"web",level:"intermediate",
+desc:{en:"A CSS layout model that distributes space among items in a container along a single axis.",fa:"مدل چیدمان CSS که فضا را بین عناصر در یک کانتینر entlang یک محور توزیع می‌کند."},
+code:".container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 10px;\n}",
+steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"gap"}]}
 ];
 
 let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null;
@@ -268,6 +348,152 @@ ctx.strokeStyle="#8b5cf6";ctx.strokeRect(250,150,300,250);ctx.fillStyle="#a78bfa
 let count=0;if(currentStep>=2)count=1;if(currentStep>=3)count=2;
 ctx.fillStyle="#e6edf3";ctx.font="bold 40px monospace";ctx.fillText(count,400,310);
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["counter() called","count captured in closure","inc() → count = 1","inc() → count = 2","get() → returns 2"][currentStep],400,500);
+}else if(id==="bintree"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+if(currentStep>=0){ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(400,120,30,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText("1",400,126)}
+if(currentStep>=1){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(375,145);ctx.lineTo(280,220);ctx.stroke();ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(260,240,30,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("2",260,246)}
+if(currentStep>=2){ctx.beginPath();ctx.moveTo(425,145);ctx.lineTo(520,220);ctx.stroke();ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(540,240,30,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("3",540,246)}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("inorder: 2,1,3",400,350)}
+if(currentStep>=4){ctx.fillText("done!",400,400)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["root(1)","left child(2)","right child(3)","traverse","complete"][currentStep],400,500);
+}else if(id==="bfs"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var pos={A:[400,120],B:[250,250],C:[550,250],D:[180,380],E:[320,380]};
+Object.entries(pos).forEach(function(e){var k=e[0],x=e[1][0],y=e[1][1];ctx.fillStyle=(currentStep===0&&k==="A")||(currentStep===2&&k==="B")||(currentStep===3&&k==="C")?"#f85149":"#8b5cf6";ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 16px monospace";ctx.fillText(k,x,y+6)});
+ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;[["A","B"],["A","C"],["B","D"],["B","E"]].forEach(function(e){ctx.beginPath();ctx.moveTo(pos[e[0]][0],pos[e[0]][1]+25);ctx.lineTo(pos[e[1]][0],pos[e[1]][1]-25);ctx.stroke()});
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["visit A, queue=[A]","dequeue A, enqueue B,C","visit B, enqueue D,E","visit C","all visited"][currentStep],400,500);
+}else if(id==="dfs"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var pos2={A:[400,100],B:[250,220],D:[180,350],C:[550,220]};
+Object.entries(pos2).forEach(function(e){var k=e[0],x=e[1][0],y=e[1][1];ctx.fillStyle=(currentStep===0&&k==="A")||(currentStep===1&&k==="B")||(currentStep===2&&k==="D")||(currentStep===4&&k==="C")?"#f85149":"#8b5cf6";ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 16px monospace";ctx.fillText(k,x,y+6)});
+ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;[["A","B"],["A","C"],["B","D"]].forEach(function(e){ctx.beginPath();ctx.moveTo(pos2[e[0]][0],pos2[e[0]][1]+25);ctx.lineTo(pos2[e[1]][0],pos2[e[1]][1]-25);ctx.stroke()});
+if(currentStep===3){ctx.fillStyle="#484f58";ctx.font="14px sans-serif";ctx.fillText("backtrack to A",400,430)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["visit A","go deep to B","go deep to D","backtrack","go to C"][currentStep],400,500);
+}else if(id==="mergesort"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var labels=[["[5,3,8,1]"],["[5,3]","[8,1]"],["[3,5]","[1,8]"],["[1,3,5,8]"]];
+if(currentStep<4){labels[currentStep].forEach(function(t,i){var x=400-(labels[currentStep].length-1)*100+i*200;ctx.fillStyle="#8b5cf6";ctx.fillRect(x-60,150+currentStep*80,120,50);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText(t,x,180+currentStep*80)})}
+if(currentStep===4){ctx.fillStyle="#3fb950";ctx.font="bold 24px monospace";ctx.fillText("[1,3,5,8] sorted!",400,300)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["original array","split in half","sort each half","merge","done"][currentStep],400,530);
+}else if(id==="quicksort"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var arr2=[5,3,8,1,7];
+arr2.forEach(function(v,i){var x=150+i*110;ctx.fillStyle=i===0&&currentStep===0?"#f85149":"#8b5cf6";ctx.fillRect(x,200,80,60);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(v,x+40,235)});
+if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("left: [3,1]",250,320)}
+if(currentStep>=3){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("right: [8,7]",500,320)}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="bold 20px monospace";ctx.fillText("[1,3,5,7,8]",400,400)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["pivot = 5","partition","left < pivot","right >= pivot","sorted"][currentStep],400,530);
+}else if(id==="singleton"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(300,150,200,80);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("Singleton",400,195);
+if(currentStep===0){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText("getInstance()",400,280)}
+if(currentStep>=1){ctx.strokeStyle="#3fb950";ctx.lineWidth=2;ctx.strokeRect(320,300,160,60);ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("instance created",400,335)}
+if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText("getInstance()",400,410)}
+if(currentStep>=3){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("same instance returned!",400,450)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["first call","create instance","second call","same ref!","done"][currentStep],400,530);
+}else if(id==="factory"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(280,100,240,60);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("Factory",400,135);
+if(currentStep>=0){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText('input: "dog"',400,200)}
+if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.fillRect(320,240,160,50);ctx.fillStyle="#fff";ctx.font="14px sans-serif";ctx.fillText("new Dog()",400,270)}
+if(currentStep>=3){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText("return dog",400,340)}
+if(currentStep>=4){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("dog.speak() -> woof!",400,400)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["receive input","lookup type","create object","return","use"][currentStep],400,530);
+}else if(id==="promise"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var states=["pending","fetching...","resolved","data received","done"];
+ctx.fillStyle=["#484f58","#a78bfa","#3fb950","#3fb950","#3fb950"][currentStep];ctx.fillRect(280,150,240,80);ctx.fillStyle="#fff";ctx.font="bold 18px sans-serif";ctx.fillText(states[currentStep],400,195);
+if(currentStep>=1){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText(".then(res => res.json())",400,280)}
+if(currentStep>=3){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText(".then(data => ...)",400,330)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["new Promise()","fetch(url)","resolve(data)","then callback","chain done"][currentStep],400,500);
+}else if(id==="eventloop"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.strokeStyle="#30363d";ctx.lineWidth=2;ctx.strokeRect(100,100,250,350);ctx.strokeRect(450,100,250,350);
+ctx.fillStyle="#484f58";ctx.font="bold 14px sans-serif";ctx.fillText("Call Stack",225,130);ctx.fillText("Task Queue",575,130);
+if(currentStep===0){ctx.fillStyle="#8b5cf6";ctx.fillRect(120,150,210,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("log('1')",225,175)}
+if(currentStep===1){ctx.fillStyle="#a78bfa";ctx.fillRect(470,150,210,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("setTimeout(cb)",575,175)}
+if(currentStep===2){ctx.fillStyle="#8b5cf6";ctx.fillRect(120,200,210,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("log('3')",225,225)}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.fillRect(120,150,210,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("cb() from queue",225,175)}
+if(currentStep>=4){ctx.fillStyle="#f85149";ctx.fillRect(120,200,210,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("log('2')",225,225)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["sync: log 1","queue setTimeout","sync: log 3","dequeue cb","exec: log 2"][currentStep],400,520);
+}else if(id==="http"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(100,200,150,80);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("Client",175,245);
+ctx.fillStyle="#3fb950";ctx.fillRect(550,200,150,80);ctx.fillStyle="#fff";ctx.fillText("Server",625,245);
+if(currentStep>=1){ctx.strokeStyle="#a78bfa";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(250,230);ctx.lineTo(550,230);ctx.stroke();ctx.fillStyle="#e6edf3";ctx.font="12px monospace";ctx.fillText("GET /users",400,220)}
+if(currentStep>=2){ctx.fillStyle="#f85149";ctx.beginPath();ctx.arc(625,240,10,0,Math.PI*2);ctx.fill()}
+if(currentStep>=3){ctx.strokeStyle="#3fb950";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(550,260);ctx.lineTo(250,260);ctx.stroke();ctx.fillStyle="#e6edf3";ctx.font="12px monospace";ctx.fillText("200 OK + JSON",400,280)}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("render data on page",175,340)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["user action","send request","server process","send response","render"][currentStep],400,500);
+}else if(id==="array"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var arr3=[10,20,30,40,50];
+for(var i=0;i<5;i++){var x=150+i*110;ctx.fillStyle=(currentStep===1&&i===2)?"#f85149":(currentStep===2&&i===4)?"#3fb950":"#8b5cf6";ctx.fillRect(x,200,80,60);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(arr3[i],x+40,235);ctx.fillStyle="#484f58";ctx.font="12px monospace";ctx.fillText("["+i+"]",x+40,280)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["init array","access arr[2]=30","push(50)","splice(1,1)","done"][currentStep],400,400);
+}else if(id==="deque"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var items=[];if(currentStep>=0)items.push({v:"A",c:"#8b5cf6"});if(currentStep>=1)items.push({v:"B",c:"#8b5cf6"});if(currentStep>=2)items.unshift({v:"Z",c:"#3fb950"});
+items.forEach(function(it,idx){var x=200+idx*120;ctx.fillStyle=it.c;ctx.fillRect(x,230,90,60);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(it.v,x+45,265)});
+ctx.fillStyle="#484f58";ctx.font="14px sans-serif";ctx.fillText("front",200,220);ctx.fillText("back",200+items.length*120-30,220);
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["addBack(A)","addBack(B)","addFront(Z)","removeFront()","removeBack()"][currentStep],400,500);
+}else if(id==="heap"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var trees=[[{v:5,x:400,y:120}],[{v:3,x:400,y:120},{v:5,x:280,y:230}],[{v:3,x:400,y:120},{v:5,x:280,y:230},{v:7,x:520,y:230}],[{v:5,x:400,y:120},{v:7,x:520,y:230}],[{v:5,x:400,y:120}]];
+trees[currentStep].forEach(function(n){ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(n.x,n.y,28,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(n.v,n.x,n.y+6)});
+if(currentStep>=1)trees[currentStep].slice(1).forEach(function(n){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,148);ctx.lineTo(n.x,n.y-28);ctx.stroke()});
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["insert(5)","insert(3), bubble up","insert(7)","extractMin()=3","rebalance"][currentStep],400,400);
+}else if(id==="trie"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(400,80,20,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="12px monospace";ctx.fillText("root",400,85);
+if(currentStep>=0){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,100);ctx.lineTo(300,160);ctx.stroke();ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(300,170,20,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("c",300,175);ctx.beginPath();ctx.moveTo(300,190);ctx.lineTo(300,240);ctx.stroke();ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(300,250,20,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("a",300,255);ctx.beginPath();ctx.moveTo(300,270);ctx.lineTo(300,320);ctx.stroke();ctx.fillStyle="#3fb950";ctx.beginPath();ctx.arc(300,330,20,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("t",300,335)}
+if(currentStep>=1){ctx.beginPath();ctx.moveTo(300,190);ctx.lineTo(400,240);ctx.stroke();ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(400,250,20,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("r",400,255)}
+if(currentStep>=2){ctx.beginPath();ctx.moveTo(400,270);ctx.lineTo(400,320);ctx.stroke();ctx.fillStyle="#3fb950";ctx.beginPath();ctx.arc(400,330,20,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText("d",400,335)}
+if(currentStep>=3){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("search('car')...",400,420)}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.fillText("found!",400,450)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["insert 'cat'","insert 'car'","insert 'card'","search 'car'","match found"][currentStep],400,530);
+}else if(id==="insertionsort"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var arrs=[[5,3,8,1],[5,3,8,1],[5,5,8,1],[3,5,8,1],[1,3,5,8]];
+arrs[currentStep].forEach(function(v,idx){var x=150+idx*130;ctx.fillStyle=(currentStep===1&&idx===1)||(currentStep===2&&idx===1)?"#f85149":"#8b5cf6";ctx.fillRect(x,200,100,60);ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,x+50,235)});
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["original","pick key=3","shift 5 right","insert 3 at [0]","sorted"][currentStep],400,400);
+}else if(id==="selectionsort"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var arrs2=[[5,3,8,1],[5,3,8,1],[1,3,8,5],[1,3,8,5],[1,3,5,8]];
+arrs2[currentStep].forEach(function(v,idx){var x=150+idx*130;ctx.fillStyle=(currentStep===0&&idx===3)||(currentStep===2&&idx===2)?"#f85149":"#8b5cf6";ctx.fillRect(x,200,100,60);ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,x+50,235)});
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["find min=1","swap 1 and 5","find min=5","swap 5 and 8","sorted"][currentStep],400,400);
+}else if(id==="strategy"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(300,100,200,60);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("Context",400,135);
+var si=currentStep>=3?1:0;
+ctx.fillStyle=si===0?"#3fb950":"#f85149";ctx.fillRect(300,210,200,50);ctx.fillStyle="#fff";ctx.font="14px sans-serif";ctx.fillText(si===0?"BubbleSort":"QuickSort",400,240);
+if(currentStep>=1){ctx.fillStyle="#e6edf3";ctx.font="13px monospace";ctx.fillText("setStrategy(A)",400,300)}
+if(currentStep>=2){ctx.fillText("sort([3,1,2])",400,330)}
+if(currentStep>=3){ctx.fillStyle="#f85149";ctx.font="13px monospace";ctx.fillText("setStrategy(B)",400,370)}
+if(currentStep>=4){ctx.fillText("sort([3,1,2])",400,400)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["context ready","set strategy A","execute A","switch to B","execute B"][currentStep],400,500);
+}else if(id==="decorator"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(300,150,200,60);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("add(a,b)",400,185);
+if(currentStep>=1){ctx.strokeStyle="#3fb950";ctx.lineWidth=3;ctx.strokeRect(270,130,260,100);ctx.fillStyle="#3fb950";ctx.font="12px sans-serif";ctx.fillText("withLogging wrapper",400,125)}
+if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText("loggedAdd(2,3)",400,280)}
+if(currentStep>=3){ctx.fillStyle="#f85149";ctx.font="14px monospace";ctx.fillText("log: Calling add",400,320)}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="bold 20px monospace";ctx.fillText("result: 5",400,380)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["original fn","wrap decorator","call wrapped","log output","return result"][currentStep],400,500);
+}else if(id==="boxmodel"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var layers=[{c:"#8b5cf6",l:"content",w:200,h:120},{c:"#3fb950",l:"padding",w:260,h:180},{c:"#f85149",l:"border",w:300,h:220},{c:"#484f58",l:"margin",w:360,h:280}];
+var show=Math.min(currentStep+1,4);
+for(var j=show-1;j>=0;j--){var l=layers[j];ctx.fillStyle=l.c;ctx.globalAlpha=0.3;ctx.fillRect(400-l.w/2,280-l.h/2,l.w,l.h);ctx.globalAlpha=1;ctx.strokeStyle=l.c;ctx.lineWidth=2;ctx.strokeRect(400-l.w/2,280-l.h/2,l.w,l.h);ctx.fillStyle="#fff";ctx.font="12px sans-serif";ctx.fillText(l.l,400,280-l.h/2+15)}
+if(currentStep===4){ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText("total = content+padding+border+margin",400,480)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["content area","+ padding","+ border","+ margin","total size"][currentStep],400,540);
+}else if(id==="flexbox"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.strokeStyle="#30363d";ctx.lineWidth=2;ctx.strokeRect(100,150,600,200);
+var fitems=[{w:100,c:"#8b5cf6"},{w:150,c:"#a78bfa"},{w:80,c:"#3fb950"}];
+var cx=120;
+fitems.forEach(function(it,idx){ctx.fillStyle=it.c;var gap=currentStep>=4?40:10;ctx.fillRect(cx,200,it.w,100);ctx.fillStyle="#fff";ctx.font="bold 14px monospace";ctx.fillText(idx+1,cx+it.w/2,255);cx+=it.w+gap});
+if(currentStep>=3){ctx.strokeStyle="#f85149";ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(400,150);ctx.lineTo(400,350);ctx.stroke();ctx.setLineDash([])}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["flex container","add items","justify-content","align-items","gap: 10px"][currentStep],400,450);
 }
 }
 
