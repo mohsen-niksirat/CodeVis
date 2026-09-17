@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodeVis - Visual Code Concepts Daily</title>
+<title>CodeVis</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--accent:#8b5cf6;--accent2:#a78bfa;--green:#3fb950;--red:#f85149}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+[dir="rtl"] body{font-family:'Vazirmatn','Segoe UI',system-ui,sans-serif}
 header{width:100%;max-width:900px;padding:24px 20px 0;display:flex;justify-content:space-between;align-items:center}
 header h1{font-size:1.5rem;color:var(--accent2);letter-spacing:-0.5px}
+.header-right{display:flex;gap:10px;align-items:center}
 .streak{background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:20px;font-size:.85rem;color:var(--green)}
+.lang-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent2);padding:6px 14px;border-radius:20px;font-size:.85rem;cursor:pointer;font-weight:600;transition:opacity .2s}
+.lang-btn:hover{opacity:.7}
 .controls{width:100%;max-width:900px;padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .controls select,.controls input,.controls button{background:var(--surface);color:var(--text);border:1px solid var(--border);padding:8px 14px;border-radius:8px;font-size:.85rem;outline:none}
 .controls button{cursor:pointer;background:var(--accent);color:#fff;border:none;font-weight:600;transition:opacity .2s}
@@ -23,10 +27,11 @@ header h1{font-size:1.5rem;color:var(--accent2);letter-spacing:-0.5px}
 .card .level{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:10px;background:var(--border);color:var(--text);margin-bottom:12px;text-transform:uppercase}
 .card .desc{font-size:.9rem;line-height:1.6;margin-bottom:16px;color:#8b949e}
 canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:block}
-.code-block{background:#0a0e14;border-radius:8px;padding:14px;font-family:'Fira Code',monospace;font-size:.8rem;line-height:1.7;overflow-x:auto;white-space:pre;color:#e6edf3;max-height:300px;overflow-y:auto}
+.code-block{background:#0a0e14;border-radius:8px;padding:14px;font-family:'Fira Code',monospace;font-size:.8rem;line-height:1.7;overflow-x:auto;white-space:pre;color:#e6edf3;max-height:300px;overflow-y:auto;direction:ltr;text-align:left}
 .step-controls{display:flex;gap:8px;margin-top:14px;align-items:center}
 .step-controls button{padding:6px 16px;font-size:.8rem}
 .step-indicator{font-size:.8rem;color:#8b949e;margin-left:auto}
+[dir="rtl"] .step-indicator{margin-left:0;margin-right:auto}
 .calendar{width:100%;max-width:900px;padding:0 20px 40px}
 .calendar h3{font-size:1rem;margin-bottom:12px;color:var(--accent2)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
@@ -39,85 +44,130 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 <body>
 <header>
 <h1>CodeVis</h1>
-<div class="streak" id="streak">0 day streak</div>
+<div class="header-right">
+<button class="lang-btn" id="langBtn">فا</button>
+<div class="streak" id="streak"></div>
+</div>
 </header>
 <div class="controls">
-<select id="categoryFilter"><option value="all">All Categories</option><option value="ds">Data Structures</option><option value="algo">Algorithms</option><option value="pattern">Patterns</option><option value="web">Web</option></select>
-<select id="levelFilter"><option value="all">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
-<input type="text" id="search" placeholder="Search concepts...">
-<button class="secondary" id="randomBtn">Random</button>
-<button id="shareBtn">Share as PNG</button>
+<select id="categoryFilter"></select>
+<select id="levelFilter"></select>
+<input type="text" id="search">
+<button class="secondary" id="randomBtn"></button>
+<button id="shareBtn"></button>
 </div>
 <div class="main">
 <div class="card">
-<h2 id="conceptTitle">Stack</h2>
-<span class="level" id="conceptLevel">beginner</span>
-<p class="desc" id="conceptDesc">A Last-In-First-Out (LIFO) data structure where elements are added and removed from the top.</p>
+<h2 id="conceptTitle"></h2>
+<span class="level" id="conceptLevel"></span>
+<p class="desc" id="conceptDesc"></p>
 <canvas id="animCanvas" width="800" height="600"></canvas>
 <div class="step-controls">
-<button class="secondary" id="prevBtn">Prev</button>
-<button id="playBtn">Play</button>
-<button class="secondary" id="nextBtn">Next</button>
-<span class="step-indicator" id="stepInfo">Step 1 / 5</span>
+<button class="secondary" id="prevBtn"></button>
+<button id="playBtn"></button>
+<button class="secondary" id="nextBtn"></button>
+<span class="step-indicator" id="stepInfo"></span>
 </div>
 </div>
 <div class="card">
-<h2>Code</h2>
+<h2 id="codeTitle"></h2>
 <div class="code-block" id="codeBlock"></div>
 </div>
 </div>
 <div class="calendar">
-<h3>Progress</h3>
+<h3 id="progressTitle"></h3>
 <div class="cal-grid" id="calGrid"></div>
 </div>
 <canvas id="shareCanvas" width="1200" height="675"></canvas>
 <script>
+const i18n={
+en:{
+streak:"day streak",allCategories:"All Categories",ds:"Data Structures",algo:"Algorithms",pattern:"Patterns",web:"Web",
+allLevels:"All Levels",beginner:"Beginner",intermediate:"Intermediate",advanced:"Advanced",
+searchPh:"Search concepts...",random:"Random",share:"Share as PNG",
+play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",langToggle:"فا"
+},
+fa:{
+streak:"روز متوالی",allCategories:"همه دسته‌ها",ds:"ساختمان داده",algo:"الگوریتم‌ها",pattern:"الگوها",web:"وب",
+allLevels:"همه سطوح",beginner:"مبتدی",intermediate:"متوسط",advanced:"پیشرفته",
+searchPh:"جستجوی مفاهیم...",random:"تصادفی",share:"اشتراک PNG",
+play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",langToggle:"EN"
+}
+};
+let lang=localStorage.getItem("cv_lang")||"en";
+function t(k){return i18n[lang][k]||i18n.en[k]}
+function applyLang(){
+document.documentElement.lang=lang;
+document.documentElement.dir=lang==="fa"?"rtl":"ltr";
+document.getElementById("langBtn").textContent=t("langToggle");
+document.getElementById("streak").textContent=getStreak()+" "+t("streak");
+const cf=document.getElementById("categoryFilter");
+cf.innerHTML=`<option value="all">${t("allCategories")}</option><option value="ds">${t("ds")}</option><option value="algo">${t("algo")}</option><option value="pattern">${t("pattern")}</option><option value="web">${t("web")}</option>`;
+const lf=document.getElementById("levelFilter");
+lf.innerHTML=`<option value="all">${t("allLevels")}</option><option value="beginner">${t("beginner")}</option><option value="intermediate">${t("intermediate")}</option><option value="advanced">${t("advanced")}</option>`;
+document.getElementById("search").placeholder=t("searchPh");
+document.getElementById("randomBtn").textContent=t("random");
+document.getElementById("shareBtn").textContent=t("share");
+document.getElementById("prevBtn").textContent=t("prev");
+document.getElementById("playBtn").textContent=isPlaying?t("pause"):t("play");
+document.getElementById("nextBtn").textContent=t("next");
+document.getElementById("codeTitle").textContent=t("code");
+document.getElementById("progressTitle").textContent=t("progress");
+if(currentConcept)loadConcept(currentConcept);
+}
+document.getElementById("langBtn").onclick=()=>{lang=lang==="en"?"fa":"en";localStorage.setItem("cv_lang",lang);applyLang()};
+
 const concepts=[
-{id:"stack",title:"Stack",category:"ds",level:"beginner",desc:"A Last-In-First-Out (LIFO) data structure. Elements are pushed on top and popped from the top.",code:"class Stack {\n  constructor() { this.items = []; }\n  push(item) { this.items.push(item); }\n  pop() { return this.items.pop(); }\n  peek() { return this.items[this.items.length-1]; }\n  isEmpty() { return this.items.length === 0; }\n}",steps:[
-{type:"push",val:"A"},{type:"push",val:"B"},{type:"push",val:"C"},{type:"pop"},{type:"pop"}
-]},
-{id:"queue",title:"Queue",category:"ds",level:"beginner",desc:"A First-In-First-Out (FIFO) data structure. Elements are enqueued at the back and dequeued from the front.",code:"class Queue {\n  constructor() { this.items = []; }\n  enqueue(item) { this.items.push(item); }\n  dequeue() { return this.items.shift(); }\n  front() { return this.items[0]; }\n  isEmpty() { return this.items.length === 0; }\n}",steps:[
-{type:"enqueue",val:"A"},{type:"enqueue",val:"B"},{type:"enqueue",val:"C"},{type:"dequeue"},{type:"dequeue"}
-]},
-{id:"linkedlist",title:"Linked List",category:"ds",level:"intermediate",desc:"A linear data structure where each element points to the next node, allowing O(1) insertions.",code:"class Node {\n  constructor(val) {\n    this.val = val;\n    this.next = null;\n  }\n}\nclass LinkedList {\n  append(val) {\n    const node = new Node(val);\n    if (!this.head) { this.head = node; return; }\n    let curr = this.head;\n    while (curr.next) curr = curr.next;\n    curr.next = node;\n  }\n}",steps:[
-{type:"add",val:"A"},{type:"add",val:"B"},{type:"add",val:"C"},{type:"traverse"},{type:"remove"}
-]},
-{id:"binarysearch",title:"Binary Search",category:"algo",level:"beginner",desc:"An efficient search algorithm that divides the sorted array in half each step. O(log n) time complexity.",code:"function binarySearch(arr, target) {\n  let low = 0, high = arr.length - 1;\n  while (low <= high) {\n    const mid = Math.floor((low + high) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) low = mid + 1;\n    else high = mid - 1;\n  }\n  return -1;\n}",steps:[
-{type:"init",range:[0,15]},{type:"mid",val:7},{type:"narrow",dir:"right"},{type:"mid",val:11},{type:"found",val:11}
-]},
-{id:"recursion",title:"Recursion",category:"pattern",level:"intermediate",desc:"A function that calls itself with a base case to terminate. Each call creates a new frame on the call stack.",code:"function factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n\nfactorial(5);\n// 5 * 4 * 3 * 2 * 1 = 120",steps:[
-{type:"call",val:5},{type:"call",val:4},{type:"call",val:3},{type:"base",val:1},{type:"return"}
-]},
-{id:"bubbleSort",title:"Bubble Sort",category:"algo",level:"beginner",desc:"Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.",code:"function bubbleSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    for (let j = 0; j < arr.length - i - 1; j++) {\n      if (arr[j] > arr[j+1]) {\n        [arr[j], arr[j+1]] = [arr[j+1], arr[j]];\n      }\n    }\n  }\n  return arr;\n}",steps:[
-{type:"compare",i:0,j:1},{type:"swap",i:0,j:1},{type:"compare",i:1,j:2},{type:"pass"},{type:"done"}
-]},
-{id:"hashmap",title:"Hash Map",category:"ds",level:"intermediate",desc:"Stores key-value pairs using a hash function to compute an index into an array of buckets for O(1) average lookup.",code:"class HashMap {\n  constructor(size = 16) {\n    this.buckets = new Array(size).fill(null).map(() => []);\n    this.size = size;\n  }\n  hash(key) { return key.toString().length % this.size; }\n  set(key, val) { this.buckets[this.hash(key)].push([key, val]); }\n  get(key) {\n    return this.buckets[this.hash(key)].find(([k]) => k === key)?.[1];\n  }\n}",steps:[
-{type:"insert",key:"name",val:"Ali"},{type:"hash",key:"name",bucket:4},{type:"insert",key:"age",val:25},{type:"hash",key:"age",bucket:3},{type:"lookup",key:"name"}
-]},
-{id:"observer",title:"Observer Pattern",category:"pattern",level:"advanced",desc:"A design pattern where an object (subject) maintains a list of observers and notifies them of state changes automatically.",code:"class Subject {\n  constructor() { this.observers = []; }\n  subscribe(fn) { this.observers.push(fn); }\n  notify(data) { this.observers.forEach(fn => fn(data)); }\n}\nconst sub = new Subject();\nsub.subscribe(d => console.log('Got:', d));\nsub.notify('hello');",steps:[
-{type:"subscribe",who:"A"},{type:"subscribe",who:"B"},{type:"event",val:"update"},{type:"notify",to:"A"},{type:"notify",to:"B"}
-]},
-{id:"dom",title:"DOM Tree",category:"web",level:"beginner",desc:"The Document Object Model represents HTML as a tree structure where each node is an object representing a part of the document.",code:"document.querySelector('#app')\n  .addEventListener('click', (e) => {\n    const el = document.createElement('div');\n    el.textContent = 'Clicked!';\n    e.target.appendChild(el);\n  });",steps:[
-{type:"build",tag:"html"},{type:"build",tag:"body"},{type:"build",tag:"div"},{type:"event",val:"click"},{type:"mutate"}
-]},
-{id:"closure",title:"Closure",category:"pattern",level:"advanced",desc:"A closure is a function that retains access to its lexical scope even when executed outside that scope.",code:"function counter() {\n  let count = 0;\n  return {\n    inc: () => ++count,\n    get: () => count\n  };\n}\nconst c = counter();\nc.inc(); c.inc(); c.get(); // 2",steps:[
-{type:"create",scope:"outer"},{type:"capture",var:"count"},{type:"call",fn:"inc"},{type:"call",fn:"inc"},{type:"call",fn:"get"}
-]}
+{id:"stack",title:{en:"Stack",fa:"پشته"},category:"ds",level:"beginner",
+desc:{en:"A Last-In-First-Out (LIFO) data structure. Elements are pushed on top and popped from the top.",fa:"ساختمان داده آخر-ورودی-اول-خروجی. عناصر از بالا اضافه و از بالا حذف می‌شوند."},
+code:"class Stack {\n  constructor() { this.items = []; }\n  push(item) { this.items.push(item); }\n  pop() { return this.items.pop(); }\n  peek() { return this.items[this.items.length-1]; }\n  isEmpty() { return this.items.length === 0; }\n}",
+steps:[{type:"push",val:"A"},{type:"push",val:"B"},{type:"push",val:"C"},{type:"pop"},{type:"pop"}]},
+{id:"queue",title:{en:"Queue",fa:"صف"},category:"ds",level:"beginner",
+desc:{en:"A First-In-First-Out (FIFO) data structure. Elements are enqueued at the back and dequeued from the front.",fa:"ساختمان داده اول-ورودی-اول-خروجی. عناصر از انتها وارد و از ابتدا خارج می‌شوند."},
+code:"class Queue {\n  constructor() { this.items = []; }\n  enqueue(item) { this.items.push(item); }\n  dequeue() { return this.items.shift(); }\n  front() { return this.items[0]; }\n  isEmpty() { return this.items.length === 0; }\n}",
+steps:[{type:"enqueue",val:"A"},{type:"enqueue",val:"B"},{type:"enqueue",val:"C"},{type:"dequeue"},{type:"dequeue"}]},
+{id:"linkedlist",title:{en:"Linked List",fa:"لیست پیوندی"},category:"ds",level:"intermediate",
+desc:{en:"A linear data structure where each element points to the next node, allowing O(1) insertions.",fa:"ساختمان داده خطی که هر عنصر به گره بعدی اشاره می‌کند و درج O(1) را ممکن می‌سازد."},
+code:"class Node {\n  constructor(val) {\n    this.val = val;\n    this.next = null;\n  }\n}\nclass LinkedList {\n  append(val) {\n    const node = new Node(val);\n    if (!this.head) { this.head = node; return; }\n    let curr = this.head;\n    while (curr.next) curr = curr.next;\n    curr.next = node;\n  }\n}",
+steps:[{type:"add",val:"A"},{type:"add",val:"B"},{type:"add",val:"C"},{type:"traverse"},{type:"remove"}]},
+{id:"binarysearch",title:{en:"Binary Search",fa:"جستجوی دودویی"},category:"algo",level:"beginner",
+desc:{en:"An efficient search algorithm that divides the sorted array in half each step. O(log n) time complexity.",fa:"الگوریتم جستجوی کارآمد که آرایه مرتب را در هر مرحله نصف می‌کند. پیچیدگی زمانی O(log n)."},
+code:"function binarySearch(arr, target) {\n  let low = 0, high = arr.length - 1;\n  while (low <= high) {\n    const mid = Math.floor((low + high) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) low = mid + 1;\n    else high = mid - 1;\n  }\n  return -1;\n}",
+steps:[{type:"init",range:[0,15]},{type:"mid",val:7},{type:"narrow",dir:"right"},{type:"mid",val:11},{type:"found",val:11}]},
+{id:"recursion",title:{en:"Recursion",fa:"بازگشت"},category:"pattern",level:"intermediate",
+desc:{en:"A function that calls itself with a base case to terminate. Each call creates a new frame on the call stack.",fa:"تابعی که خودش را با یک حالت پایه فراخوانی می‌کند. هر فراخوانی فریم جدیدی روی پشته ایجاد می‌کند."},
+code:"function factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n\nfactorial(5);\n// 5 * 4 * 3 * 2 * 1 = 120",
+steps:[{type:"call",val:5},{type:"call",val:4},{type:"call",val:3},{type:"base",val:1},{type:"return"}]},
+{id:"bubbleSort",title:{en:"Bubble Sort",fa:"مرتب‌سازی حبابی"},category:"algo",level:"beginner",
+desc:{en:"Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.",fa:"به طور مکرر لیست را پیمایش می‌کند، عناصر مجاور را مقایسه و در صورت نیاز جابجا می‌کند."},
+code:"function bubbleSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    for (let j = 0; j < arr.length - i - 1; j++) {\n      if (arr[j] > arr[j+1]) {\n        [arr[j], arr[j+1]] = [arr[j+1], arr[j]];\n      }\n    }\n  }\n  return arr;\n}",
+steps:[{type:"compare",i:0,j:1},{type:"swap",i:0,j:1},{type:"compare",i:1,j:2},{type:"pass"},{type:"done"}]},
+{id:"hashmap",title:{en:"Hash Map",fa:"جدول هش"},category:"ds",level:"intermediate",
+desc:{en:"Stores key-value pairs using a hash function to compute an index into an array of buckets for O(1) average lookup.",fa:"جفت‌های کلید-مقدار را با استفاده از تابع هش برای محاسبه اندیس ذخیره می‌کند. جستجوی متوسط O(1)."},
+code:"class HashMap {\n  constructor(size = 16) {\n    this.buckets = new Array(size).fill(null).map(() => []);\n    this.size = size;\n  }\n  hash(key) { return key.toString().length % this.size; }\n  set(key, val) { this.buckets[this.hash(key)].push([key, val]); }\n  get(key) {\n    return this.buckets[this.hash(key)].find(([k]) => k === key)?.[1];\n  }\n}",
+steps:[{type:"insert",key:"name",val:"Ali"},{type:"hash",key:"name",bucket:4},{type:"insert",key:"age",val:25},{type:"hash",key:"age",bucket:3},{type:"lookup",key:"name"}]},
+{id:"observer",title:{en:"Observer Pattern",fa:"الگوی ناظر"},category:"pattern",level:"advanced",
+desc:{en:"A design pattern where an object (subject) maintains a list of observers and notifies them of state changes automatically.",fa:"الگوی طراحی که شیء (موضوع) لیستی از ناظران را نگه می‌دارد و تغییرات حالت را خودکار اطلاع می‌دهد."},
+code:"class Subject {\n  constructor() { this.observers = []; }\n  subscribe(fn) { this.observers.push(fn); }\n  notify(data) { this.observers.forEach(fn => fn(data)); }\n}\nconst sub = new Subject();\nsub.subscribe(d => console.log('Got:', d));\nsub.notify('hello');",
+steps:[{type:"subscribe",who:"A"},{type:"subscribe",who:"B"},{type:"event",val:"update"},{type:"notify",to:"A"},{type:"notify",to:"B"}]},
+{id:"dom",title:{en:"DOM Tree",fa:"درخت DOM"},category:"web",level:"beginner",
+desc:{en:"The Document Object Model represents HTML as a tree structure where each node is an object representing a part of the document.",fa:"مدل شیء سند، HTML را به صورت ساختار درختی نمایش می‌دهد که هر گره بخشی از سند است."},
+code:"document.querySelector('#app')\n  .addEventListener('click', (e) => {\n    const el = document.createElement('div');\n    el.textContent = 'Clicked!';\n    e.target.appendChild(el);\n  });",
+steps:[{type:"build",tag:"html"},{type:"build",tag:"body"},{type:"build",tag:"div"},{type:"event",val:"click"},{type:"mutate"}]},
+{id:"closure",title:{en:"Closure",fa:"بسته (کلوژر)"},category:"pattern",level:"advanced",
+desc:{en:"A closure is a function that retains access to its lexical scope even when executed outside that scope.",fa:"بسته تابعی است که حتی وقتی خارج از اسکوپ اصلی اجرا شود، به اسکوپ لغوی خود دسترسی دارد."},
+code:"function counter() {\n  let count = 0;\n  return {\n    inc: () => ++count,\n    get: () => count\n  };\n}\nconst c = counter();\nc.inc(); c.inc(); c.get(); // 2",
+steps:[{type:"create",scope:"outer"},{type:"capture",var:"count"},{type:"call",fn:"inc"},{type:"call",fn:"inc"},{type:"call",fn:"get"}]}
 ];
 
 let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
 canvas.width=800;canvas.height=600;
-
 const doneDays=JSON.parse(localStorage.getItem("cv_done")||"[]");
 const today=new Date().toISOString().split("T")[0];
 
-function updateStreak(){
-let s=0,d=new Date();
-while(true){const ds=d.toISOString().split("T")[0];if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}
-document.getElementById("streak").textContent=s+" day streak";
-}
-
+function getStreak(){let s=0,d=new Date();while(true){const ds=d.toISOString().split("T")[0];if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
+function updateStreak(){document.getElementById("streak").textContent=getStreak()+" "+t("streak")}
 function buildCalendar(){
 const grid=document.getElementById("calGrid");grid.innerHTML="";
 const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),1);
@@ -127,81 +177,76 @@ const d=document.createElement("div"),ds=`${now.getFullYear()}-${String(now.getM
 d.className="cal-day"+(doneDays.includes(ds)?" done":"")+(ds===today?" today":"");
 d.textContent=i;grid.appendChild(d);
 }}
-
-function markDone(){
-if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays));updateStreak();buildCalendar()}
-}
+function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays));updateStreak();buildCalendar()}}
 
 function loadConcept(c){
 currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
-document.getElementById("conceptTitle").textContent=c.title;
-document.getElementById("conceptLevel").textContent=c.level;
-document.getElementById("conceptDesc").textContent=c.desc;
+document.getElementById("conceptTitle").textContent=c.title[lang]||c.title.en;
+document.getElementById("conceptLevel").textContent=t(c.level);
+document.getElementById("conceptDesc").textContent=c.desc[lang]||c.desc.en;
 document.getElementById("codeBlock").textContent=c.code;
-document.getElementById("playBtn").textContent="Play";
+document.getElementById("playBtn").textContent=t("play");
 drawStep();
 }
 
 function filterAndLoad(){
 const cat=document.getElementById("categoryFilter").value,lvl=document.getElementById("levelFilter").value,q=document.getElementById("search").value.toLowerCase();
-let filtered=concepts.filter(c=>(cat==="all"||c.category===cat)&&(lvl==="all"||c.level===lvl)&&(!q||c.title.toLowerCase().includes(q)||c.desc.toLowerCase().includes(q)));
+let filtered=concepts.filter(c=>(cat==="all"||c.category===cat)&&(lvl==="all"||c.level===lvl)&&(!q||(c.title.en+c.title.fa+c.desc.en+c.desc.fa).toLowerCase().includes(q)));
 if(filtered.length)loadConcept(filtered[0]);
 }
 
 function drawStep(){
 if(!currentConcept)return;
 ctx.clearRect(0,0,800,600);
-document.getElementById("stepInfo").textContent=`Step ${currentStep+1} / ${currentConcept.steps.length}`;
+document.getElementById("stepInfo").textContent=`${t("step")} ${currentStep+1} / ${currentConcept.steps.length}`;
 const step=currentConcept.steps[currentStep],id=currentConcept.id;
 ctx.fillStyle="#e6edf3";ctx.font="16px 'Segoe UI',sans-serif";ctx.textAlign="center";
 
 if(id==="stack"){
 const items=[];for(let i=0;i<=currentStep;i++){if(step.type==="push"&&i===currentStep)items.push(step.val);else if(i<currentStep){const s=currentConcept.steps[i];if(s.type==="push")items.push(s.val)}}
 if(currentStep>=3){const pops=currentStep-2;items.splice(items.length-pops,pops)}
-ctx.fillText("Stack",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.strokeStyle="#30363d";ctx.lineWidth=2;ctx.strokeRect(300,80,200,450);
 items.forEach((v,i)=>{const y=500-i*60;ctx.fillStyle="#8b5cf6";ctx.fillRect(310,y-50,180,50);ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,400,y-20);ctx.font="16px 'Segoe UI',sans-serif"});
 ctx.fillStyle="#3fb950";ctx.fillText(step.type==="push"?"push('"+step.val+"')":"pop()",400,570);
 }else if(id==="queue"){
 const items=[];for(let i=0;i<=currentStep;i++){const s=currentConcept.steps[i];if(s.type==="enqueue")items.push(s.val)}
 if(currentStep>=3){const dq=currentStep-2;items.splice(0,dq)}
-ctx.fillText("Queue",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 items.forEach((v,i)=>{const x=150+i*100;ctx.fillStyle="#8b5cf6";ctx.fillRect(x,250,80,80);ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,x+40,295);ctx.font="16px 'Segoe UI',sans-serif"});
 ctx.fillStyle="#3fb950";ctx.fillText(step.type==="enqueue"?"enqueue('"+step.val+"')":"dequeue()",400,400);
 ctx.fillStyle="#484f58";ctx.fillText("front →",120,295);ctx.fillText("← back",150+items.length*100+30,295);
 }else if(id==="linkedlist"){
 const nodes=[];for(let i=0;i<=Math.min(currentStep,2);i++)nodes.push(currentConcept.steps[i].val);
-ctx.fillText("Linked List",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 nodes.forEach((v,i)=>{const x=150+i*180;ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(x,300,35,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,x,307);if(i<nodes.length-1){ctx.strokeStyle="#a78bfa";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+35,300);ctx.lineTo(x+145,300);ctx.stroke();ctx.beginPath();ctx.moveTo(x+145,300);ctx.lineTo(x+135,290);ctx.lineTo(x+135,310);ctx.fill()}ctx.font="16px 'Segoe UI',sans-serif"});
 ctx.fillStyle="#3fb950";ctx.fillText(["append(A)","append(B)","append(C)","traverse()","remove last"][currentStep],400,450);
 }else if(id==="binarysearch"){
 const arr=Array.from({length:16},(_,i)=>i);
-ctx.fillText("Binary Search — target: 11",400,40);
-let lo=0,hi=15;
-if(currentStep>=2)lo=8;if(currentStep>=3)lo=10;
-if(currentStep>=2)hi=currentStep>=3?13:15;
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+" — target: 11",400,40);
+let lo=0,hi=15;if(currentStep>=2)lo=8;if(currentStep>=3)lo=10;if(currentStep>=2)hi=currentStep>=3?13:15;
 arr.forEach((v,i)=>{const x=60+i*44;ctx.fillStyle=(i>=lo&&i<=hi)?"#161b22":"#0a0e14";ctx.fillRect(x,200,40,40);ctx.strokeStyle="#30363d";ctx.strokeRect(x,200,40,40);ctx.fillStyle=(i>=lo&&i<=hi)?"#e6edf3":"#484f58";ctx.font="14px monospace";ctx.fillText(v,x+20,225)});
 if(currentStep>=1){const mi=currentStep===1?7:currentStep===3?11:Math.floor((lo+hi)/2);ctx.fillStyle="#f85149";ctx.beginPath();ctx.moveTo(60+mi*44+20,190);ctx.lineTo(60+mi*44+10,170);ctx.lineTo(60+mi*44+30,170);ctx.fill();ctx.fillStyle="#f85149";ctx.font="12px sans-serif";ctx.fillText("mid",60+mi*44+20,165)}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["Init: low=0, high=15","Check mid=7, 7<11 → go right","Narrow: low=8, high=15","Check mid=11, found!","Return index 11"][currentStep],400,350);
 }else if(id==="recursion"){
 const depth=Math.min(currentStep+1,4);
-ctx.fillText("Recursion: factorial(5)",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+": factorial(5)",400,40);
 for(let i=0;i<depth;i++){const w=300-i*50,x=400-w/2,y=100+i*100;ctx.strokeStyle="#8b5cf6";ctx.lineWidth=2;ctx.strokeRect(x,y,w,60);ctx.fillStyle="#e6edf3";ctx.font="14px monospace";ctx.fillText(i<3?`factorial(${5-i})`:`base: factorial(1)=1`,400,y+35)}
 if(currentStep===4){ctx.fillStyle="#3fb950";ctx.font="14px monospace";for(let i=0;i<4;i++)ctx.fillText(`return ${[1,2,6,24,120][i+1]}`,400,160+(3-i)*100)}
 ctx.font="16px 'Segoe UI',sans-serif";
 }else if(id==="bubbleSort"){
 const arr=[5,3,8,1,2];
-ctx.fillText("Bubble Sort",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 arr.forEach((v,i)=>{const x=120+i*120,h=v*60;ctx.fillStyle=(currentStep<3&&(i===currentStep%2||i===currentStep%2+1))?"#f85149":"#8b5cf6";ctx.fillRect(x,500-h,80,h);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(v,x+40,500-h/2+6)});
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["Compare 5,3","Swap → 3,5","Compare 5,8","Pass 1 done","Sorted!"][currentStep],400,560);
 }else if(id==="hashmap"){
-ctx.fillText("Hash Map",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 for(let i=0;i<8;i++){ctx.strokeStyle="#30363d";ctx.strokeRect(200,100+i*55,400,50);ctx.fillStyle="#484f58";ctx.font="12px monospace";ctx.fillText("bucket "+i,220,130+i*55)}
 if(currentStep>=0){ctx.fillStyle="#8b5cf6";ctx.fillRect(350,100+4*55+5,200,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("name → Ali",450,130+4*55)}
 if(currentStep>=2){ctx.fillStyle="#8b5cf6";ctx.fillRect(350,100+3*55+5,200,40);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("age → 25",450,130+3*55)}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["set('name','Ali')","hash('name') → 4","set('age',25)","hash('age') → 3","get('name') → 'Ali'"][currentStep],400,570);
 }else if(id==="observer"){
-ctx.fillText("Observer Pattern",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#8b5cf6";ctx.fillRect(300,120,200,60);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("Subject",400,155);
 const subs=currentStep>=1?2:currentStep>=0?1:0;
 for(let i=0;i<subs;i++){const x=200+i*300;ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,180);ctx.lineTo(x+50,280);ctx.stroke();ctx.fillStyle="#161b22";ctx.strokeStyle="#30363d";ctx.strokeRect(x,280,100,50);ctx.fillStyle="#e6edf3";ctx.font="14px sans-serif";ctx.fillText("Obs "+["A","B"][i],x+50,310)}
@@ -209,7 +254,7 @@ if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillTe
 if(currentStep>=3){ctx.fillStyle="#f85149";for(let i=0;i<=(currentStep-3);i++){const x=200+i*300;ctx.fillText("notified!",x+50,360)}}
 ctx.font="16px 'Segoe UI',sans-serif";
 }else if(id==="dom"){
-ctx.fillText("DOM Tree",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 const nodes=[{t:"html",x:400,y:100,c:["body"]},{t:"body",x:400,y:200,c:["div"]},{t:"div",x:400,y:300,c:[]}];
 const show=Math.min(currentStep+1,3);
 for(let i=0;i<show;i++){const n=nodes[i];ctx.fillStyle="#8b5cf6";ctx.fillRect(n.x-40,n.y-15,80,30);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("<"+n.t+">",n.x,n.y+5);if(i<show-1){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(n.x,n.y+15);ctx.lineTo(nodes[i+1].x,nodes[i+1].y-15);ctx.stroke()}}
@@ -217,7 +262,7 @@ if(currentStep>=3){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillTe
 if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.fillRect(340,330,120,30);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText("<div>Clicked!</div>",400,350)}
 ctx.font="16px 'Segoe UI',sans-serif";
 }else if(id==="closure"){
-ctx.fillText("Closure",400,40);
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.strokeStyle="#30363d";ctx.lineWidth=2;ctx.strokeRect(150,80,500,400);ctx.fillStyle="#484f58";ctx.font="12px sans-serif";ctx.fillText("outer scope: count = 0",170,100);
 ctx.strokeStyle="#8b5cf6";ctx.strokeRect(250,150,300,250);ctx.fillStyle="#a78bfa";ctx.font="12px sans-serif";ctx.fillText("inner functions: inc(), get()",270,170);
 let count=0;if(currentStep>=2)count=1;if(currentStep>=3)count=2;
@@ -228,7 +273,7 @@ ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cou
 
 function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;drawStep();markDone()}
 function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;drawStep()}
-function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent="Play"}else{isPlaying=true;document.getElementById("playBtn").textContent="Pause";playInterval=setInterval(nextStep,1200)}}
+function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,1200)}}
 
 document.getElementById("nextBtn").onclick=nextStep;
 document.getElementById("prevBtn").onclick=prevStep;
@@ -242,9 +287,10 @@ document.getElementById("shareBtn").onclick=()=>{
 const sc=document.getElementById("shareCanvas"),sx=sc.getContext("2d");
 sx.fillStyle="#0d1117";sx.fillRect(0,0,1200,675);
 sx.fillStyle="#8b5cf6";sx.font="bold 32px 'Segoe UI',sans-serif";sx.textAlign="left";sx.fillText("CodeVis",40,50);
-sx.fillStyle="#c9d1d9";sx.font="24px 'Segoe UI',sans-serif";sx.fillText(currentConcept?currentConcept.title:"",40,100);
+sx.fillStyle="#c9d1d9";sx.font="24px 'Segoe UI',sans-serif";sx.fillText(currentConcept?currentConcept.title[lang]||currentConcept.title.en:"",40,100);
 sx.fillStyle="#8b949e";sx.font="16px 'Segoe UI',sans-serif";
-const words=(currentConcept?currentConcept.desc:"").split(" ");let line="",y=140;
+const desc=currentConcept?(currentConcept.desc[lang]||currentConcept.desc.en):"";
+const words=desc.split(" ");let line="",y=140;
 words.forEach(w=>{if(sx.measureText(line+w).width>700){sx.fillText(line,40,y);line=w+" ";y+=24}else line+=w+" "});
 sx.fillText(line,40,y);
 sx.drawImage(canvas,40,200,700,450);
@@ -257,6 +303,7 @@ sc.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);
 };
 
 const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
+applyLang();
 loadConcept(concepts[dayIndex]);
 updateStreak();
 buildCalendar();
