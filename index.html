@@ -283,7 +283,7 @@ d.textContent=i;grid.appendChild(d);
 }}
 document.getElementById("calPrev").onclick=()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--}buildCalendar()};
 document.getElementById("calNext").onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}buildCalendar()};
-function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays));updateStreak();buildCalendar()}}
+function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays))}localStorage.setItem("cv_lastConcept",currentConcept?currentConcept.id:"");updateStreak();buildCalendar()}
 
 function loadConcept(c){
 currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
@@ -564,9 +564,7 @@ sx.fillStyle="#484f58";sx.font="14px sans-serif";sx.textAlign="center";sx.fillTe
 sc.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="codevis-"+(currentConcept?currentConcept.id:"concept")+".png";a.click()});
 };
 
-const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
-applyLang();
-loadConcept(concepts[dayIndex]);
+const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;`nconst savedId=localStorage.getItem("cv_lastConcept");`nconst savedConcept=savedId?concepts.find(c=>c.id===savedId):null;`napplyLang();`nloadConcept(savedConcept||concepts[dayIndex]);
 updateStreak();
 buildCalendar();
 </script>
