@@ -497,8 +497,18 @@ ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["fle
 }
 }
 
-function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;drawStep();markDone()}
-function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;drawStep()}
+let animProgress=1,animRAF=null;
+function animateTransition(){
+if(animProgress>=1){cancelAnimationFrame(animRAF);return}
+animProgress=Math.min(1,animProgress+0.05);
+ctx.globalAlpha=animProgress;
+drawStep();
+ctx.globalAlpha=1;
+animRAF=requestAnimationFrame(animateTransition);
+}
+
+function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();markDone()}
+function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition()}
 function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,1200)}}
 
 document.getElementById("nextBtn").onclick=nextStep;
