@@ -67,6 +67,7 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 <input type="text" id="search">
 <button class="secondary" id="randomBtn"></button>
 <button id="shareBtn"></button>
+<button class="secondary" id="gifBtn">GIF</button>
 </div>
 <div class="main">
 <div class="card">
@@ -565,7 +566,21 @@ sx.fillStyle="#484f58";sx.font="14px sans-serif";sx.textAlign="center";sx.fillTe
 sc.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="codevis-"+(currentConcept?currentConcept.id:"concept")+".png";a.click()});
 };
 
-const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;`nconst savedId=localStorage.getItem("cv_lastConcept");`nconst savedConcept=savedId?concepts.find(c=>c.id===savedId):null;`napplyLang();`nloadConcept(savedConcept||concepts[dayIndex]);
+document.getElementById("gifBtn").onclick=()=>{
+if(!currentConcept)return;
+const gif=new GIF({workers:2,quality:10,width:800,height:600,workerScript:"https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js"});
+const savedStep=currentStep;
+for(let i=0;i<currentConcept.steps.length;i++){currentStep=i;drawStep();gif.addFrame(canvas,{copy:true,delay:800})}
+currentStep=savedStep;drawStep();
+gif.on("finished",b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="codevis-"+currentConcept.id+".gif";a.click()});
+gif.render();
+};
+
+const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
+const savedId=localStorage.getItem("cv_lastConcept");
+const savedConcept=savedId?concepts.find(c=>c.id===savedId):null;
+applyLang();
+loadConcept(savedConcept||concepts[dayIndex]);
 updateStreak();
 buildCalendar();
 </script>
