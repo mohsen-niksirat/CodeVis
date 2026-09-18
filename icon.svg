@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#8b5cf6"/>
+<stop offset="100%" style="stop-color:#6d28d9"/>
+</linearGradient>
+<linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#a78bfa"/>
+<stop offset="100%" style="stop-color:#8b5cf6"/>
+</linearGradient>
+</defs>
+<rect width="512" height="512" rx="80" fill="url(#bg)"/>
+<rect x="40" y="60" width="432" height="300" rx="24" fill="#0d1117" opacity="0.9"/>
+<rect x="40" y="60" width="432" height="300" rx="24" fill="none" stroke="#30363d" stroke-width="2"/>
+<circle cx="72" cy="84" r="8" fill="#f85149"/>
+<circle cx="96" cy="84" r="8" fill="#e3b341"/>
+<circle cx="120" cy="84" r="8" fill="#3fb950"/>
+<text x="80" y="140" font-family="monospace" font-size="28" fill="#a78bfa">const</text>
+<text x="168" y="140" font-family="monospace" font-size="28" fill="#e6edf3">node</text>
+<text x="252" y="140" font-family="monospace" font-size="28" fill="#8b949e">=</text>
+<text x="280" y="140" font-family="monospace" font-size="28" fill="#3fb950">{</text>
+<text x="100" y="180" font-family="monospace" font-size="28" fill="#79c0ff">val</text>
+<text x="168" y="180" font-family="monospace" font-size="28" fill="#8b949e">:</text>
+<text x="196" y="180" font-family="monospace" font-size="28" fill="#f85149">42</text>
+<text x="100" y="220" font-family="monospace" font-size="28" fill="#79c0ff">next</text>
+<text x="180" y="220" font-family="monospace" font-size="28" fill="#8b949e">:</text>
+<text x="208" y="220" font-family="monospace" font-size="28" fill="#a78bfa">null</text>
+<text x="80" y="260" font-family="monospace" font-size="28" fill="#3fb950">}</text>
+<circle cx="160" cy="420" r="36" fill="url(#glow)" opacity="0.9"/>
+<text x="160" y="430" font-family="sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle">42</text>
+<line x1="196" y1="420" x2="280" y2="420" stroke="#a78bfa" stroke-width="4" stroke-dasharray="8,4"/>
+<polygon points="276,412 292,420 276,428" fill="#a78bfa"/>
+<circle cx="328" cy="420" r="36" fill="url(#glow)" opacity="0.6"/>
+<text x="328" y="430" font-family="sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle">?</text>
+<line x1="364" y1="420" x2="420" y2="420" stroke="#30363d" stroke-width="3" stroke-dasharray="6,6"/>
+</svg>
