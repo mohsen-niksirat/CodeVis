@@ -10,15 +10,21 @@ A new concept every day — from data structures to design patterns — with ste
 
 ## Features
 
-- **10 interactive concepts**: Stack, Queue, Linked List, Binary Search, Recursion, Bubble Sort, Hash Map, Observer Pattern, DOM Tree, Closure
+- **40+ interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, and OS concepts
+- **High-DPI Canvas**: Retina-ready rendering with smooth easing animations
 - **Canvas animations**: Step-by-step visual breakdown for each concept
-- **Playback controls**: Play, Pause, Next, Previous
+- **Active code highlighting**: Current line synchronized with animation
+- **Playback controls**: Play, Pause, Next, Previous + keyboard shortcuts
+- **Time-scaled animations**: 0.5x, 1x, 2x, with easing transitions
 - **Synced code panel**: Real code displayed alongside the animation
 - **Bilingual**: English and Persian (FA) with RTL support
-- **Daily streak tracker**: Calendar-based progress saved in localStorage
-- **Share as PNG**: One-click export of concept + code + description
-- **Search & filter**: By category (Data Structures, Algorithms, Patterns, Web), level (Beginner, Intermediate, Advanced), or keyword
-- **Random mode**: Jump to a random concept
+- **Daily streak tracker**: Calendar-based progress with month navigation
+- **Stats panel**: Total days, best streak, concepts seen
+- **Share as PNG/GIF**: One-click export of concept + code + animation
+- **Search & filter**: By category, level, or keyword
+- **Keyboard shortcuts**: Arrow keys, Space, R for random
+- **Dark/Light theme**: Persistent preference saved in localStorage
+- **PWA support**: Installable, works offline with service worker
 - **Zero dependencies**: Vanilla HTML/CSS/JS, no frameworks, no build step
 - **Single file**: Everything in one `index.html`
 - **GitHub Pages ready**: Push and deploy instantly
