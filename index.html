@@ -265,9 +265,6 @@ steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"
 let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
 canvas.width=800;canvas.height=600;
-const offscreen=document.createElement("canvas");offscreen.width=800;offscreen.height=600;
-const offCtx=offscreen.getContext("2d");
-let cachedStep=-1,cachedId="";
 const doneDays=JSON.parse(localStorage.getItem("cv_done")||"[]");
 function getLocalToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 const today=getLocalToday();
@@ -308,7 +305,6 @@ if(filtered.length)loadConcept(filtered[0]);
 
 function drawStep(){
 if(!currentConcept)return;
-if(cachedId===currentConcept.id&&cachedStep===currentStep){ctx.clearRect(0,0,800,600);ctx.drawImage(offscreen,0,0);document.getElementById("stepInfo").textContent=`${t("step")} ${currentStep+1} / ${currentConcept.steps.length}`;return}
 ctx.clearRect(0,0,800,600);
 document.getElementById("stepInfo").textContent=`${t("step")} ${currentStep+1} / ${currentConcept.steps.length}`;
 const step=currentConcept.steps[currentStep],id=currentConcept.id;
@@ -531,7 +527,6 @@ fitems.forEach(function(it,idx){ctx.fillStyle=it.c;var gap=currentStep>=4?40:10;
 if(currentStep>=3){ctx.strokeStyle="#f85149";ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(400,150);ctx.lineTo(400,350);ctx.stroke();ctx.setLineDash([])}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["flex container","add items","justify-content","align-items","gap: 10px"][currentStep],400,450);
 }
-offCtx.clearRect(0,0,800,600);offCtx.drawImage(canvas,0,0);cachedId=currentConcept.id;cachedStep=currentStep;
 }
 
 let animProgress=1,animRAF=null;
