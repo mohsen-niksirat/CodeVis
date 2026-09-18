@@ -530,12 +530,14 @@ ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["fle
 }
 
 let animProgress=1,animRAF=null;
+function easeOut(t){return 1-Math.pow(1-t,3)}
 function animateTransition(){
 if(animProgress>=1){cancelAnimationFrame(animRAF);return}
-animProgress=Math.min(1,animProgress+0.05);
-ctx.globalAlpha=animProgress;
+animProgress=Math.min(1,animProgress+0.04);
+ctx.save();
+ctx.globalAlpha=easeOut(animProgress);
 drawStep();
-ctx.globalAlpha=1;
+ctx.restore();
 animRAF=requestAnimationFrame(animateTransition);
 }
 
