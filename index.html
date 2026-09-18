@@ -262,9 +262,17 @@ code:".container {\n  display: flex;\n  justify-content: space-between;\n  align
 steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"gap"}]}
 ];
 
-let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null;
+let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
-canvas.width=800;canvas.height=600;
+let DPR=window.devicePixelRatio||1;
+canvas.width=800*DPR;canvas.height=600*DPR;canvas.style.width="800px";canvas.style.height="600px";
+ctx.scale(DPR,DPR);
+const offscreen=document.createElement("canvas");
+offscreen.width=800;offscreen.height=600;
+const offCtx=offscreen.getContext("2d");
+ctx.imageSmoothingEnabled=true;
+function resizeCanvas(){DPR=window.devicePixelRatio||1;canvas.width=800*DPR;canvas.height=600*DPR;canvas.style.width="800px";canvas.style.height="600px";ctx.setTransform(1,0,0,1,0,0);ctx.scale(DPR,DPR)}
+window.addEventListener('resize',resizeCanvas);
 const doneDays=JSON.parse(localStorage.getItem("cv_done")||"[]");
 function getLocalToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 const today=getLocalToday();
@@ -292,9 +300,25 @@ currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
 document.getElementById("conceptTitle").textContent=c.title[lang]||c.title.en;
 document.getElementById("conceptLevel").textContent=t(c.level);
 document.getElementById("conceptDesc").textContent=c.desc[lang]||c.desc.en;
-document.getElementById("codeBlock").textContent=c.code;
+document.getElementById("codeBlock").innerHTML=c.code;
 document.getElementById("playBtn").textContent=t("play");
-drawStep();
+currentStep=0;animProgress=0;drawStep();
+}
+
+function easeInOut(t){return t<0.5?t*t*(t*4-1):1-Math.pow(-t+2,3)/2}
+function interp(a,b,p){return a+(b-a)*easeInOut(p)}
+
+function syncCodeLine(){
+if(!currentConcept)return;
+const lines=c.currentConcept.code.split("\n");
+const step=currentConcept.steps[currentStep];
+if(!step||!lines)return;
+let targetLine=0;
+if(step.val)lines.forEach((l,i)=>{if(l.includes(step.val)||l.includes(String(step.val)))targetLine=i});
+for(let i=0;i<lines.length;i++){
+lines[i]=lines[i].replace(/^(?!.*<mark>).*(?!.*<\/mark>).*$/m,(m)=>i===targetLine?`<mark>${m}</mark>`:m);
+}
+document.getElementById("codeBlock").innerHTML=lines.join("\n");
 }
 
 function filterAndLoad(){
