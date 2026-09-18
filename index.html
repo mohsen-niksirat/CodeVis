@@ -47,7 +47,7 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-day{aspect-ratio:1;border-radius:4px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#484f58}
 .cal-day.done{background:var(--accent);color:#fff;border-color:var(--accent)}
-.cal-day.today{border-color:var(--green);color:var(--green)}
+.cal-day.today{border-color:var(--green);color:var(--green)}`n.stats{width:100%;max-width:900px;padding:0 20px 40px;display:flex;gap:12px;flex-wrap:wrap}`n.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;flex:1;min-width:140px;text-align:center}`n.stat-card .val{font-size:1.5rem;font-weight:700;color:var(--accent2)}`n.stat-card .lbl{font-size:.8rem;color:#8b949e;margin-top:4px}
 #shareCanvas{display:none}
 </style>
 </head>
@@ -93,7 +93,7 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 </div>
 <div class="cal-grid" id="calGrid"></div>
 </div>
-<canvas id="shareCanvas" width="1200" height="675"></canvas>
+<div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div><canvas id="shareCanvas" width="1200" height="675"></canvas>
 <script>
 const i18n={
 en:{
@@ -269,7 +269,7 @@ const today=getLocalToday();
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
 function getStreak(){let s=0,d=new Date();while(true){const ds=d.toISOString().split("T")[0];if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
-function updateStreak(){document.getElementById("streak").textContent=getStreak()+" "+t("streak")}
+function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();const seen=new Set(doneDays.map((_,i)=>concepts[i%concepts.length]?.id));document.getElementById("statConcepts").textContent=Math.min(doneDays.length,concepts.length);document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats()}
 function buildCalendar(){
 const grid=document.getElementById("calGrid");grid.innerHTML="";
 const start=new Date(calYear,calMonth,1);
@@ -543,7 +543,7 @@ document.getElementById("playBtn").onclick=togglePlay;
 document.getElementById("randomBtn").onclick=()=>loadConcept(concepts[Math.floor(Math.random()*concepts.length)]);
 document.getElementById("categoryFilter").onchange=filterAndLoad;
 document.getElementById("levelFilter").onchange=filterAndLoad;
-document.getElementById("search").oninput=filterAndLoad;
+document.getElementById("search").oninput=filterAndLoad;`ndocument.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;if(e.key==="ArrowRight")nextStep();else if(e.key==="ArrowLeft")prevStep();else if(e.key===" "){e.preventDefault();togglePlay()}else if(e.key.toLowerCase()==="r")loadConcept(concepts[Math.floor(Math.random()*concepts.length)])});
 
 document.getElementById("shareBtn").onclick=()=>{
 const sc=document.getElementById("shareCanvas"),sx=sc.getContext("2d");
