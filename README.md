@@ -67,10 +67,10 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 
 ## Roadmap
 
-- [ ] 30+ concepts covering more CS topics
-- [ ] Smoother animations with requestAnimationFrame transitions
-- [ ] Dark/Light theme toggle
-- [ ] PWA support for full offline usage
+- [x] 30+ concepts covering more CS topics (49 now)
+- [x] Smoother animations with requestAnimationFrame transitions
+- [x] Dark/Light theme toggle
+- [x] PWA support for full offline usage
 - [ ] More languages (Arabic, Spanish, etc.)
 
 ## Contributing
@@ -97,7 +97,7 @@ MIT
 
 ## ویژگی‌ها
 
-- **۱۰ مفهوم تعاملی**: پشته، صف، لیست پیوندی، جستجوی دودویی، بازگشت، مرتب‌سازی حبابی، جدول هش، الگوی ناظر، درخت DOM، کلوژر
+- **۴۹ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، پویا (DP)، APIهای وب و مفاهیم سیستم‌عامل
 - **انیمیشن Canvas**: نمایش مرحله‌به‌مرحله هر مفهوم
 - **کنترل پخش**: پخش، توقف، بعدی، قبلی
 - **پنل کد همگام**: نمایش کد واقعی کنار انیمیشن
@@ -139,10 +139,10 @@ cd CodeVis
 
 ## نقشه راه
 
-- [ ] بیش از ۳۰ مفهوم پوشش‌دهنده موضوعات بیشتر علوم کامپیوتر
-- [ ] انیمیشن‌های روان‌تر با requestAnimationFrame
-- [ ] سوئیچ تم تاریک/روشن
-- [ ] پشتیبانی PWA برای استفاده کاملاً آفلاین
+- [x] بیش از ۳۰ مفهوم پوشش‌دهنده موضوعات بیشتر علوم کامپیوتر (۴۹ مفهوم)
+- [x] انیمیشن‌های روان‌تر با requestAnimationFrame
+- [x] سوئیچ تم تاریک/روشن
+- [x] پشتیبانی PWA برای استفاده کاملاً آفلاین
 - [ ] زبان‌های بیشتر (عربی، اسپانیایی و...)
 
 ## مشارکت

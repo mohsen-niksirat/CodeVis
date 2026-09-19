@@ -34,8 +34,9 @@ header h1{font-size:1.5rem;color:var(--accent2);letter-spacing:-0.5px}
 .card h2{font-size:1.1rem;margin-bottom:6px;color:var(--accent2)}
 .card .level{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:10px;background:var(--border);color:var(--text);margin-bottom:12px;text-transform:uppercase}
 .card .desc{font-size:.9rem;line-height:1.6;margin-bottom:16px;color:#8b949e}
-canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:block}
+canvas{width:100%;height:auto;border-radius:8px;background:#0a0e14;display:block}
 .code-block{background:#0a0e14;border-radius:8px;padding:14px;font-family:'Fira Code',monospace;font-size:.8rem;line-height:1.7;overflow-x:auto;white-space:pre;color:#e6edf3;max-height:300px;overflow-y:auto;direction:ltr;text-align:left}
+.code-block mark{background:var(--accent);color:#fff;border-radius:3px;padding:0 2px}
 .step-controls{display:flex;gap:8px;margin-top:14px;align-items:center}
 .step-controls button{padding:6px 16px;font-size:.8rem}
 .step-indicator{font-size:.8rem;color:#8b949e;margin-left:auto}
@@ -48,7 +49,11 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-day{aspect-ratio:1;border-radius:4px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#484f58}
 .cal-day.done{background:var(--accent);color:#fff;border-color:var(--accent)}
-.cal-day.today{border-color:var(--green);color:var(--green)}`n.stats{width:100%;max-width:900px;padding:0 20px 40px;display:flex;gap:12px;flex-wrap:wrap}`n.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;flex:1;min-width:140px;text-align:center}`n.stat-card .val{font-size:1.5rem;font-weight:700;color:var(--accent2)}`n.stat-card .lbl{font-size:.8rem;color:#8b949e;margin-top:4px}
+.cal-day.today{border-color:var(--green);color:var(--green)}
+.stats{width:100%;max-width:900px;padding:0 20px 40px;display:flex;gap:12px;flex-wrap:wrap}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px;flex:1;min-width:140px;text-align:center}
+.stat-card .val{font-size:1.5rem;font-weight:700;color:var(--accent2)}
+.stat-card .lbl{font-size:.8rem;color:#8b949e;margin-top:4px}
 #shareCanvas{display:none}
 </style>
 </head>
@@ -96,19 +101,22 @@ canvas{width:100%;height:300px;border-radius:8px;background:#0a0e14;display:bloc
 <div class="cal-grid" id="calGrid"></div>
 </div>
 <div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div><canvas id="shareCanvas" width="1200" height="675"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 <script>
 const i18n={
 en:{
 streak:"day streak",allCategories:"All Categories",ds:"Data Structures",algo:"Algorithms",pattern:"Patterns",web:"Web",
 allLevels:"All Levels",beginner:"Beginner",intermediate:"Intermediate",advanced:"Advanced",
 searchPh:"Search concepts...",random:"Random",share:"Share as PNG",
-play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",langToggle:"فا"
+play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",
+totalDays:"Total Days",bestStreak:"Best Streak",conceptsSeen:"Concepts Seen",langToggle:"فا"
 },
 fa:{
 streak:"روز متوالی",allCategories:"همه دسته‌ها",ds:"ساختمان داده",algo:"الگوریتم‌ها",pattern:"الگوها",web:"وب",
 allLevels:"همه سطوح",beginner:"مبتدی",intermediate:"متوسط",advanced:"پیشرفته",
 searchPh:"جستجوی مفاهیم...",random:"تصادفی",share:"اشتراک PNG",
-play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",langToggle:"EN"
+play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",
+totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:"مفاهیم دیده‌شده",langToggle:"EN"
 }
 };
 let lang=localStorage.getItem("cv_lang")||"en";
@@ -263,42 +271,44 @@ steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"
 {id:"avl",title:{en:"AVL Tree",fa:"درخت AVL"},category:"ds",level:"advanced",desc:{en:"Self-balancing binary search tree with height rotation.",fa:"درخت دودویی جستجو با تعادل خودکار با چرخش ارتفاع."},code:"function getBalance(n){return n?n.left.height-n.right.height:0}\nfunction rotateRight(y){const x=y.left;x.right=y.left;x.height=Math.max(x.left.height,x.right.height)+1;y.height=Math.max(y.left.height,y.right.height)+1;return x}",steps:[{type:"insert"},{"type":"check"},{"type":"rotate"},{"type":"balance"},{"type":"done"}]},
 {id:"dijkstra",title:{en:"Dijkstra",fa:"دیکسترا"},category:"algo",level:"advanced",desc:{en:"Shortest path in weighted graph with non-negative edges.",fa:"کوتاه‌ترین مسیر در گراف وزن‌دار با یک‌جهت‌گیری مثبت."},code:"function dijkstra(graph,s){const d={},pq=new PriorityQueue();for(const n in graph)d[n]=Infinity;d[s]=0;pq.enqueue([s,0]);while(!pq.isEmpty()){const[u,w]=pq.dequeue();if(w>d[u])continue;for(const[v,c]of graph[u]){if(d[u]+c<d[v]){d[v]=d[u]+c;pq.enqueue([v,d[v]])}}}return d}",steps:[{type:"init"},{"type":"visit"},{"type":"relax"},{"type":"update"},{"type":"done"}]},
 {id:"toposort",title:{en:"Topological Sort",fa:"مرتب‌سازی شی‌داری"},category:"algo",level:"advanced",desc:{en:"Linear ordering of vertices where each edge goes from earlier to later.",fa:"ترتیب خطی رئوی گراف که هر یک‌جهت‌گیری از زودتر به بعد می‌رود."},code:"function topoSort(g){const v=new Set(),r=[];function visit(n){if(v.has(n))return;v.add(n);for(const x of g[n])visit(x);r.push(n)}for(const n in g)visit(n);return r.reverse()}",steps:[{type:"start"},{"type":"dfs"},{"type":"reached"},{"type":"add"},{"type":"reverse"}]},
-{id:"fib_dp",title:{en:"Fibonacci DP",fa:"فیبوناچی با پویا"},category:"algo",level:"intermediate",desc:{en:"Memoization vs tabulation for optimal substructure.",fa:"حافظه موقت مقابل جدول‌بندی برای زیرساختار بهینه."},code:"function fibMem(n,c={}){if(n<=1)return n;if(c[n])return c[n];c[n]=fibMemo(n-1,c)+fibMemo(n-2,c);return c[n]}\nfunction fibTab(n){const d=[0,1];for(let i=2;i<=n;i++)d[i]=d[i-1]+d[i-2];return d[n]}",steps:[{type:"memo"},{"type":"cache"},{"type":"tab"},{"type":"iter"},{"type:"result"}]},
-{id:"knapsack",title:{en:"0/1 Knapsack",fa:"کپس‌پی"},category:"algo",level:"advanced",desc:{en:"Maximize value within weight capacity using dynamic programming.",fa:"بیشینه کردن ارزش در محدودیت وزن با پویای برنامه‌نویسی."},code:"function knap(items,W){const dp=Array(W+1).fill(0);for(const{w,v}of items)for(let c=W;c>=w;c--)dp[c]=Math.max(dp[c],dp[c-w]+v);return dp[W]}",steps:[{type:"init"},{"type":"iterate"},{"type:"choose"},{"type:"fill"},{"type:"result"}]},
-{id:"virtualmem",title:{en:"Virtual Memory",fa:"حافظه مجازی"},category:"ds",level:"advanced",desc:{en:"Page table translation from virtual to physical addresses.",fa:"ترجمه آدرس مجازی به فیزیکی با جدول صفحه."},code:"// VirtualAddr: 32-bit\n// Page = VirtualAddr >> 12 (high 20 bits)\n// Offset = VirtualAddr & 0xFFF (low 12 bits)\nphysicalAddr = (pageTable[page] << 12) | offset",steps:[{type:"virtual"},{"type":"split"},{"type:"lookup"},{"type":"translate"},{"type:"cache"}]},
-{id:"callstack",title:{en:"Call Stack",fa:"پشته فراخوانی"},category:"web",level:"beginner",desc:{en:"Function call frames pushed onto and popped from the call stack in LIFO order.",fa:"فریم‌های فراخوانی تابع به صورت LIFO روی پشته فراخوانی افزوده و حذف می‌شوند."},code:"function outer(){\n  const a=1;        // Stack frame 1\n  function inner(){\n    const b=2;      // Stack frame 2\n    return a+b;\n  }\n  return inner();    // frames: outer->inner->return->pop\n}\nouter();",steps:[{type:"push"},{"type":"local"},{"type:"nested"},{"type":"return"},{"type:"pop"}]},
-{id:"heapvsstack",title:{en:"Heap vs Stack",fa:"هیپ مقابل پشته"},category:"ds",level:"intermediate",desc:{en:"Stack for local vars, heap for objects. GC reclaims unused heap memory.",fa:"پشته برای متغیرهای محلی، هیپ برای اشیاء. GC حافظه هیپ استفاده‌نشده را آزاد می‌کند."},code:"// Stack: fast allocation, auto cleanup\n// Heap: slower, manual reference counting or GC\nlet primitive = 42;          // Stack\nlet obj = {x:1, y:2};        // Heap\n// When obj refs = 0, GC frees it",steps:[{type:"stack"},{"type":"heap"},{"type:"alloc"},{"type:"gc"},{"type:"cleanup"}]},
-{id:"jwt",title:{en:"JWT Lifecycle",fa:"چرخه عمر JWT"},category:"web",level:"intermediate",desc:{en:"Header, payload, signature - base64url encoded for client-side storage and server verification.",fa:"سربرگ، بار محتوا، امضا - به صورت base64url برای ذخیره‌سازی سمت کلاینت و اعتبارسنجی سرور."},code:"// Header: {\"alg\":\"HS256\",\"typ\":\"JWT\"}\n// Payload: {\"sub\":123,\"exp\":1234567890}\n// Signature: HMAC(base64(header)+\".\"+base64(payload), secret)\n// Output: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyM30...",steps:[{type:"header"},{"type":"payload"},{"type:"sign"},{"type:"token"},{"type:"verify"}]},
-{id:"webworker",title:{en:"Web Worker",fa:"ویب ورکر"},category:"web",level:"advanced",desc:{en,"Background thread for CPU-intensive tasks without blocking main thread.",fa:"رشته پس‌زمینه برای وظایف سنگین بدون مسدود کردن رشته اصلی."},code:"// Main thread\nconst w = new Worker('worker.js');\nw.postMessage({cmd:'process',data:largeArray});\nw.onmessage = e => console.log(e.data);\n\n// worker.js\nself.onmessage = e => {\n  const r = e.data.data.reduce((a,b)=>a+b,0);\n  self.postMessage(r);\n};",steps:[{type:"spawn"},{"type":"post"},{"type":"process"},{"type":"result"},{"type:"terminate"}]},
-{id:"gc",title:{en:"Garbage Collection",fa:"جمع‌آوری زباله"},category:"ds",level:"advanced",desc:{en,"Mark-and-sweep: identify reachable objects, mark, then sweep unreachable memory.",fa:"علامت و پاک‌سازی: شناسایی اشیاء قابل‌دسترس، علامت‌گذاری، سپس پاک‌سازی حافظه غیرمرجع."},code:"// Phase 1: Mark all roots and reachable objects\n// Phase 2: Sweep all unmarked memory regions as garbage\n// Phase 3: Compact heap if fragmentation > threshold\nfunction isGarbage(obj){return !obj.reachableFromGC}",steps:[{type:"roots"},{"type":"mark"},{"type":"sweep"},{"type:"free"},{"type":"compact"}]},
-{id:"bloom",title:{en:"Bloom Filter",fa:"فیلتر بلوم"},category:"ds",level:"advanced",desc:{en,"Space-efficient probabilistic set membership test with false positive rate.",fa:"تست عضویت احتمالی فضای صرفه‌جویی‌شده با نرخ خطای مثبت."},code:"class BloomFilter{\n  constructor(size,hashCount){this.bits=new Uint8Array(size);this.k=hashCount}\n  add(item){for(const h of this.hash(item))this.bits[h%this.bits.length]=1}\n  mightContain(item){return this.hash(item).every(h=>this.bits[h%this.bits.length]===1)}\n}",steps:[{type:"init"},{"type":"hash"},{"type:"set"},{"type:"query"},{"type:"result"}]},
-{id:"lru",title:{en:"LRU Cache",fa:"کش LRU"},category:"ds",level:"intermediate",desc:{en,"Evict least recently used item when cache is full. Doubly-linked list + hash map for O(1) operations.",fa:"حذف کمترین دسترسی اخیر وقت کش پر است. لیست دوطرفه + جدotle هش برای عملیات O(1)."},code:"class LRUCache{constructor(k){this.c=k;this.map=new Map()}\nget(k){if(!this.map.has(k))return-1;const v=this.map.get(k);this.map.delete(k);this.map.set(k,v);return v}\nput(k,v){if(this.map.has(k))this.map.delete(k);else if(this.map.size===this.c){const f=this.map.keys().next().value;this.map.delete(f);this.map.set(k,v)}}",steps:[{type:"get"},{"type:"hit"},{"type:"reorder"},{"type:"miss"},{"type:"evict"}]},
-{id:"debounce",title:{en:"Debounce",fa:"دبانس"},category:"web",level:"beginner",desc:{en,"Delay function execution until after a pause. Essential for search input optimization.",fa,"تأخیر اجرای تابع تا پس از یک توقف. ضروری برای بهینه‌سازی ورودی جستجو."},code:"function debounce(fn, delay){\n  let t;\n  return (...args)=>{\n    clearTimeout(t);\n    t=setTimeout(()=>fn(...args),delay);\n  };\n}\n// Usage: window.addEventListener('resize', debounce(handleResize, 300));",steps:[{type:"call"},{"type":"wait"},{"type:"cancel"},{"type:"exec"},{"type":"done"}]},
-{id:"promiseAll",title:{en:"Promise.all",fa:"پرامیس.اُل"},category:"web",level:"intermediate",desc:{en,"Wait for all promises to resolve or first rejection. Useful for parallel API calls.",fa,"منتظر رسیدن همه پرامیس یا اولین ارجاع خطا. مفید برای فراخوانی‌های موازی API."},code:"Promise.all([\n  fetch('/api/users'),   // Promise 1\n  fetch('/api/posts'),   // Promise 2\n  fetch('/api/comments')  // Promise 3\n]).then(([users, posts, comments])=>{\n  // All resolved\n  console.log(users, posts, comments);\n}).catch(err=>{\n  // First rejection stops execution\n  console.error('One failed:', err);\n});",steps:[{type:"start"},{"type":"fetch1"},{"type:"fetch2"},{"type:"fetch3"},{"type:"resolve"}]},
-{id:"cors",title:{en:"CORS",fa:"CORS"},category:"web",level:"intermediate",desc:{en,"Cross-Origin Resource Sharing: HTTP headers controlling which origins can access resources.",fa,"تبادل منابع بین‌مرکزی: سرآیندهای HTTP که کنترل دسترسی مناطع را فراهم می‌کنند."},code:"// Server must send CORS headers:\nAccess-Control-Allow-Origin: https://your-site.com\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE\nAccess-Control-Allow-Headers: Content-Type, Authorization\n\n// Browser blocks cross-origin requests without these headers",steps:[{type:"request"},{"type":"blocked"},{"type:"header"},{"type:"allowed"},{"type:"cache"}]},
-{id:"regex",title:{en:"Regex",fa:"نگاه منظم"},category:"web",level:"intermediate",desc:{en,"Pattern matching with anchors, quantifiers, character classes, and capturing groups.",fa,"جستجوی الگو با نقطه‌گذاری، شمارنده، کلاس‌های کاراکتر و گروه‌های گرفتن."},code:"// Email validation\nconst email=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;\n\n// Phone number\nconst phone=/\\d{3}-\\d{3}-\\d{4}/;\n\n// Match and extract\ntext.match(email)           // returns array or null\ntext.replace(phone, 'XXX-XXX-XXXX')  // replace",steps:[{type:"pattern"},{"type":"anchor"},{"type:"match"},{"type:"capture"},{"type:"result"}]},
-{id:"heapSort",title:{en:"Heap Sort",fa:"مرتب‌سازی هیپ"},category:"algo",level:"advanced",desc:{en,"Build max-heap then repeatedly extract max for O(n log n) sort.",fa,"ساخت تمام‌گرا سپس استخراج مکرر بیشینه برای مرتب‌سازی O(n log n)."},code:"function heapSort(arr){\n  heapify(arr, arr.length);\n  for(let i=arr.length-1;i>0;i--){[arr[0],arr[i]]=[arr[i],arr[0]];heapify(arr,i)};\n  return arr;\n}\nfunction heapify(arr,n,i){let l=2*i+1,r=2*i+2,largest=i;\n  if(l<n&&arr[l]>arr[largest])largest=l;\n  if(r<n&&arr[r]>arr[largest])largest=r;\n  if(largest!==i){[arr[i],arr[largest]]=[arr[largest],arr[i]];heapify(arr,n,largest)};\n}",steps:[{type:"build"},{"type:"swap"},{"type:"restore"},{"type:"extract"},{"type:"sorted"}]},
-{id:"quicksortAvg",title:{en:"Quick Sort Avg",fa:"مرتب‌سازی سریع میانگین"},category:"algo",level:"advanced",desc:{en,"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.",fa,"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},code:"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}",steps:[{type:"analysis"},{"type:"average"},{"type:"worst"},{"type:"pivot"},{"type:"optimize"}]},
+{id:"fib_dp",title:{en:"Fibonacci DP",fa:"فیبوناچی با پویا"},category:"algo",level:"intermediate",desc:{en:"Memoization vs tabulation for optimal substructure.",fa:"حافظه موقت مقابل جدول‌بندی برای زیرساختار بهینه."},code:"function fibMem(n,c={}){if(n<=1)return n;if(c[n])return c[n];c[n]=fibMemo(n-1,c)+fibMemo(n-2,c);return c[n]}\nfunction fibTab(n){const d=[0,1];for(let i=2;i<=n;i++)d[i]=d[i-1]+d[i-2];return d[n]}",steps:[{type:"memo"},{"type":"cache"},{"type":"tab"},{"type":"iter"},{type:"result"}]},
+{id:"knapsack",title:{en:"0/1 Knapsack",fa:"کپس‌پی"},category:"algo",level:"advanced",desc:{en:"Maximize value within weight capacity using dynamic programming.",fa:"بیشینه کردن ارزش در محدودیت وزن با پویای برنامه‌نویسی."},code:"function knap(items,W){const dp=Array(W+1).fill(0);for(const{w,v}of items)for(let c=W;c>=w;c--)dp[c]=Math.max(dp[c],dp[c-w]+v);return dp[W]}",steps:[{type:"init"},{"type":"iterate"},{type:"choose"},{type:"fill"},{type:"result"}]},
+{id:"virtualmem",title:{en:"Virtual Memory",fa:"حافظه مجازی"},category:"ds",level:"advanced",desc:{en:"Page table translation from virtual to physical addresses.",fa:"ترجمه آدرس مجازی به فیزیکی با جدول صفحه."},code:"// VirtualAddr: 32-bit\n// Page = VirtualAddr >> 12 (high 20 bits)\n// Offset = VirtualAddr & 0xFFF (low 12 bits)\nphysicalAddr = (pageTable[page] << 12) | offset",steps:[{type:"virtual"},{"type":"split"},{type:"lookup"},{"type":"translate"},{type:"cache"}]},
+{id:"callstack",title:{en:"Call Stack",fa:"پشته فراخوانی"},category:"web",level:"beginner",desc:{en:"Function call frames pushed onto and popped from the call stack in LIFO order.",fa:"فریم‌های فراخوانی تابع به صورت LIFO روی پشته فراخوانی افزوده و حذف می‌شوند."},code:"function outer(){\n  const a=1;        // Stack frame 1\n  function inner(){\n    const b=2;      // Stack frame 2\n    return a+b;\n  }\n  return inner();    // frames: outer->inner->return->pop\n}\nouter();",steps:[{type:"push"},{"type":"local"},{type:"nested"},{"type":"return"},{type:"pop"}]},
+{id:"heapvsstack",title:{en:"Heap vs Stack",fa:"هیپ مقابل پشته"},category:"ds",level:"intermediate",desc:{en:"Stack for local vars, heap for objects. GC reclaims unused heap memory.",fa:"پشته برای متغیرهای محلی، هیپ برای اشیاء. GC حافظه هیپ استفاده‌نشده را آزاد می‌کند."},code:"// Stack: fast allocation, auto cleanup\n// Heap: slower, manual reference counting or GC\nlet primitive = 42;          // Stack\nlet obj = {x:1, y:2};        // Heap\n// When obj refs = 0, GC frees it",steps:[{type:"stack"},{"type":"heap"},{type:"alloc"},{type:"gc"},{type:"cleanup"}]},
+{id:"jwt",title:{en:"JWT Lifecycle",fa:"چرخه عمر JWT"},category:"web",level:"intermediate",desc:{en:"Header, payload, signature - base64url encoded for client-side storage and server verification.",fa:"سربرگ، بار محتوا، امضا - به صورت base64url برای ذخیره‌سازی سمت کلاینت و اعتبارسنجی سرور."},code:"// Header: {\"alg\":\"HS256\",\"typ\":\"JWT\"}\n// Payload: {\"sub\":123,\"exp\":1234567890}\n// Signature: HMAC(base64(header)+\".\"+base64(payload), secret)\n// Output: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyM30...",steps:[{type:"header"},{"type":"payload"},{type:"sign"},{type:"token"},{type:"verify"}]},
+{id:"webworker",title:{en:"Web Worker",fa:"ویب ورکر"},category:"web",level:"advanced",desc:{en:"Background thread for CPU-intensive tasks without blocking main thread.",fa:"رشته پس‌زمینه برای وظایف سنگین بدون مسدود کردن رشته اصلی."},code:"// Main thread\nconst w = new Worker('worker.js');\nw.postMessage({cmd:'process',data:largeArray});\nw.onmessage = e => console.log(e.data);\n\n// worker.js\nself.onmessage = e => {\n  const r = e.data.data.reduce((a,b)=>a+b,0);\n  self.postMessage(r);\n};",steps:[{type:"spawn"},{"type":"post"},{"type":"process"},{"type":"result"},{type:"terminate"}]},
+{id:"gc",title:{en:"Garbage Collection",fa:"جمع‌آوری زباله"},category:"ds",level:"advanced",desc:{en:"Mark-and-sweep: identify reachable objects, mark, then sweep unreachable memory.",fa:"علامت و پاک‌سازی: شناسایی اشیاء قابل‌دسترس، علامت‌گذاری، سپس پاک‌سازی حافظه غیرمرجع."},code:"// Phase 1: Mark all roots and reachable objects\n// Phase 2: Sweep all unmarked memory regions as garbage\n// Phase 3: Compact heap if fragmentation > threshold\nfunction isGarbage(obj){return !obj.reachableFromGC}",steps:[{type:"roots"},{"type":"mark"},{"type":"sweep"},{type:"free"},{"type":"compact"}]},
+{id:"bloom",title:{en:"Bloom Filter",fa:"فیلتر بلوم"},category:"ds",level:"advanced",desc:{en:"Space-efficient probabilistic set membership test with false positive rate.",fa:"تست عضویت احتمالی فضای صرفه‌جویی‌شده با نرخ خطای مثبت."},code:"class BloomFilter{\n  constructor(size,hashCount){this.bits=new Uint8Array(size);this.k=hashCount}\n  add(item){for(const h of this.hash(item))this.bits[h%this.bits.length]=1}\n  mightContain(item){return this.hash(item).every(h=>this.bits[h%this.bits.length]===1)}\n}",steps:[{type:"init"},{"type":"hash"},{type:"set"},{type:"query"},{type:"result"}]},
+{id:"lru",title:{en:"LRU Cache",fa:"کش LRU"},category:"ds",level:"intermediate",desc:{en:"Evict least recently used item when cache is full. Doubly-linked list + hash map for O(1) operations.",fa:"حذف کمترین دسترسی اخیر وقت کش پر است. لیست دوطرفه + جدotle هش برای عملیات O(1)."},code:"class LRUCache{constructor(k){this.c=k;this.map=new Map()}\nget(k){if(!this.map.has(k))return-1;const v=this.map.get(k);this.map.delete(k);this.map.set(k,v);return v}\nput(k,v){if(this.map.has(k))this.map.delete(k);else if(this.map.size===this.c){const f=this.map.keys().next().value;this.map.delete(f);this.map.set(k,v)}}",steps:[{type:"get"},{type:"hit"},{type:"reorder"},{type:"miss"},{type:"evict"}]},
+{id:"debounce",title:{en:"Debounce",fa:"دبانس"},category:"web",level:"beginner",desc:{en:"Delay function execution until after a pause. Essential for search input optimization.",fa:"تأخیر اجرای تابع تا پس از یک توقف. ضروری برای بهینه‌سازی ورودی جستجو."},code:"function debounce(fn, delay){\n  let t;\n  return (...args)=>{\n    clearTimeout(t);\n    t=setTimeout(()=>fn(...args),delay);\n  };\n}\n// Usage: window.addEventListener('resize', debounce(handleResize, 300));",steps:[{type:"call"},{"type":"wait"},{type:"cancel"},{type:"exec"},{"type":"done"}]},
+{id:"promiseAll",title:{en:"Promise.all",fa:"پرامیس.اُل"},category:"web",level:"intermediate",desc:{en:"Wait for all promises to resolve or first rejection. Useful for parallel API calls.",fa:"منتظر رسیدن همه پرامیس یا اولین ارجاع خطا. مفید برای فراخوانی‌های موازی API."},code:"Promise.all([\n  fetch('/api/users'),   // Promise 1\n  fetch('/api/posts'),   // Promise 2\n  fetch('/api/comments')  // Promise 3\n]).then(([users, posts, comments])=>{\n  // All resolved\n  console.log(users, posts, comments);\n}).catch(err=>{\n  // First rejection stops execution\n  console.error('One failed:', err);\n});",steps:[{type:"start"},{"type":"fetch1"},{type:"fetch2"},{type:"fetch3"},{type:"resolve"}]},
+{id:"cors",title:{en:"CORS",fa:"CORS"},category:"web",level:"intermediate",desc:{en:"Cross-Origin Resource Sharing: HTTP headers controlling which origins can access resources.",fa:"تبادل منابع بین‌مرکزی: سرآیندهای HTTP که کنترل دسترسی مناطع را فراهم می‌کنند."},code:"// Server must send CORS headers:\nAccess-Control-Allow-Origin: https://your-site.com\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE\nAccess-Control-Allow-Headers: Content-Type, Authorization\n\n// Browser blocks cross-origin requests without these headers",steps:[{type:"request"},{"type":"blocked"},{type:"header"},{type:"allowed"},{type:"cache"}]},
+{id:"regex",title:{en:"Regex",fa:"نگاه منظم"},category:"web",level:"intermediate",desc:{en:"Pattern matching with anchors, quantifiers, character classes, and capturing groups.",fa:"جستجوی الگو با نقطه‌گذاری، شمارنده، کلاس‌های کاراکتر و گروه‌های گرفتن."},code:"// Email validation\nconst email=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;\n\n// Phone number\nconst phone=/\\d{3}-\\d{3}-\\d{4}/;\n\n// Match and extract\ntext.match(email)           // returns array or null\ntext.replace(phone, 'XXX-XXX-XXXX')  // replace",steps:[{type:"pattern"},{"type":"anchor"},{type:"match"},{type:"capture"},{type:"result"}]},
+{id:"heapSort",title:{en:"Heap Sort",fa:"مرتب‌سازی هیپ"},category:"algo",level:"advanced",desc:{en:"Build max-heap then repeatedly extract max for O(n log n) sort.",fa:"ساخت تمام‌گرا سپس استخراج مکرر بیشینه برای مرتب‌سازی O(n log n)."},code:"function heapSort(arr){\n  heapify(arr, arr.length);\n  for(let i=arr.length-1;i>0;i--){[arr[0],arr[i]]=[arr[i],arr[0]];heapify(arr,i)};\n  return arr;\n}\nfunction heapify(arr,n,i){let l=2*i+1,r=2*i+2,largest=i;\n  if(l<n&&arr[l]>arr[largest])largest=l;\n  if(r<n&&arr[r]>arr[largest])largest=r;\n  if(largest!==i){[arr[i],arr[largest]]=[arr[largest],arr[i]];heapify(arr,n,largest)};\n}",steps:[{type:"build"},{type:"swap"},{type:"restore"},{type:"extract"},{type:"sorted"}]},
+{id:"quicksortAvg",title:{en:"Quick Sort Avg",fa:"مرتب‌سازی سریع میانگین"},category:"algo",level:"advanced",desc:{en:"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.",fa:"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},code:"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}",steps:[{type:"analysis"},{type:"average"},{type:"worst"},{type:"pivot"},{type:"optimize"}]},
 ];
 
 let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
-let DPR=window.devicePixelRatio||1;
-canvas.width=800*DPR;canvas.height=600*DPR;canvas.style.width="800px";canvas.style.height="600px";
-ctx.scale(DPR,DPR);
+let DPR=1;
+function resizeCanvas(){DPR=window.devicePixelRatio||1;canvas.width=800*DPR;canvas.height=600*DPR;ctx.setTransform(1,0,0,1,0,0);ctx.scale(DPR,DPR);drawStep()}
+resizeCanvas();
 const offscreen=document.createElement("canvas");
 offscreen.width=800;offscreen.height=600;
 const offCtx=offscreen.getContext("2d");
 ctx.imageSmoothingEnabled=true;
-function resizeCanvas(){DPR=window.devicePixelRatio||1;canvas.width=800*DPR;canvas.height=600*DPR;canvas.style.width="800px";canvas.style.height="600px";ctx.setTransform(1,0,0,1,0,0);ctx.scale(DPR,DPR)}
 window.addEventListener('resize',resizeCanvas);
 const doneDays=JSON.parse(localStorage.getItem("cv_done")||"[]");
-function getLocalToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+const seenIds=new Set(JSON.parse(localStorage.getItem("cv_seen")||"[]"));
+function markSeen(id){if(!seenIds.has(id)){seenIds.add(id);localStorage.setItem("cv_seen",JSON.stringify([...seenIds]))}}
+function fmtLocal(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function getLocalToday(){return fmtLocal(new Date())}
 const today=getLocalToday();
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
-function getStreak(){let s=0,d=new Date();while(true){const ds=d.toISOString().split("T")[0];if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
-function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();const seen=new Set(doneDays.map((_,i)=>concepts[i%concepts.length]?.id));document.getElementById("statConcepts").textContent=Math.min(doneDays.length,concepts.length);document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats()}
+function getStreak(){let s=0,d=new Date();while(true){const ds=fmtLocal(d);if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
+function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats()}
 function buildCalendar(){
 const grid=document.getElementById("calGrid");grid.innerHTML="";
 const start=new Date(calYear,calMonth,1);
@@ -314,14 +324,17 @@ document.getElementById("calPrev").onclick=()=>{calMonth--;if(calMonth<0){calMon
 document.getElementById("calNext").onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}buildCalendar()};
 function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays))}localStorage.setItem("cv_lastConcept",currentConcept?currentConcept.id:"");updateStreak();buildCalendar()}
 
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
 function loadConcept(c){
 currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
 document.getElementById("conceptTitle").textContent=c.title[lang]||c.title.en;
 document.getElementById("conceptLevel").textContent=t(c.level);
 document.getElementById("conceptDesc").textContent=c.desc[lang]||c.desc.en;
-document.getElementById("codeBlock").innerHTML=c.code;
+document.getElementById("codeBlock").innerHTML=esc(c.code);
 document.getElementById("playBtn").textContent=t("play");
 currentStep=0;animProgress=0;drawStep();
+markSeen(c.id);updateStats();syncCodeLine();
 }
 
 function easeInOut(t){return t<0.5?t*t*(t*4-1):1-Math.pow(-t+2,3)/2}
@@ -329,15 +342,12 @@ function interp(a,b,p){return a+(b-a)*easeInOut(p)}
 
 function syncCodeLine(){
 if(!currentConcept)return;
-const lines=c.currentConcept.code.split("\n");
+const lines=currentConcept.code.split("\n").map(esc);
 const step=currentConcept.steps[currentStep];
-if(!step||!lines)return;
+if(!step)return;
 let targetLine=0;
-if(step.val)lines.forEach((l,i)=>{if(l.includes(step.val)||l.includes(String(step.val)))targetLine=i});
-for(let i=0;i<lines.length;i++){
-lines[i]=lines[i].replace(/^(?!.*<mark>).*(?!.*<\/mark>).*$/m,(m)=>i===targetLine?`<mark>${m}</mark>`:m);
-}
-document.getElementById("codeBlock").innerHTML=lines.join("\n");
+if(step.val!=null){const sv=String(step.val);lines.forEach((l,i)=>{if(l.includes(sv))targetLine=i})}
+document.getElementById("codeBlock").innerHTML=lines.map((l,i)=>i===targetLine?`<mark>${l}</mark>`:l).join("\n");
 }
 
 function filterAndLoad(){
@@ -572,7 +582,7 @@ ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["fle
 }
 }
 
-let animProgress=1,animRAF=null;
+let animRAF=null;
 function easeOut(t){return 1-Math.pow(1-t,3)}
 function animateTransition(){
 if(animProgress>=1){cancelAnimationFrame(animRAF);return}
@@ -584,8 +594,8 @@ ctx.restore();
 animRAF=requestAnimationFrame(animateTransition);
 }
 
-function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();markDone()}
-function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition()}
+function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();if(currentStep===currentConcept.steps.length-1)markDone()}
+function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine()}
 function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,1200)}}
 
 document.getElementById("nextBtn").onclick=nextStep;
@@ -594,7 +604,8 @@ document.getElementById("playBtn").onclick=togglePlay;
 document.getElementById("randomBtn").onclick=()=>loadConcept(concepts[Math.floor(Math.random()*concepts.length)]);
 document.getElementById("categoryFilter").onchange=filterAndLoad;
 document.getElementById("levelFilter").onchange=filterAndLoad;
-document.getElementById("search").oninput=filterAndLoad;`ndocument.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;if(e.key==="ArrowRight")nextStep();else if(e.key==="ArrowLeft")prevStep();else if(e.key===" "){e.preventDefault();togglePlay()}else if(e.key.toLowerCase()==="r")loadConcept(concepts[Math.floor(Math.random()*concepts.length)])});
+document.getElementById("search").oninput=filterAndLoad;
+document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;if(e.key==="ArrowRight")nextStep();else if(e.key==="ArrowLeft")prevStep();else if(e.key===" "){e.preventDefault();togglePlay()}else if(e.key.toLowerCase()==="r")loadConcept(concepts[Math.floor(Math.random()*concepts.length)])});
 
 document.getElementById("shareBtn").onclick=()=>{
 const sc=document.getElementById("shareCanvas"),sx=sc.getContext("2d");
@@ -617,12 +628,15 @@ sc.toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);
 
 document.getElementById("gifBtn").onclick=()=>{
 if(!currentConcept)return;
-const gif=new GIF({workers:2,quality:10,width:800,height:600,workerScript:"https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js"});
+fetch("https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js").then(r=>r.text()).then(w=>{
+const workerUrl=URL.createObjectURL(new Blob([w],{type:"application/javascript"}));
+const gif=new GIF({workers:2,quality:10,width:800,height:600,workerScript:workerUrl});
 const savedStep=currentStep;
-for(let i=0;i<currentConcept.steps.length;i++){currentStep=i;drawStep();gif.addFrame(canvas,{copy:true,delay:800})}
-currentStep=savedStep;drawStep();
+for(let i=0;i<currentConcept.steps.length;i++){currentStep=i;drawStep();offCtx.drawImage(canvas,0,0,800,600);gif.addFrame(offscreen,{copy:true,delay:800})}
+currentStep=savedStep;drawStep();syncCodeLine();
 gif.on("finished",b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="codevis-"+currentConcept.id+".gif";a.click()});
 gif.render();
+});
 };
 
 const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
