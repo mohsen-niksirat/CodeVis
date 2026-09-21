@@ -67,10 +67,23 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 
 ## Roadmap
 
-- [x] 30+ concepts covering more CS topics (49 now)
-- [x] Smoother animations with requestAnimationFrame transitions
-- [x] Dark/Light theme toggle
-- [x] PWA support for full offline usage
+### Phase 0: Foundation ✅
+- [x] Fix all syntax errors
+- [x] Add CI workflow (node check + lighthouse)
+- [x] Add SEO files (robots.txt, sitemap.xml)
+
+### Phase 1: User Experience ✅
+- [x] Hash-based URL routing (#/concept/{id})
+- [x] Speed slider control (500ms-2000ms)
+- [x] Fullscreen mode
+
+### Phase 2: Content & Export ✅
+- [x] Timeline scrubber for step navigation
+- [x] WebM video export
+- [x] 49 concepts live
+
+### Phase 3: Polish (In Progress)
+- [ ] Lighthouse enforced (currently optional)
 - [ ] More languages (Arabic, Spanish, etc.)
 
 ## Contributing
@@ -139,10 +152,23 @@ cd CodeVis
 
 ## نقشه راه
 
-- [x] بیش از ۳۰ مفهوم پوشش‌دهنده موضوعات بیشتر علوم کامپیوتر (۴۹ مفهوم)
-- [x] انیمیشن‌های روان‌تر با requestAnimationFrame
-- [x] سوئیچ تم تاریک/روشن
-- [x] پشتیبانی PWA برای استفاده کاملاً آفلاین
+### فاز ۰: پایه ✅
+- [x] رفع تمام خطاهای سینتکس
+- [x] افزودن CI (بررسی node + lighthouse)
+- [x] افزودن فایل‌های سئو (robots.txt، sitemap.xml)
+
+### فاز ۱: تجربه کاربری ✅
+- [x] مسیریابی URL بر پایه هش (#/concept/{id})
+- [x] اسلایدر سرعت (500ms-2000ms)
+- [x] حالت تماشا
+
+### فاز ۲: محتوا و خروجی ✅
+- [x] اسکرول‌تایم‌لاین برای ناوبری گام‌ها
+- [x] صدور ویدیو WebM
+- [x] ۴۹ مفهوم فعال
+
+### فاز ۳: تمیزکاری (در حال اجرا)
+- [ ] الزام‌آور کردن Lighthouse
 - [ ] زبان‌های بیشتر (عربی، اسپانیایی و...)
 
 ## مشارکت
