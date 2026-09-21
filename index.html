@@ -7,6 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b5cf6">
 <title>CodeVis</title>
+<!-- Phase 0: Add new concept renderer by adding entry to `concepts` array (line ~150) and creating an `else if(id==="newId"){...}` block in drawStep() -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#c9d1d9;--accent:#8b5cf6;--accent2:#a78bfa;--green:#3fb950;--red:#f85149}
@@ -41,6 +42,8 @@ canvas{width:100%;height:auto;border-radius:8px;background:#0a0e14;display:block
 .step-controls button{padding:6px 16px;font-size:.8rem}
 .step-indicator{font-size:.8rem;color:#8b949e;margin-left:auto}
 [dir="rtl"] .step-indicator{margin-left:0;margin-right:auto}
+.controls input[type="range"]{flex:1;margin:0 8px}
+.controls span{font-size:.8rem;color:var(--text)}
 .calendar{width:100%;max-width:900px;padding:0 20px 40px}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .cal-header h3{font-size:1rem;color:var(--accent2);margin:0}
@@ -73,6 +76,8 @@ canvas{width:100%;height:auto;border-radius:8px;background:#0a0e14;display:block
 <button class="secondary" id="randomBtn"></button>
 <button id="shareBtn"></button>
 <button class="secondary" id="gifBtn">GIF</button>
+<input type="range" id="speedSlider" min="500" max="2000" value="1200" step="100" title="Step duration (ms)">
+<span id="speedValue">1200ms</span>
 </div>
 <div class="main">
 <div class="card">
@@ -289,7 +294,7 @@ steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"
 {id:"quicksortAvg",title:{en:"Quick Sort Avg",fa:"مرتب‌سازی سریع میانگین"},category:"algo",level:"advanced",desc:{en:"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.",fa:"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},code:"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}",steps:[{type:"analysis"},{type:"average"},{type:"worst"},{type:"pivot"},{type:"optimize"}]},
 ];
 
-let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1;
+let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1,stepDuration=1200;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
 let DPR=1;
 function resizeCanvas(){DPR=window.devicePixelRatio||1;canvas.width=800*DPR;canvas.height=600*DPR;ctx.setTransform(1,0,0,1,0,0);ctx.scale(DPR,DPR);drawStep()}
@@ -334,7 +339,10 @@ document.getElementById("conceptDesc").textContent=c.desc[lang]||c.desc.en;
 document.getElementById("codeBlock").innerHTML=esc(c.code);
 document.getElementById("playBtn").textContent=t("play");
 currentStep=0;animProgress=0;drawStep();
-markSeen(c.id);updateStats();syncCodeLine();
+markSeen(c.id);
+updateStats();
+syncCodeLine();
+window.location.hash = "concept/" + c.id;
 }
 
 function easeInOut(t){return t<0.5?t*t*(t*4-1):1-Math.pow(-t+2,3)/2}
@@ -596,7 +604,7 @@ animRAF=requestAnimationFrame(animateTransition);
 
 function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();if(currentStep===currentConcept.steps.length-1)markDone()}
 function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine()}
-function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,1200)}}
+function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,stepDuration)}}
 
 document.getElementById("nextBtn").onclick=nextStep;
 document.getElementById("prevBtn").onclick=prevStep;
@@ -605,6 +613,7 @@ document.getElementById("randomBtn").onclick=()=>loadConcept(concepts[Math.floor
 document.getElementById("categoryFilter").onchange=filterAndLoad;
 document.getElementById("levelFilter").onchange=filterAndLoad;
 document.getElementById("search").oninput=filterAndLoad;
+document.getElementById("speedSlider").oninput=(e)=>{stepDuration=parseInt(e.target.value);document.getElementById("speedValue").textContent=stepDuration+"ms"};
 document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;if(e.key==="ArrowRight")nextStep();else if(e.key==="ArrowLeft")prevStep();else if(e.key===" "){e.preventDefault();togglePlay()}else if(e.key.toLowerCase()==="r")loadConcept(concepts[Math.floor(Math.random()*concepts.length)])});
 
 document.getElementById("shareBtn").onclick=()=>{
@@ -646,6 +655,25 @@ applyLang();
 loadConcept(savedConcept||concepts[dayIndex]);
 updateStreak();
 buildCalendar();
+
+window.addEventListener("hashchange",()=>{
+const match = window.location.hash.match(/#concept\/(.+)/);
+if(match){
+const conceptId = decodeURIComponent(match[1]);
+const concept = concepts.find(c=>c.id===conceptId);
+if(concept) loadConcept(concept);
+}
+});
+
+// Handle initial hash
+if(window.location.hash.startsWith("#concept/")){
+const match = window.location.hash.match(/#concept\/(.+)/);
+if(match){
+const conceptId = decodeURIComponent(match[1]);
+const concept = concepts.find(c=>c.id===conceptId);
+if(concept) loadConcept(concept);
+}
+}
 </script>
 <script>
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js")}
