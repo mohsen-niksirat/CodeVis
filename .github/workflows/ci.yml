@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate HTML/JS syntax
+        run: |
+          node -e "const fs=require('fs'); const h=fs.readFileSync('index.html','utf8'); const s=h.indexOf('<script>'); const e=h.indexOf('</script>')+9; const js=h.substring(s+8,e-8); fs.writeFileSync('/tmp/check.js',js); try { require('fs').readFileSync('/tmp/check.js','utf8'); require('vm').createScript(fs.readFileSync('/tmp/check.js','utf8')); console.log('✓ JS syntax valid'); } catch(err) { console.error('✗ Syntax error:', err.message); process.exit(1); }"
+      - name: Run Lighthouse (optional)
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: 'https://mohsen-niksirat.github.io/CodeVis/'
+          budgetPath: './lighthouse-budget.json'
+        continue-on-error: true

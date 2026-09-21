@@ -1,0 +1,19 @@
+[
+  {
+    "resourceSizes": [
+      {"resourceType": "document", "budget": 100},
+      {"resourceType": "total", "budget": 200}
+    ],
+    "resourceCounts": [
+      {"resourceType": "total", "budget": 50}
+    ],
+    "timings": [
+      {"metric": "interactive", "budget": 3000},
+      {"metric": "first-contentful-paint", "budget": 1000}
+    ],
+    "maxPotentialFirstContentfulPaint": 1500,
+    "suggestedPhases": [
+      {"start": "interactive", "end": "first-contentful-paint", "budget": 1500}
+    ]
+  }
+]
