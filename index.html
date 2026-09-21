@@ -58,6 +58,11 @@ canvas{width:100%;height:auto;border-radius:8px;background:#0a0e14;display:block
 .stat-card .val{font-size:1.5rem;font-weight:700;color:var(--accent2)}
 .stat-card .lbl{font-size:.8rem;color:#8b949e;margin-top:4px}
 #shareCanvas{display:none}
+#calendarCanvas{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 24px}
+body.fullscreen .card{display:inline-block;width:auto;max-width:100vw}
+body.fullscreen .main{grid-template-columns:1fr}
+body.fullscreen .code-block{max-height:400px}
+input[type="range"]{background:var(--surface);color:var(--text)}
 </style>
 </head>
 <body>
@@ -76,8 +81,11 @@ canvas{width:100%;height:auto;border-radius:8px;background:#0a0e14;display:block
 <button class="secondary" id="randomBtn"></button>
 <button id="shareBtn"></button>
 <button class="secondary" id="gifBtn">GIF</button>
+<button class="secondary" id="videoBtn">WebM</button>
 <input type="range" id="speedSlider" min="500" max="2000" value="1200" step="100" title="Step duration (ms)">
 <span id="speedValue">1200ms</span>
+<button class="secondary" id="fullscreenBtn" title="Fullscreen">🌐</button>
+<input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step">
 </div>
 <div class="main">
 <div class="card">
@@ -294,7 +302,7 @@ steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"
 {id:"quicksortAvg",title:{en:"Quick Sort Avg",fa:"مرتب‌سازی سریع میانگین"},category:"algo",level:"advanced",desc:{en:"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.",fa:"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},code:"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}",steps:[{type:"analysis"},{type:"average"},{type:"worst"},{type:"pivot"},{type:"optimize"}]},
 ];
 
-let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1,stepDuration=1200;
+let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1,stepDuration=1200,isFullscreen=false;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
 let DPR=1;
 function resizeCanvas(){DPR=window.devicePixelRatio||1;canvas.width=800*DPR;canvas.height=600*DPR;ctx.setTransform(1,0,0,1,0,0);ctx.scale(DPR,DPR);drawStep()}
@@ -342,6 +350,7 @@ currentStep=0;animProgress=0;drawStep();
 markSeen(c.id);
 updateStats();
 syncCodeLine();
+updateTimelineSlider();
 window.location.hash = "concept/" + c.id;
 }
 
@@ -614,6 +623,16 @@ document.getElementById("categoryFilter").onchange=filterAndLoad;
 document.getElementById("levelFilter").onchange=filterAndLoad;
 document.getElementById("search").oninput=filterAndLoad;
 document.getElementById("speedSlider").oninput=(e)=>{stepDuration=parseInt(e.target.value);document.getElementById("speedValue").textContent=stepDuration+"ms"};
+document.getElementById("fullscreenBtn").onclick=()=>{isFullscreen=!isFullscreen;if(isFullscreen){document.body.requestFullscreen();document.getElementById("fullscreenBtn").textContent="🗕";document.body.classList.add("fullscreen");}else{document.exitFullscreen();document.getElementById("fullscreenBtn").textContent="🌐";document.body.classList.remove("fullscreen")}};
+document.getElementById("timelineSlider").oninput=(e)=>{
+currentStep=parseInt(e.target.value);drawStep();syncCodeLine();
+};
+
+function updateTimelineSlider(){
+if(!currentConcept)return;
+document.getElementById("timelineSlider").max=currentConcept.steps.length-1;
+document.getElementById("timelineSlider").value=currentStep;
+}
 document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;if(e.key==="ArrowRight")nextStep();else if(e.key==="ArrowLeft")prevStep();else if(e.key===" "){e.preventDefault();togglePlay()}else if(e.key.toLowerCase()==="r")loadConcept(concepts[Math.floor(Math.random()*concepts.length)])});
 
 document.getElementById("shareBtn").onclick=()=>{
@@ -646,6 +665,20 @@ currentStep=savedStep;drawStep();syncCodeLine();
 gif.on("finished",b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="codevis-"+currentConcept.id+".gif";a.click()});
 gif.render();
 });
+};
+
+document.getElementById("videoBtn").onclick=()=>{
+if(!currentConcept)return;
+const stream = canvas.captureStream(1000/stepDuration||1);
+const recorder = new MediaRecorder(stream,{mimeType:'video/webm'});
+const chunks = [];
+recorder.ondataavailable=e=>chunks.push(e.data);
+recorder.onstop=()=>{const blob=new Blob(chunks,{type:'video/webm'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='codevis-'+currentConcept.id+'.webm';a.click()};
+recorder.start();
+const savedStep=currentStep;
+for(let i=0;i<currentConcept.steps.length;i++){currentStep=i;drawStep();}
+currentStep=savedStep;drawStep();
+setTimeout(()=>{recorder.stop()},currentConcept.steps.length*stepDuration);
 };
 
 const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
