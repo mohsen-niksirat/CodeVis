@@ -75,29 +75,29 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 </div>
 </header>
 <div class="controls">
-<select id="categoryFilter"></select>
-<select id="levelFilter"></select>
-<input type="text" id="search">
-<button class="secondary" id="randomBtn"></button>
-<button id="shareBtn"></button>
-<button class="secondary" id="gifBtn">GIF</button>
-<button class="secondary" id="videoBtn">WebM</button>
+<select id="categoryFilter" aria-label="Filter by category"></select>
+<select id="levelFilter" aria-label="Filter by level"></select>
+<input type="text" id="search" aria-label="Search concepts">
+<button class="secondary" id="randomBtn" aria-label="Random concept"></button>
+<button id="shareBtn" aria-label="Share as PNG"></button>
+<button class="secondary" id="gifBtn" aria-label="Export as GIF">GIF</button>
+<button class="secondary" id="videoBtn" aria-label="Export as WebM video">WebM</button>
 <input type="range" id="speedSlider" min="500" max="2000" value="1200" step="100" title="Step duration (ms)">
 <span id="speedValue">1200ms</span>
 <button class="secondary" id="fullscreenBtn" title="Fullscreen">🌐</button>
-<input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step">
+<input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step" aria-label="Timeline slider">
 </div>
 <div class="main">
 <div class="card">
 <h2 id="conceptTitle"></h2>
 <span class="level" id="conceptLevel"></span>
 <p class="desc" id="conceptDesc"></p>
-<canvas id="animCanvas" width="800" height="600"></canvas>
+<canvas id="animCanvas" width="800" height="600" role="img" aria-label="Concept animation"></canvas>
 <div class="step-controls">
-<button class="secondary" id="prevBtn"></button>
-<button id="playBtn"></button>
-<button class="secondary" id="nextBtn"></button>
-<span class="step-indicator" id="stepInfo"></span>
+<button class="secondary" id="prevBtn" aria-label="Previous step"></button>
+<button id="playBtn" aria-label="Play"></button>
+<button class="secondary" id="nextBtn" aria-label="Next step"></button>
+<span class="step-indicator" id="stepInfo" aria-live="polite"></span>
 </div>
 </div>
 <div class="card">
