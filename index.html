@@ -113,7 +113,12 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 </div>
 <div class="cal-grid" id="calGrid"></div>
 </div>
-<div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div><canvas id="shareCanvas" width="1200" height="675"></canvas>
+<div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div>
+<div class="card" id="reviewCard" style="display:none;">
+<h2>📚 Seen Concepts</h2>
+<div id="reviewList" style="max-height:200px;overflow-y:auto"></div>
+</div>
+<canvas id="shareCanvas" width="1200" height="675"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 <script>
 const i18n={
@@ -321,7 +326,28 @@ const today=getLocalToday();
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
 function getStreak(){let s=0,d=new Date();while(true){const ds=fmtLocal(d);if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
-function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats()}
+function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}
+function updateReviewList(){
+const card=document.getElementById("reviewCard");
+const list=document.getElementById("reviewList");
+document.getElementById("statConcepts").textContent=seenIds.size;
+document.getElementById("statConceptsLbl").textContent=t("conceptsSeen");
+if (seenIds.size===0){
+  card.style.display="none";
+  return;
+}
+card.style.display="block";
+list.innerHTML="";
+Array.from(seenIds).sort().forEach(id=>{
+  const c=concepts.find(x=>x.id===id);
+  if (c){
+    const div=document.createElement("div");
+    div.textContent=c.title[lang]||c.title.en;
+    div.style.cssText="padding:4px 0;border-bottom:1px solid var(--border)";
+    list.appendChild(div);
+  }
+});
+}
 function buildCalendar(){
 const grid=document.getElementById("calGrid");grid.innerHTML="";
 const start=new Date(calYear,calMonth,1);
@@ -351,6 +377,7 @@ markSeen(c.id);
 updateStats();
 syncCodeLine();
 updateTimelineSlider();
+updateReviewList();
 window.location.hash = "concept/" + c.id;
 }
 
