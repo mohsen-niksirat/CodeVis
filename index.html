@@ -63,28 +63,29 @@ body.fullscreen .card{display:inline-block;width:auto;max-width:100vw}
 body.fullscreen .main{grid-template-columns:1fr}
 body.fullscreen .code-block{max-height:400px}
 input[type="range"]{background:var(--surface);color:var(--text)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
 <header>
 <h1>CodeVis</h1>
 <div class="header-right">
-<button class="theme-btn" id="themeBtn"></button>
-<button class="lang-btn" id="langBtn">فا</button>
-<div class="streak" id="streak"></div>
+<button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
+<button class="lang-btn" id="langBtn" aria-label="Toggle language">فا</button>
+<div class="streak" id="streak" aria-label="Current streak"></div>
 </div>
 </header>
 <div class="controls">
-<select id="categoryFilter"></select>
-<select id="levelFilter"></select>
-<input type="text" id="search">
-<button class="secondary" id="randomBtn"></button>
-<button id="shareBtn"></button>
-<button class="secondary" id="gifBtn">GIF</button>
-<button class="secondary" id="videoBtn">WebM</button>
-<input type="range" id="speedSlider" min="500" max="2000" value="1200" step="100" title="Step duration (ms)">
-<span id="speedValue">1200ms</span>
-<button class="secondary" id="fullscreenBtn" title="Fullscreen">🌐</button>
+<select id="categoryFilter" aria-label="Category filter"></select>
+<select id="levelFilter" aria-label="Level filter"></select>
+<input type="text" id="search" aria-label="Search concepts" autocomplete="off">
+<button class="secondary" id="randomBtn" aria-label="Random concept"></button>
+<button id="shareBtn" aria-label="Share as PNG"></button>
+<button class="secondary" id="gifBtn" aria-label="Export as GIF">GIF</button>
+<button class="secondary" id="videoBtn" aria-label="Export as WebM">WebM</button>
+<input type="range" id="speedSlider" min="500" max="2000" value="1200" step="100" title="Step duration (ms)" aria-label="Step duration">
+<span id="speedValue" aria-live="polite">1200ms</span>
+<button class="secondary" id="fullscreenBtn" title="Fullscreen" aria-label="Toggle fullscreen">🌐</button>
 <input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step">
 </div>
 <div class="main">
@@ -92,12 +93,12 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 <h2 id="conceptTitle"></h2>
 <span class="level" id="conceptLevel"></span>
 <p class="desc" id="conceptDesc"></p>
-<canvas id="animCanvas" width="800" height="600"></canvas>
+<canvas id="animCanvas" width="800" height="600" aria-label="Concept visualization canvas" role="img"></canvas>
 <div class="step-controls">
-<button class="secondary" id="prevBtn"></button>
-<button id="playBtn"></button>
-<button class="secondary" id="nextBtn"></button>
-<span class="step-indicator" id="stepInfo"></span>
+<button class="secondary" id="prevBtn" aria-label="Previous step"></button>
+<button id="playBtn" aria-label="Play animation"></button>
+<button class="secondary" id="nextBtn" aria-label="Next step"></button>
+<span class="step-indicator" id="stepInfo" aria-live="polite"></span>
 </div>
 </div>
 <div class="card">
@@ -113,7 +114,11 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 </div>
 <div class="cal-grid" id="calGrid"></div>
 </div>
-<div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div><canvas id="shareCanvas" width="1200" height="675"></canvas>
+  <div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div>
+  <div class="card" id="studyListCard" style="margin-top:20px">
+    <h2 id="studyListTitle"></h2>
+    <div id="studyList"><div class="desc" id="studyListEmpty"></div></div>
+  </div><canvas id="shareCanvas" width="1200" height="675"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 <script>
 const i18n={
@@ -122,15 +127,17 @@ streak:"day streak",allCategories:"All Categories",ds:"Data Structures",algo:"Al
 allLevels:"All Levels",beginner:"Beginner",intermediate:"Intermediate",advanced:"Advanced",
 searchPh:"Search concepts...",random:"Random",share:"Share as PNG",
 play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",
-totalDays:"Total Days",bestStreak:"Best Streak",conceptsSeen:"Concepts Seen",langToggle:"فا"
-},
-fa:{
+totalDays:"Total Days",bestStreak:"Best Streak",conceptsSeen:"Concepts Seen",langToggle:"فا",
+  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen"
+  },
+  fa:{
 streak:"روز متوالی",allCategories:"همه دسته‌ها",ds:"ساختمان داده",algo:"الگوریتم‌ها",pattern:"الگوها",web:"وب",
 allLevels:"همه سطوح",beginner:"مبتدی",intermediate:"متوسط",advanced:"پیشرفته",
 searchPh:"جستجوی مفاهیم...",random:"تصادفی",share:"اشتراک PNG",
 play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",
-totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:"مفاهیم دیده‌شده",langToggle:"EN"
-}
+totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:"مفاهیم دیده‌شده",langToggle:"EN",
+  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده"
+  }
 };
 let lang=localStorage.getItem("cv_lang")||"en";
 function t(k){return i18n[lang][k]||i18n.en[k]}
@@ -314,14 +321,48 @@ ctx.imageSmoothingEnabled=true;
 window.addEventListener('resize',resizeCanvas);
 const doneDays=JSON.parse(localStorage.getItem("cv_done")||"[]");
 const seenIds=new Set(JSON.parse(localStorage.getItem("cv_seen")||"[]"));
-function markSeen(id){if(!seenIds.has(id)){seenIds.add(id);localStorage.setItem("cv_seen",JSON.stringify([...seenIds]))}}
+function markSeen(id){if(!seenIds.has(id)){seenIds.add(id);localStorage.setItem("cv_seen",JSON.stringify([...seenIds]));buildLearningPaths()}}
 function fmtLocal(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function getLocalToday(){return fmtLocal(new Date())}
 const today=getLocalToday();
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
 function getStreak(){let s=0,d=new Date();while(true){const ds=fmtLocal(d);if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
-function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats()}
+function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats();buildLearningPaths()}
+
+const learningPaths={beginner:["array","stack","queue","hashmap","bintree","bfs","dfs","insertionsort","selectionsort"],intermediate:["linkedlist","binarysearch","recursion","heap","trie","mergesort","quicksort","heapSort","debounce","promise","promiseAll","cors","regex","lru","heapSort"],advanced:["heap","avl","dijkstra","toposort","quicksortAvg","strategy","decorator","observer","closure","eventloop","virtualmem","callstack","heapvsstack","jwt","webworker","gc","bloom","knapsack","fib_dp"]};
+function buildLearningPaths(){
+  document.getElementById("studyListTitle").textContent=t("studyList");
+  const container=document.getElementById("studyList");
+  const seen=[...seenIds];
+  if(seen.length===0){
+    container.innerHTML='<div class="desc">'+t("studyEmpty")+'</div>';
+    return;
+  }
+  let html="";
+  const review=seen.slice(-5).reverse();
+  if(review.length){
+    html+='<div class="step-controls" style="flex-direction:column;gap:4px;margin-bottom:8px"><span class="step-indicator" style="font-size:.75rem;color:#8b949e">'+t("studyReview")+'</span>';
+    review.forEach(id=>{const c=concepts.find(x=>x.id===id);if(c)html+=`<button class="secondary" style="width:100%;justify-content:flex-start" onclick="loadConcept('${c.id}')" aria-label="${t('seen')}: ${c.title[lang]||c.title.en}">${c.title[lang]||c.title.en} <span style="color:#8b5cf6;margin-left:auto;font-size:.7rem">${t('seen')}</span></button>`});
+    html+='</div>';
+  }
+  const unseen=concepts.filter(c=>!seenIds.has(c.id));
+  if(unseen.length){
+    const starter=unseen.filter(c=>c.level==="beginner").slice(0,5);
+    if(starter.length){
+      html+='<div class="step-controls" style="flex-direction:column;gap:4px;margin-bottom:8px"><span class="step-indicator" style="font-size:.75rem;color:#8b949e">'+t("studyStart")+'</span>';
+       starter.forEach(c=>html+=`<button class="secondary" style="width:100%;justify-content:flex-start" onclick="loadConcept('${c.id}')" aria-label="Learn ${c.title[lang]||c.title.en}">${c.title[lang]||c.title.en} <span style="color:#3fb950;margin-left:auto;font-size:.7rem">${c.level}</span></button>`);
+       html+='</div>';
+     }
+     const nextIntermediate=unseen.filter(c=>c.level==="intermediate").slice(0,4);
+     if(nextIntermediate.length){
+       html+='<div class="step-controls" style="flex-direction:column;gap:4px"><span class="step-indicator" style="font-size:.75rem;color:#8b949e">'+t("studyNext")+'</span>';
+       nextIntermediate.forEach(c=>html+=`<button class="secondary" style="width:100%;justify-content:flex-start" onclick="loadConcept('${c.id}')" aria-label="Learn ${c.title[lang]||c.title.en}">${c.title[lang]||c.title.en} <span style="color:#a78bfa;margin-left:auto;font-size:.7rem">${c.level}</span></button>`);
+      html+='</div>';
+    }
+  }
+  container.innerHTML=html||'<div class="desc">'+t("studyEmpty")+'</div>';
+}
 function buildCalendar(){
 const grid=document.getElementById("calGrid");grid.innerHTML="";
 const start=new Date(calYear,calMonth,1);
@@ -596,6 +637,155 @@ var cx=120;
 fitems.forEach(function(it,idx){ctx.fillStyle=it.c;var gap=currentStep>=4?40:10;ctx.fillRect(cx,200,it.w,100);ctx.fillStyle="#fff";ctx.font="bold 14px monospace";ctx.fillText(idx+1,cx+it.w/2,255);cx+=it.w+gap});
 if(currentStep>=3){ctx.strokeStyle="#f85149";ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(400,150);ctx.lineTo(400,350);ctx.stroke();ctx.setLineDash([])}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["flex container","add items","justify-content","align-items","gap: 10px"][currentStep],400,450);
+}else if(id==="avl"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var nodes=[{v:10,x:400,y:130},{v:20,x:260,y:250},{v:30,x:540,y:250},{v:25,x:400,y:400}];
+var show=Math.min(currentStep+1,4);
+for(var n=0;n<show;n++){var node=nodes[n];ctx.fillStyle="#8b5cf6";ctx.beginPath();ctx.arc(node.x,node.y,28,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(node.v,node.x,node.y+6)}
+if(show>=2){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,158);ctx.lineTo(280,238);ctx.stroke()}
+if(show>=3){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,158);ctx.lineTo(520,238);ctx.stroke()}
+if(show>=4){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(280,262);ctx.lineTo(400,388);ctx.stroke()}
+if(currentStep===3){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("LL rotation to rebalance",400,500)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["insert(10)","insert(20)","insert(30)","rotate to balance"][currentStep],400,560);
+}else if(id==="dijkstra"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var dpos={A:[200,180],B:[400,120],C:[600,180],D:[150,380],E:[550,380]};
+ctx.strokeStyle="#30363d";ctx.lineWidth=1;
+for(var edge of [["A","B"],["A","C"],["B","C"],["B","D"],["B","E"],["C","E"],["D","E"]]){var p1=dpos[edge[0]],p2=dpos[edge[1]];ctx.beginPath();ctx.moveTo(p1[0]+25,p1[1]+25);ctx.lineTo(p2[0]+25,p2[1]+25);ctx.stroke();ctx.fillStyle="#484f58";ctx.font="11px sans-serif";ctx.fillText("7",p1[0]+p1[1],p1[1])}
+Object.entries(dpos).forEach(function(e){var k=e[0],p=e[1];var color=currentStep===0||(currentStep>=1&&k==="B")||(currentStep>=2&&k==="B")||(currentStep>=3&&k==="E")||(currentStep>=4&&k==="C")?"#f85149":"#8b5cf6";ctx.fillStyle=color;ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.arc(p[0]+25,p[1]+25,25,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle="#fff";ctx.font="bold 16px monospace";ctx.fillText(k,p[0]+25,p[1]+30)})
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["start at A (dist=0)","visit B (dist=4)","check C via B (dist=6)","visit E (dist=9)","found shortest to C"][currentStep],400,500);
+}else if(id==="toposort"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var tasks=["A","B","C","D","E"];
+var taskY=[150,250,350,450,550];
+tasks.forEach(function(t,i){ctx.fillStyle="#8b5cf6";ctx.fillRect(300,taskY[i],120,40);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(t,360,taskY[i]+25)});
+ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;[["A","B"],["A","C"],["B","D"],["C","D"],["D","E"]].forEach(function(e){var sy=tasks.indexOf(e[0]),ey=tasks.indexOf(e[1]);ctx.beginPath();ctx.moveTo(420,taskY[sy]+20);ctx.lineTo(520,taskY[ey]+20);ctx.stroke();ctx.beginPath();ctx.moveTo(520,taskY[ey]+20);ctx.lineTo(510,taskY[ey]+15);ctx.lineTo(510,taskY[ey]+25);ctx.fill()});
+var order=["A","B","C","D","E"];for(var i=0;i<=currentStep&&i<5;i++){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("order: "+order.slice(0,i+1).join(" → "),400,60)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["visit A","visit B","visit C","visit D","visit E (final order)"][currentStep],400,560);
+}else if(id==="fib_dp"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+" - fib(5)",400,40);
+var memo={0:0,1:1,2:1,3:2,4:3,5:5};
+var labels=["memo[0]=0","memo[1]=1","memo[2]=1","memo[3]=2","memo[4]=3","memo[5]=5"];
+for(var i=0;i<6;i++){ctx.fillStyle=i<=currentStep?"#3fb950":"#30363d";ctx.fillRect(150+i*110,200,100,60);ctx.fillStyle="#fff";ctx.font="bold 16px monospace";ctx.fillText(labels[i].split("=")[0],200,220);ctx.fillStyle=i<=currentStep?"#8b5cf6":"#484f58";ctx.font="14px sans-serif";ctx.fillText(memo[labels[i].split("=")[0][5]]||0,200,250)}
+ctx.fillStyle="#e6edf3";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText("memoization avoids O(2^n) recompute",400,350);
+ctx.fillStyle="#3fb950";ctx.fillText(["compute fib(0)","compute fib(1)","fib(2)=1","fib(3)=2","fib(4)=3","fib(5)=5 ✓"][currentStep],400,500);
+}else if(id==="knapsack"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+" - W=5",400,40);
+var ksItems=[{n:"Item1",w:2,v:3},{n:"Item2",w:3,v:4},{n:"Item3",w:4,v:5},{n:"Item4",w:5,v:8}];
+ksItems.forEach(function(it,i){var x=180+i*160;ctx.fillStyle="#8b5cf6";ctx.fillRect(x,150,120,60);ctx.fillStyle="#fff";ctx.font="bold 14px sans-serif";ctx.fillText(it.n+" (w="+it.w+",v="+it.v+")",x+10,175);ctx.font="12px sans-serif";ctx.fillText("value="+it.v,x+10,195)});
+ctx.fillStyle="#3fb950";ctx.font="16px sans-serif";ctx.fillRect(200,280,400,30);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("knapsack capacity = 5",400,302);
+ctx.fillStyle="#3fb950";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText(["items listed","consider Item1 (w=2,v=3)","Item3 fits (w=4,total=6>too much)","best: Item1+Item2 (w=5,v=7)","done: max value = 8"][currentStep],400,400);
+}else if(id==="heapSort"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var hs=[8,3,5,1,9];var hsSorted=[1,3,5,8,9];var cur=hs.slice();
+if(currentStep>=3)cur=[8,3,5,1,9];
+if(currentStep>=4)cur=[1,3,5,8,9];
+cur.forEach(function(v,i){var x=150+i*120;ctx.fillStyle=v==hsSorted[i]&&currentStep>=4?"#3fb950":v==1&&currentStep>=3?"#f85149":"#8b5cf6";ctx.fillRect(x,200,80,60);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(v,x+40,235)});
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["original array","build max-heap","heapify","extract max","sorted"][currentStep],400,400);
+}else if(id==="quicksortAvg"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var qa=[5,3,8,1,7];var steps=[[5,3,8,1,7],[1,3,5,8,7],[1,3,5,7,8]];
+var curA=currentStep<2?qa:steps[currentStep-1];
+curA.forEach(function(v,i){var x=150+i*120;ctx.fillStyle="#8b5cf6";ctx.fillRect(x,200,80,60);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(v,x+40,235)});
+if(currentStep===0){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("pivot=5",160,180)}
+if(currentStep===1){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("partition around pivot",400,180)}
+if(currentStep===2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("recurse on subarrays",400,180)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["avg: pivot splits evenly","O(n log n) expected","avoid worst O(n²)"][Math.min(currentStep,2)],400,400);
+}else if(id==="virtualmem"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(150,150,500,80);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Virtual Address (32-bit)",400,195);
+if(currentStep>=1){ctx.fillStyle="#a78bfa";ctx.fillRect(150,260,100,60);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("Page Number",200,295);ctx.fillStyle="#484f58";ctx.font="12px sans-serif";ctx.fillText("high 20 bits",200,315)}
+if(currentStep>=2){ctx.fillStyle="#a78bfa";ctx.fillRect(550,260,100,60);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("Offset",600,295);ctx.fillStyle="#484f58";ctx.font="12px sans-serif";ctx.fillText("low 12 bits",600,315)}
+if(currentStep>=3){ctx.strokeStyle="#3fb950";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(400,240);ctx.lineTo(400,320);ctx.stroke();ctx.beginPath();ctx.moveTo(400,320);ctx.lineTo(550,260);ctx.stroke()}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.fillRect(150,380,500,60);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("Physical Address",400,420)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["virtual address","extract page number","extract offset","page table lookup","physical address"][currentStep],400,540);
+}else if(id==="callstack"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+" - outer()",400,40);
+var levels=[{n:"outer()",h:400},{n:"inner()",h:300},{n:"return",h:200}];
+for(var li=0;li<=Math.min(currentStep,2);li++){var lv=levels[li];ctx.fillStyle="#8b5cf6";ctx.fillRect(250,lv.h,300,70);ctx.fillStyle="#fff";ctx.font="bold 16px monospace";ctx.fillText(lv.n,400,lv.h+40);if(li<2){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,lv.h+70);ctx.lineTo(400,lv.h+100);ctx.stroke();ctx.beginPath();ctx.moveTo(395,lv.h+100);ctx.lineTo(405,lv.h+100);ctx.fill()}}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("pop inner()",400,480)}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("pop outer()",400,520)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["call outer()","call inner()","execute inner","return inner","return outer"][currentStep],400,560);
+}else if(id==="jwt"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(150,150,180,60);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText('{"alg":"HS256"}',240,180);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(150,230,180,60);ctx.fillText('{"sub":123}',240,260);
+if(currentStep>=1){ctx.fillStyle="#a78bfa";ctx.fillRect(370,150,180,60);ctx.fillStyle="#e6edf3";ctx.font="12px monospace";ctx.fillText("base64url",460,180)}
+if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.fillRect(370,230,180,60);ctx.fillStyle="#fff";ctx.fillText("HMAC signature",460,260)}
+if(currentStep>=3){ctx.strokeStyle="#f85149";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(240,340);ctx.lineTo(460,340);ctx.stroke();ctx.fillStyle="#e6edf3";ctx.font="14px sans-serif";ctx.fillText("Header.Payload.Signature",350,335)}
+if(currentStep>=4){ctx.fillStyle="#8b5cf6";ctx.fillRect(150,380,500,40);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEyM30.signature",400,405)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["encode header","encode payload","sign with secret","concatenate parts","JWT token"][currentStep],400,480);
+}else if(id==="webworker"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#0a0e14";ctx.fillRect(100,100,280,300);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Main Thread",240,135);
+ctx.fillStyle="#0a0e14";ctx.fillRect(520,100,280,300);ctx.fillStyle="#fff";ctx.fillText("Worker Thread",660,135);
+if(currentStep>=1){ctx.fillStyle="#a78bfa";ctx.strokeStyle="#f85149";ctx.lineWidth=3;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(280,200);ctx.lineTo(520,200);ctx.moveTo(270,200);ctx.lineTo(530,200);ctx.stroke();ctx.setLineDash([]);ctx.font="14px sans-serif";ctx.fillStyle="#e6edf3";ctx.fillText("postMessage(data)",400,200)}
+if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.font="14px monospace";ctx.fillText("worker.js: processing...",660,250)}
+if(currentStep>=3){ctx.fillStyle="#a78bfa";ctx.beginPath();ctx.moveTo(520,200);ctx.lineTo(280,250);ctx.strokeStyle="#a78bfa";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#e6edf3";ctx.fillText("postMessage(result)",400,245)}
+if(currentStep>=4){ctx.fillStyle="#8b5cf6";ctx.font="14px sans-serif";ctx.fillText("main thread: received!",240,280)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["create worker","postMessage()","worker processes","postMessage back","main receives result"][currentStep],400,520);
+}else if(id==="gc"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#0a0e14";ctx.fillRect(100,100,600,350);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Heap Memory",400,130);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(150,180,80,40);ctx.fillStyle="#fff";ctx.font="12px sans-serif";ctx.fillText("reachable",190,205);
+ctx.fillStyle="#8b5cf6";ctx.fillRect(300,180,80,40);ctx.fillText("roots",340,205);
+ctx.fillStyle="#f85149";ctx.fillRect(500,180,80,40);ctx.fillStyle="#fff";ctx.fillText("garbage",540,205);
+if(currentStep>=1){ctx.fillStyle="#3fb950";ctx.font="12px sans-serif";ctx.fillText("mark phase",200,260);ctx.fillRect(150,280,80,40);ctx.fillRect(300,280,80,40);ctx.fillStyle="#fff";ctx.fillText("marked",190,305);ctx.fillText("marked",340,305)}
+if(currentStep>=2){ctx.fillStyle="#f85149";ctx.fillRect(500,180,80,40);ctx.fillStyle="#fff";ctx.fillText("swept",540,205)}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("heap compacted",400,380)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["mark roots","mark reachable","sweep garbage","compact heap"][currentStep],400,480);
+}else if(id==="bloom"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#0a0e14";ctx.fillRect(150,100,500,350);
+for(var bi=0;bi<32;bi++){var bx=170+(bi%8)*55;var by=130+Math.floor(bi/8)*45;ctx.fillStyle="#30363d";ctx.fillRect(bx,by,45,35)}
+if(currentStep>=1){for(var h=0;h<3;h++){var hx=170+((h*13%8))*55;var hy=130+Math.floor(h%4)*45;ctx.fillStyle="#8b5cf6";ctx.fillRect(hx,hy,45,35)}}
+if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="14px sans-serif";ctx.fillText("contains('cat')?",400,400)}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("maybe in set",400,430)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["initialize bit array","add items (hash)","query set","check bits \u2192 maybe yes"][currentStep],400,520);
+}else if(id==="lru"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+var lru=[{k:"A",v:"10"},{k:"B",v:"20"},{k:"C",v:"30"}];
+for(var li=0;li<3;li++){var lx=250+li*180;ctx.fillStyle="#8b5cf6";ctx.fillRect(lx,200,120,50);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText(lru[li].k+": "+lru[li].v,lx+60,235)}
+if(currentStep>=1){ctx.fillStyle="#3fb950";ctx.fillRect(250,300,120,50);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("get(A)",310,330)}
+if(currentStep>=2){ctx.fillStyle="#a78bfa";ctx.fillRect(400,370,120,50);ctx.fillStyle="#fff";ctx.fillText("put(D,40)",460,400)}
+if(currentStep>=3){ctx.fillStyle="#f85149";ctx.fillRect(250,200,120,50);ctx.fillStyle="#fff";ctx.fillText("evict LRU (B)",310,235)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cache: A,B,C","access A \u2192 reorder","add D \u2192 evict","A,C,D in cache"][currentStep],400,500);
+}else if(id==="debounce"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#0a0e14";ctx.fillRect(100,150,600,80);ctx.fillStyle="#fff";ctx.font="18px sans-serif";ctx.fillText("Input: search",400,195);
+ctx.strokeStyle="#30363d";ctx.lineWidth=2;ctx.strokeRect(100,250,600,200);
+if(currentStep>=1){ctx.fillStyle="#a78bfa";ctx.font="14px sans-serif";ctx.fillText("keystroke 1",300,280);ctx.fillRect(200,280,40,30)}
+if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="14px sans-serif";ctx.fillText("keystroke 2 - reset timer!",300,320);ctx.fillRect(220,320,40,30)}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("pause... waiting",300,360);ctx.fillRect(280,360,40,30)}
+if(currentStep>=4){ctx.fillStyle="#8b5cf6";ctx.font="14px sans-serif";ctx.fillText("debounced call!",300,400);ctx.fillRect(250,400,60,30)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["type","type again","reset timer","waiting pause","execute after 300ms"][currentStep],400,520);
+}else if(id==="promiseAll"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.strokeStyle="#30363d";ctx.lineWidth=1;
+ctx.strokeRect(150,120,150,80);ctx.fillStyle="#8b5cf6";ctx.font="14px sans-serif";ctx.fillText("Promise 1",225,165);
+ctx.strokeRect(325,120,150,80);ctx.fillStyle="#8b5cf6";ctx.font="14px sans-serif";ctx.fillText("Promise 2",400,165);
+ctx.strokeRect(500,120,150,80);ctx.fillStyle="#8b5cf6";ctx.font="14px sans-serif";ctx.fillText("Promise 3",575,165);
+if(currentStep>=1){ctx.fillStyle="#3fb950";ctx.fillRect(150,230,150,30);ctx.fillStyle="#fff";ctx.fillText("resolved \u2713",225,250)}
+if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.fillRect(325,230,150,30);ctx.fillStyle="#fff";ctx.fillText("resolved \u2713",400,250)}
+if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.fillRect(500,230,150,30);ctx.fillStyle="#fff";ctx.fillText("resolved \u2713",575,250)}
+if(currentStep>=4){ctx.fillStyle="#8b5cf6";ctx.fillRect(325,300,150,50);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("callback()",400,335);ctx.font="14px sans-serif";ctx.fillText("all promises resolved",400,355)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["start all 3","promise 1 done","promise 2 done","promise 3 done","all resolved \u2192 callback"][currentStep],400,420);
+}else if(id==="cors"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#f85149";ctx.fillRect(150,150,200,200);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Client (site-a.com)",250,180);
+ctx.fillStyle="#3fb950";ctx.fillRect(550,150,200,200);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Server (api.com)",650,180);
+if(currentStep>=1){ctx.strokeStyle="#a78bfa";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(250,250);ctx.lineTo(650,250);ctx.stroke()}
+if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="12px sans-serif";ctx.fillText("GET /data - no CORS",400,280)}
+if(currentStep>=3){ctx.fillStyle="#a78bfa";ctx.font="12px sans-serif";ctx.fillText("Access-Control-Allow-Origin: *",400,320);ctx.fillRect(350,340,200,40);ctx.fillStyle("#fff");ctx.fillText("response",450,365)}
+if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("CORS allowed!",400,420)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cross-origin request","blocked by browser","server adds CORS header","response returned","data loaded!"][currentStep],400,480);
+}else if(id==="regex"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#0a0e14";ctx.fillRect(100,120,600,80);ctx.fillStyle="#fff";ctx.font="20px monospace";ctx.fillText("email: user@dom.com",400,165);
+ctx.strokeStyle="#30363d";ctx.lineWidth=2;ctx.strokeRect(100,230,600,200);
+var regexParts=["^ anchors","[ ] char class","+ quantifier","( ) groups","\\ escape"];
+regexParts.forEach(function(p,i){ctx.fillStyle="#8b5cf6";ctx.font="14px sans-serif";ctx.fillText(p,200+i*120,260);ctx.fillStyle="#a78bfa";ctx.fillRect(200+i*120,270,100,30);ctx.fillStyle="#fff";ctx.fillText("highlight",250+i*120,290)})
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["string to match","anchors ^ and $","character classes [a-z]","quantifiers + * ?","capture groups ()"][currentStep],400,500);
 }
 }
 

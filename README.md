@@ -22,6 +22,7 @@ A new concept every day — from data structures to design patterns — with ste
 - **Stats panel**: Total days, best streak, concepts seen
 - **Share as PNG/GIF**: One-click export of concept + code + animation
 - **Search & filter**: By category, level, or keyword
+- **Learning paths**: Recommended concepts based on progress, with study list
 - **Keyboard shortcuts**: Arrow keys, Space, R for random
 - **Dark/Light theme**: Persistent preference saved in localStorage
 - **PWA support**: Installable, works offline with service worker
@@ -83,6 +84,8 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 - [x] 49 concepts live
 
 ### Phase 3: Polish (In Progress)
+- [x] Learning paths / study list with recommended concepts
+- [x] ARIA labels for accessibility
 - [ ] Lighthouse enforced (currently optional)
 - [ ] More languages (Arabic, Spanish, etc.)
 
@@ -118,6 +121,7 @@ MIT
 - **ردیاب استریک روزانه**: تقویم پیشرفت ذخیره‌شده در localStorage
 - **اشتراک PNG**: خروجی تصویر با یک کلیک شامل مفهوم + کد + توضیح
 - **جستجو و فیلتر**: بر اساس دسته (ساختمان داده، الگوریتم، الگو، وب)، سطح (مبتدی، متوسط، پیشرفته) یا کلمه کلیدی
+- **مسیرهای یادگیری**: مفاهیم پیشنهادی بر اساس پیشرفت، با لیست مطالعه
 - **حالت تصادفی**: پرش به مفهوم تصادفی
 - **بدون وابستگی**: HTML/CSS/JS خالص، بدون فریمورک، بدون بیلد
 - **تک‌فایل**: همه چیز در یک `index.html`
@@ -168,6 +172,8 @@ cd CodeVis
 - [x] ۴۹ مفهوم فعال
 
 ### فاز ۳: تمیزکاری (در حال اجرا)
+- [x] مسیرهای یادگیری / لیست مطالعه با مفاهیم پیشنهادی
+- [x] برچسب‌های ARIA برای دسترسی‌پذیری
 - [ ] الزام‌آور کردن Lighthouse
 - [ ] زبان‌های بیشتر (عربی، اسپانیایی و...)
 
