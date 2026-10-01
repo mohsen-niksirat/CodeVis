@@ -10,7 +10,10 @@ A new concept every day — from data structures to design patterns — with ste
 
 ## Features
 
-- **40+ interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, and OS concepts
+- **50 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, and OS concepts
+- **Interactive Playground**: Custom live input for Stack, Queue, Binary Search, and Array Shuffle for sorting algorithms
+- **Multi-language code tabs**: Switch between JavaScript, Python, and C++ implementations
+- **Web Audio sound effects**: Melodic synthesized tones synchronized with animation steps and comparisons
 - **High-DPI Canvas**: Retina-ready rendering with smooth easing animations
 - **Canvas animations**: Step-by-step visual breakdown for each concept
 - **Active code highlighting**: Current line synchronized with animation
@@ -81,7 +84,10 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 ### Phase 2: Content & Export ✅
 - [x] Timeline scrubber for step navigation
 - [x] WebM video export
-- [x] 49 concepts live
+- [x] 50 concepts live (including WebSocket & Memory models)
+- [x] Interactive playground & custom user inputs
+- [x] Web Audio melodic sound effects
+- [x] Multi-language code panel (JS, Python, C++)
 
 ### Phase 3: Polish (In Progress)
 - [x] Learning paths / study list with recommended concepts
@@ -113,7 +119,10 @@ MIT
 
 ## ویژگی‌ها
 
-- **۴۹ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، پویا (DP)، APIهای وب و مفاهیم سیستم‌عامل
+- **۵۰ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، پویا (DP)، APIهای وب و مفاهیم سیستم‌عامل
+- **آزمایشگاه تعاملی (Playground)**: ورودی دلخواه کاربر برای پشته، صف، جستجوی دودویی و شافل آرایه مرتب‌سازی
+- **تب‌های چندزبانه کد**: سوییچ بین پیاده‌سازی‌های JavaScript، Python و ++C
+- **جلوه‌های صوتی ملودیک**: تون‌های صوتی هماهنگ با مراحل الگوریتم‌ها با Web Audio API
 - **انیمیشن Canvas**: نمایش مرحله‌به‌مرحله هر مفهوم
 - **کنترل پخش**: پخش، توقف، بعدی، قبلی
 - **پنل کد همگام**: نمایش کد واقعی کنار انیمیشن
@@ -169,7 +178,10 @@ cd CodeVis
 ### فاز ۲: محتوا و خروجی ✅
 - [x] اسکرول‌تایم‌لاین برای ناوبری گام‌ها
 - [x] صدور ویدیو WebM
-- [x] ۴۹ مفهوم فعال
+- [x] ۵۰ مفهوم فعال (شامل وب‌سوکت و مدل‌های حافظه)
+- [x] آزمایشگاه تعاملی و ورودی سفارشی کاربر
+- [x] جلوه‌های صوتی سینتی‌سایزر Web Audio
+- [x] پنل کد چندزبانه (JS، Python و ++C)
 
 ### فاز ۳: تمیزکاری (در حال اجرا)
 - [x] مسیرهای یادگیری / لیست مطالعه با مفاهیم پیشنهادی

@@ -64,12 +64,24 @@ body.fullscreen .main{grid-template-columns:1fr}
 body.fullscreen .code-block{max-height:400px}
 input[type="range"]{background:var(--surface);color:var(--text)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sound-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent2);padding:6px 14px;border-radius:20px;font-size:.85rem;cursor:pointer;font-weight:600;transition:opacity .2s}
+.sound-btn:hover{opacity:.7}
+.code-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.code-tabs{display:flex;gap:4px}
+.code-tab{background:var(--surface);color:var(--text);border:1px solid var(--border);padding:4px 10px;border-radius:6px;font-size:.75rem;cursor:pointer;font-weight:600;transition:all .15s}
+.code-tab:hover{border-color:var(--accent)}
+.code-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.playground-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.playground-bar input{padding:4px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:.8rem;max-width:110px}
+.playground-bar button{padding:4px 12px;font-size:.8rem;border-radius:6px;cursor:pointer}
+.playground-title{font-size:.8rem;font-weight:600;color:var(--accent2)}
 </style>
 </head>
 <body>
 <header>
 <h1>CodeVis</h1>
 <div class="header-right">
+<button class="sound-btn" id="soundBtn" aria-label="Toggle sound" title="Sound Effects">🔇</button>
 <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
 <button class="lang-btn" id="langBtn" aria-label="Toggle language">فا</button>
 <div class="streak" id="streak" aria-label="Current streak"></div>
@@ -93,6 +105,7 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 <h2 id="conceptTitle"></h2>
 <span class="level" id="conceptLevel"></span>
 <p class="desc" id="conceptDesc"></p>
+<div id="playgroundBar" class="playground-bar" style="display:none"></div>
 <canvas id="animCanvas" width="800" height="600" aria-label="Concept visualization canvas" role="img"></canvas>
 <div class="step-controls">
 <button class="secondary" id="prevBtn" aria-label="Previous step"></button>
@@ -102,7 +115,14 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 </div>
 </div>
 <div class="card">
-<h2 id="codeTitle"></h2>
+<div class="code-header">
+<h2 id="codeTitle" style="margin:0"></h2>
+<div class="code-tabs" id="codeLangTabs" role="tablist" aria-label="Code language">
+<button class="code-tab active" data-lang="js" role="tab" aria-selected="true">JS</button>
+<button class="code-tab" data-lang="py" role="tab" aria-selected="false">Python</button>
+<button class="code-tab" data-lang="cpp" role="tab" aria-selected="false">C++</button>
+</div>
+</div>
 <div class="code-block" id="codeBlock"></div>
 </div>
 </div>
@@ -128,7 +148,7 @@ allLevels:"All Levels",beginner:"Beginner",intermediate:"Intermediate",advanced:
 searchPh:"Search concepts...",random:"Random",share:"Share as PNG",
 play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",
 totalDays:"Total Days",bestStreak:"Best Streak",conceptsSeen:"Concepts Seen",langToggle:"فا",
-  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen"
+  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen",sound:"Sound",playground:"Interactive Playground",shuffle:"Shuffle Array",searchTarget:"Search"
   },
   fa:{
 streak:"روز متوالی",allCategories:"همه دسته‌ها",ds:"ساختمان داده",algo:"الگوریتم‌ها",pattern:"الگوها",web:"وب",
@@ -136,7 +156,7 @@ allLevels:"همه سطوح",beginner:"مبتدی",intermediate:"متوسط",adva
 searchPh:"جستجوی مفاهیم...",random:"تصادفی",share:"اشتراک PNG",
 play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",
 totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:"مفاهیم دیده‌شده",langToggle:"EN",
-  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده"
+  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده",sound:"صدا",playground:"آزمایشگاه تعاملی",shuffle:"تصادفی",searchTarget:"جستجو"
   }
 };
 let lang=localStorage.getItem("cv_lang")||"en";
@@ -309,6 +329,10 @@ steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"
 {id:"cors",title:{en:"CORS",fa:"CORS"},category:"web",level:"intermediate",desc:{en:"Cross-Origin Resource Sharing: HTTP headers controlling which origins can access resources.",fa:"تبادل منابع بین‌مرکزی: سرآیندهای HTTP که کنترل دسترسی مناطع را فراهم می‌کنند."},code:"// Server must send CORS headers:\nAccess-Control-Allow-Origin: https://your-site.com\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE\nAccess-Control-Allow-Headers: Content-Type, Authorization\n\n// Browser blocks cross-origin requests without these headers",steps:[{type:"request"},{"type":"blocked"},{type:"header"},{type:"allowed"},{type:"cache"}]},
 {id:"regex",title:{en:"Regex",fa:"نگاه منظم"},category:"web",level:"intermediate",desc:{en:"Pattern matching with anchors, quantifiers, character classes, and capturing groups.",fa:"جستجوی الگو با نقطه‌گذاری، شمارنده، کلاس‌های کاراکتر و گروه‌های گرفتن."},code:"// Email validation\nconst email=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;\n\n// Phone number\nconst phone=/\\d{3}-\\d{3}-\\d{4}/;\n\n// Match and extract\ntext.match(email)           // returns array or null\ntext.replace(phone, 'XXX-XXX-XXXX')  // replace",steps:[{type:"pattern"},{"type":"anchor"},{type:"match"},{type:"capture"},{type:"result"}]},
 {id:"heapSort",title:{en:"Heap Sort",fa:"مرتب‌سازی هیپ"},category:"algo",level:"advanced",desc:{en:"Build max-heap then repeatedly extract max for O(n log n) sort.",fa:"ساخت تمام‌گرا سپس استخراج مکرر بیشینه برای مرتب‌سازی O(n log n)."},code:"function heapSort(arr){\n  heapify(arr, arr.length);\n  for(let i=arr.length-1;i>0;i--){[arr[0],arr[i]]=[arr[i],arr[0]];heapify(arr,i)};\n  return arr;\n}\nfunction heapify(arr,n,i){let l=2*i+1,r=2*i+2,largest=i;\n  if(l<n&&arr[l]>arr[largest])largest=l;\n  if(r<n&&arr[r]>arr[largest])largest=r;\n  if(largest!==i){[arr[i],arr[largest]]=[arr[largest],arr[i]];heapify(arr,n,largest)};\n}",steps:[{type:"build"},{type:"swap"},{type:"restore"},{type:"extract"},{type:"sorted"}]},
+{id:"websocket",title:{en:"WebSocket",fa:"وب‌سوکت"},category:"web",level:"intermediate",
+desc:{en:"Full-duplex bidirectional persistent connection over a single TCP socket.",fa:"اتصال دوطرفه همزمان و پایدار بین کلاینت و سرور روی یک سوکت TCP."},
+code:"const ws = new WebSocket('wss://api.example.com/live');\nws.onopen = () => {\n  console.log('Connected!');\n  ws.send(JSON.stringify({ type: 'subscribe' }));\n};\nws.onmessage = (event) => {\n  const msg = JSON.parse(event.data);\n  console.log('Update:', msg);\n};\nws.onclose = () => console.log('Closed');",
+steps:[{type:"handshake"},{type:"upgrade"},{type:"open"},{type:"bidirectional"},{type:"close"}]},
 {id:"quicksortAvg",title:{en:"Quick Sort Avg",fa:"مرتب‌سازی سریع میانگین"},category:"algo",level:"advanced",desc:{en:"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.",fa:"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},code:"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}",steps:[{type:"analysis"},{type:"average"},{type:"worst"},{type:"pivot"},{type:"optimize"}]},
 ];
 
@@ -333,7 +357,7 @@ let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 function getStreak(){let s=0,d=new Date();while(true){const ds=fmtLocal(d);if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
 function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats();buildLearningPaths()}
 
-const learningPaths={beginner:["array","stack","queue","hashmap","bintree","bfs","dfs","insertionsort","selectionsort"],intermediate:["linkedlist","binarysearch","recursion","heap","trie","mergesort","quicksort","heapSort","debounce","promise","promiseAll","cors","regex","lru","heapSort"],advanced:["heap","avl","dijkstra","toposort","quicksortAvg","strategy","decorator","observer","closure","eventloop","virtualmem","callstack","heapvsstack","jwt","webworker","gc","bloom","knapsack","fib_dp"]};
+const learningPaths={beginner:["array","stack","queue","hashmap","bintree","bfs","dfs","insertionsort","selectionsort"],intermediate:["linkedlist","binarysearch","recursion","heap","trie","mergesort","quicksort","heapSort","debounce","promise","promiseAll","cors","regex","lru","heapSort"],advanced:["heap","avl","dijkstra","toposort","quicksortAvg","strategy","decorator","observer","closure","eventloop","virtualmem","callstack","heapvsstack","jwt","webworker","gc","bloom","knapsack","fib_dp","websocket"]};
 function buildLearningPaths(){
   document.getElementById("studyListTitle").textContent=t("studyList");
   const container=document.getElementById("studyList");
@@ -379,6 +403,203 @@ function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStor
 
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
+
+let soundEnabled = localStorage.getItem("cv_sound") === "true";
+let audioCtx = null;
+function updateSoundBtn() {
+  const btn = document.getElementById("soundBtn");
+  if (btn) btn.textContent = soundEnabled ? "🔊" : "🔇";
+}
+function playTone(freq = 440, duration = 0.08, type = "sine") {
+  if (!soundEnabled) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch(e) {}
+}
+const sBtn = document.getElementById("soundBtn");
+if (sBtn) {
+  sBtn.onclick = () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem("cv_sound", soundEnabled ? "true" : "false");
+    updateSoundBtn();
+    if (soundEnabled) playTone(587.33, 0.1);
+  };
+  updateSoundBtn();
+}
+
+let codeLang = localStorage.getItem("cv_code_lang") || "js";
+const extraCode = {
+  stack: {
+    py: "class Stack:\n    def __init__(self):\n        self.items = []\n    def push(self, item):\n        self.items.append(item)\n    def pop(self):\n        return self.items.pop()\n    def peek(self):\n        return self.items[-1]\n    def is_empty(self):\n        return len(self.items) == 0",
+    cpp: "#include <vector>\ntemplate<typename T>\nclass Stack {\n    std::vector<T> items;\npublic:\n    void push(T val) { items.push_back(val); }\n    T pop() { T v = items.back(); items.pop_back(); return v; }\n    T peek() { return items.back(); }\n    bool isEmpty() { return items.empty(); }\n};"
+  },
+  queue: {
+    py: "from collections import deque\nclass Queue:\n    def __init__(self):\n        self.items = deque()\n    def enqueue(self, item):\n        self.items.append(item)\n    def dequeue(self):\n        return self.items.popleft()\n    def front(self):\n        return self.items[0]",
+    cpp: "#include <queue>\ntemplate<typename T>\nclass Queue {\n    std::queue<T> q;\npublic:\n    void enqueue(T val) { q.push(val); }\n    T dequeue() { T v = q.front(); q.pop(); return v; }\n    T front() { return q.front(); }\n    bool isEmpty() { return q.empty(); }\n};"
+  },
+  linkedlist: {
+    py: "class Node:\n    def __init__(self, val):\n        self.val = val\n        self.next = None\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n    def append(self, val):\n        if not self.head:\n            self.head = Node(val); return\n        curr = self.head\n        while curr.next: curr = curr.next\n        curr.next = Node(val)",
+    cpp: "struct Node {\n    int val;\n    Node* next = nullptr;\n    Node(int v): val(v) {}\n};\nclass LinkedList {\n    Node* head = nullptr;\npublic:\n    void append(int val) {\n        if (!head) { head = new Node(val); return; }\n        Node* curr = head;\n        while (curr->next) curr = curr->next;\n        curr->next = new Node(val);\n    }\n};"
+  },
+  binarysearch: {
+    py: "def binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1",
+    cpp: "int binarySearch(const std::vector<int>& arr, int target) {\n    int low = 0, high = (int)arr.size() - 1;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        if (arr[mid] == target) return mid;\n        if (arr[mid] < target) low = mid + 1;\n        else high = mid - 1;\n    }\n    return -1;\n}"
+  },
+  bubbleSort: {
+    py: "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n - i - 1):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n                swapped = True\n        if not swapped: break\n    return arr",
+    cpp: "void bubbleSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 0; i < n; i++) {\n        bool swapped = false;\n        for (int j = 0; j < n - i - 1; j++) {\n            if (arr[j] > arr[j + 1]) {\n                std::swap(arr[j], arr[j + 1]);\n                swapped = true;\n            }\n        }\n        if (!swapped) break;\n    }\n}"
+  },
+  quicksort: {
+    py: "def quick_sort(arr):\n    if len(arr) <= 1: return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    mid = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + mid + quick_sort(right)",
+    cpp: "void quickSort(std::vector<int>& arr, int low, int high) {\n    if (low >= high) return;\n    int pivot = arr[high], i = low - 1;\n    for (int j = low; j < high; j++) {\n        if (arr[j] < pivot) std::swap(arr[++i], arr[j]);\n    }\n    std::swap(arr[i + 1], arr[high]);\n    int pi = i + 1;\n    quickSort(arr, low, pi - 1);\n    quickSort(arr, pi + 1, high);\n}"
+  },
+  websocket: {
+    py: "import asyncio, websockets\n\nasync def connect():\n    async with websockets.connect('wss://api.com/live') as ws:\n        await ws.send('Hello Server!')\n        msg = await ws.recv()\n        print('Live feed:', msg)\n\nasyncio.run(connect())",
+    cpp: "#include <boost/beast/websocket.hpp>\nnamespace ws = boost::beast::websocket;\n// 1. Establish TCP socket\n// 2. ws.handshake(\"api.com\", \"/live\");\n// 3. ws.write(net::buffer(\"Hello!\"));\n// 4. ws.read(buffer);"
+  }
+};
+
+function getCodeForLang(concept, langCode) {
+  if (!concept) return "";
+  if (langCode === "js") return concept.code;
+  if (extraCode[concept.id] && extraCode[concept.id][langCode]) {
+    return extraCode[concept.id][langCode];
+  }
+  if (langCode === "py") {
+    return "# Python equivalent for " + (concept.title.en || "") + "\n" + concept.code.replace(/const |let |var /g, "").replace(/;/g, "");
+  }
+  if (langCode === "cpp") {
+    return "// C++ equivalent for " + (concept.title.en || "") + "\n" + concept.code;
+  }
+  return concept.code;
+}
+
+function setupCodeTabs() {
+  const tabs = document.querySelectorAll(".code-tab");
+  tabs.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === codeLang);
+    btn.onclick = () => {
+      codeLang = btn.dataset.lang;
+      localStorage.setItem("cv_code_lang", codeLang);
+      tabs.forEach(b => b.classList.toggle("active", b.dataset.lang === codeLang));
+      syncCodeLine();
+      playTone(500, 0.05);
+    };
+  });
+}
+
+let customState = null;
+function updatePlayground() {
+  const bar = document.getElementById("playgroundBar");
+  if (!bar || !currentConcept) return;
+  const id = currentConcept.id;
+  
+  if (id === "stack") {
+    bar.style.display = "flex";
+    bar.innerHTML = `<span class="playground-title">🎮 ${t("playground")}:</span>
+      <input type="text" id="pgStackVal" value="D" maxlength="5" style="width:60px" aria-label="Item value">
+      <button class="secondary" id="pgStackPush">Push</button>
+      <button class="secondary" id="pgStackPop">Pop</button>
+      <button class="secondary" id="pgStackReset">Reset</button>
+      <span class="playground-badge" id="pgStackCount">Items: 3</span>`;
+    const getItems = () => (customState && customState.stack) ? customState.stack : ["A", "B", "C"];
+    const updateCount = () => {
+      const el = document.getElementById("pgStackCount");
+      if (el) el.textContent = "Items: " + getItems().length;
+    };
+    document.getElementById("pgStackPush").onclick = () => {
+      const inp = document.getElementById("pgStackVal");
+      const val = inp.value.trim() || "X";
+      if (!customState || !customState.stack) customState = { stack: ["A", "B", "C"] };
+      if (customState.stack.length < 6) {
+        customState.stack.push(val);
+        playTone(350 + customState.stack.length * 70, 0.08);
+        drawStep();
+        updateCount();
+      }
+    };
+    document.getElementById("pgStackPop").onclick = () => {
+      if (!customState || !customState.stack) customState = { stack: ["A", "B", "C"] };
+      if (customState.stack.length > 0) {
+        customState.stack.pop();
+        playTone(280, 0.08);
+        drawStep();
+        updateCount();
+      }
+    };
+    document.getElementById("pgStackReset").onclick = () => {
+      customState = null;
+      drawStep();
+      updateCount();
+    };
+    updateCount();
+  } else if (id === "queue") {
+    bar.style.display = "flex";
+    bar.innerHTML = `<span class="playground-title">🎮 ${t("playground")}:</span>
+      <input type="text" id="pgQueueVal" value="D" maxlength="5" style="width:60px" aria-label="Item value">
+      <button class="secondary" id="pgQueueEnq">Enqueue</button>
+      <button class="secondary" id="pgQueueDeq">Dequeue</button>
+      <button class="secondary" id="pgQueueReset">Reset</button>
+      <span class="playground-badge" id="pgQueueCount">Items: 3</span>`;
+    const getItems = () => (customState && customState.queue) ? customState.queue : ["A", "B", "C"];
+    const updateCount = () => {
+      const el = document.getElementById("pgQueueCount");
+      if (el) el.textContent = "Items: " + getItems().length;
+    };
+    document.getElementById("pgQueueEnq").onclick = () => {
+      const inp = document.getElementById("pgQueueVal");
+      const val = inp.value.trim() || "X";
+      if (!customState || !customState.queue) customState = { queue: ["A", "B", "C"] };
+      if (customState.queue.length < 6) {
+        customState.queue.push(val);
+        playTone(350 + customState.queue.length * 70, 0.08);
+        drawStep();
+        updateCount();
+      }
+    };
+    document.getElementById("pgQueueDeq").onclick = () => {
+      if (!customState || !customState.queue) customState = { queue: ["A", "B", "C"] };
+      if (customState.queue.length > 0) {
+        customState.queue.shift();
+        playTone(280, 0.08);
+        drawStep();
+        updateCount();
+      }
+    };
+    document.getElementById("pgQueueReset").onclick = () => {
+      customState = null;
+      drawStep();
+      updateCount();
+    };
+    updateCount();
+  } else if (["bubbleSort", "insertionsort", "selectionsort", "mergesort", "quicksort", "heapSort"].includes(id)) {
+    bar.style.display = "flex";
+    bar.innerHTML = `<span class="playground-title">🎮 Array:</span>
+      <button class="secondary" id="pgSortShuffle">🔀 ${t("shuffle")}</button>
+      <span class="playground-badge" id="pgSortStatus">Interactive</span>`;
+    document.getElementById("pgSortShuffle").onclick = () => {
+      const nums = Array.from({ length: 5 }, () => Math.floor(Math.random() * 80) + 10);
+      customState = { arr: nums };
+      playTone(440, 0.08);
+      setTimeout(() => playTone(660, 0.08), 80);
+      drawStep();
+    };
+  } else {
+    bar.style.display = "none";
+  }
+}
+
 function loadConcept(c){
 if(typeof c==="string"){c=concepts.find(x=>x.id===c);if(!c)return}
 currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
@@ -392,6 +613,9 @@ markSeen(c.id);
 updateStats();
 syncCodeLine();
 updateTimelineSlider();
+customState=null;
+updatePlayground();
+setupCodeTabs();
 window.location.hash = "concept/" + c.id;
 }
 
@@ -400,7 +624,8 @@ function interp(a,b,p){return a+(b-a)*easeInOut(p)}
 
 function syncCodeLine(){
 if(!currentConcept)return;
-const lines=currentConcept.code.split("\n").map(esc);
+const codeText=getCodeForLang(currentConcept, codeLang);
+const lines=codeText.split("\n").map(esc);
 const step=currentConcept.steps[currentStep];
 if(!step)return;
 let targetLine=0;
@@ -426,15 +651,25 @@ function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r
 function fillBlock(x,y,w,h,color){const g=ctx.createLinearGradient(x,y,x,y+h);g.addColorStop(0,color);g.addColorStop(1,color+"99");ctx.fillStyle=g;roundRect(x,y,w,h,6);ctx.fill();ctx.shadowBlur=0}
 
 if(id==="stack"){
-const items=[];for(let i=0;i<=currentStep;i++){if(step.type==="push"&&i===currentStep)items.push(step.val);else if(i<currentStep){const s=currentConcept.steps[i];if(s.type==="push")items.push(s.val)}}
-if(currentStep>=3){const pops=currentStep-2;items.splice(items.length-pops,pops)}
+let items=[];
+if(customState&&customState.stack){
+  items=[...customState.stack];
+}else{
+  for(let i=0;i<=currentStep;i++){if(step.type==="push"&&i===currentStep)items.push(step.val);else if(i<currentStep){const s=currentConcept.steps[i];if(s.type==="push")items.push(s.val)}}
+  if(currentStep>=3){const pops=currentStep-2;items.splice(items.length-pops,pops)}
+}
 ctx.shadowBlur=0;ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.strokeStyle="#30363d";ctx.lineWidth=2;roundRect(300,80,200,450,8);ctx.stroke();ctx.shadowBlur=0;
 items.forEach((v,i)=>{const y=500-i*60;fillBlock(310,y-50,180,50,"#8b5cf6");ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,400,y-20);ctx.font="16px 'Segoe UI',sans-serif"});
 ctx.fillStyle="#3fb950";ctx.fillText(step.type==="push"?"push('"+step.val+"')":"pop()",400,570);
 }else if(id==="queue"){
-const items=[];for(let i=0;i<=currentStep;i++){const s=currentConcept.steps[i];if(s.type==="enqueue")items.push(s.val)}
-if(currentStep>=3){const dq=currentStep-2;items.splice(0,dq)}
+let items=[];
+if(customState&&customState.queue){
+  items=[...customState.queue];
+}else{
+  for(let i=0;i<=currentStep;i++){const s=currentConcept.steps[i];if(s.type==="enqueue")items.push(s.val)}
+  if(currentStep>=3){const dq=currentStep-2;items.splice(0,dq)}
+}
 ctx.shadowBlur=0;ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 items.forEach((v,i)=>{const x=150+i*100;fillBlock(x,250,80,80,"#8b5cf6");ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,x+40,295);ctx.font="16px 'Segoe UI',sans-serif"});
 ctx.fillStyle="#3fb950";ctx.fillText(step.type==="enqueue"?"enqueue('"+step.val+"')":"dequeue()",400,400);
@@ -849,6 +1084,72 @@ if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="12px sans-serif";ctx.fillTe
 if(currentStep>=3){ctx.fillStyle="#a78bfa";ctx.font="12px sans-serif";ctx.fillText("Access-Control-Allow-Origin: *",400,320);ctx.fillRect(350,340,200,40);ctx.fillStyle="#fff";ctx.fillText("response",450,365)}
 if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("CORS allowed!",400,420)}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cross-origin request","blocked by browser","server adds CORS header","response returned","data loaded!"][currentStep],400,480);
+}else if(id==="websocket"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+
+ctx.fillStyle="#161b22";ctx.strokeStyle="#8b5cf6";ctx.lineWidth=2;
+ctx.strokeRect(100,150,180,260);ctx.fillRect(100,150,180,260);
+ctx.fillStyle="#8b5cf6";ctx.font="bold 16px sans-serif";ctx.fillText("Client (Browser)",190,185);
+ctx.fillStyle="#e6edf3";ctx.font="12px monospace";ctx.fillText("wss://api.com/live",190,215);
+
+ctx.strokeStyle="#3fb950";
+ctx.strokeRect(520,150,180,260);ctx.fillRect(520,150,180,260);
+ctx.fillStyle="#3fb950";ctx.font="bold 16px sans-serif";ctx.fillText("Server (WS Host)",610,185);
+ctx.fillStyle="#e6edf3";ctx.font="12px monospace";ctx.fillText("port: 443 (TLS)",610,215);
+
+if(currentStep===0){
+  ctx.strokeStyle="#a78bfa";ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(280,270);ctx.lineTo(520,270);ctx.stroke();
+  ctx.fillStyle="#a78bfa";ctx.beginPath();ctx.moveTo(515,265);ctx.lineTo(525,270);ctx.lineTo(515,275);ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="12px monospace";
+  ctx.fillText("GET /live HTTP/1.1",400,255);
+  ctx.fillStyle="#8b949e";ctx.font="11px sans-serif";
+  ctx.fillText("Upgrade: websocket | Connection: Upgrade",400,285);
+}
+
+if(currentStep===1){
+  ctx.strokeStyle="#3fb950";ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(520,300);ctx.lineTo(280,300);ctx.stroke();
+  ctx.fillStyle="#3fb950";ctx.beginPath();ctx.moveTo(285,295);ctx.lineTo(275,300);ctx.lineTo(285,305);ctx.fill();
+  ctx.fillStyle="#fff";ctx.font="12px monospace";
+  ctx.fillText("HTTP/1.1 101 Switching Protocols",400,285);
+  ctx.fillStyle="#8b949e";ctx.font="11px sans-serif";
+  ctx.fillText("Sec-WebSocket-Accept verified",400,315);
+}
+
+if(currentStep>=2){
+  ctx.strokeStyle="#3fb950";ctx.lineWidth=4;
+  ctx.strokeRect(280,260,240,60);
+  ctx.fillStyle="rgba(63,185,80,0.15)";
+  ctx.fillRect(280,260,240,60);
+  ctx.fillStyle="#3fb950";ctx.font="bold 13px sans-serif";
+  ctx.fillText("Persistent Full-Duplex TCP Tunnel",400,295);
+}
+
+if(currentStep===3){
+  ctx.fillStyle="#8b5cf6";ctx.fillRect(320,240,60,18);
+  ctx.fillStyle="#fff";ctx.font="11px monospace";ctx.fillText("SEND",350,253);
+  ctx.fillStyle="#3fb950";ctx.fillRect(420,322,60,18);
+  ctx.fillStyle="#fff";ctx.fillText("PUSH",450,335);
+  ctx.fillStyle="#e6edf3";ctx.font="13px sans-serif";
+  ctx.fillText("Low latency binary/text frames stream without HTTP header overhead",400,370);
+}
+
+if(currentStep===4){
+  ctx.strokeStyle="#f85149";ctx.lineWidth=2;ctx.setLineDash([4,4]);
+  ctx.strokeRect(275,255,250,70);ctx.setLineDash([]);
+  ctx.fillStyle="#f85149";ctx.font="13px monospace";
+  ctx.fillText("Close Frame (Code 1000: Normal Closure)",400,360);
+}
+
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";
+ctx.fillText([
+  "HTTP GET Handshake with Upgrade: websocket header",
+  "Server responds with 101 Switching Protocols",
+  "Bi-directional TCP socket established (no polling)",
+  "Real-time event frames stream both ways instantly",
+  "Clean TCP close handshake initiated and completed"
+][currentStep],400,480);
 }else if(id==="regex"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#0a0e14";ctx.fillRect(100,120,600,80);ctx.fillStyle="#fff";ctx.font="20px monospace";ctx.fillText("email: user@dom.com",400,165);
@@ -871,8 +1172,8 @@ ctx.restore();
 animRAF=requestAnimationFrame(animateTransition);
 }
 
-function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();updateTimelineSlider();if(currentStep===currentConcept.steps.length-1)markDone()}
-function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();updateTimelineSlider()}
+function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);playTone(320+(currentStep+1)*80,0.06);animateTransition();syncCodeLine();updateTimelineSlider();if(currentStep===currentConcept.steps.length-1)markDone()}
+function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);playTone(300+currentStep*70,0.06);animateTransition();syncCodeLine();updateTimelineSlider()}
 function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,stepDuration)}}
 
 document.getElementById("nextBtn").onclick=nextStep;
