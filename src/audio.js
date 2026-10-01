@@ -1,4 +1,4 @@
-// Web Audio Melodic Tone & Chord Synthesizer
+// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 let soundEnabled = (typeof localStorage !== 'undefined' ? localStorage.getItem("cv_sound") : null) === "true";
 let audioCtx = null;
 
@@ -31,6 +31,13 @@ function playChord(notes = [523.25, 659.25, 783.99]) {
   });
 }
 
+function playSonification(val = 50, min = 0, max = 100, duration = 0.06) {
+  if (!soundEnabled) return;
+  const clamped = Math.max(min, Math.min(max, val));
+  const freq = 200 + ((clamped - min) / Math.max(1, max - min)) * 680;
+  playTone(freq, duration, "triangle");
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { playTone, playChord, updateSoundBtn };
+  module.exports = { playTone, playChord, playSonification, updateSoundBtn };
 }

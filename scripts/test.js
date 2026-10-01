@@ -10,6 +10,7 @@ const mockCtx = {
   moveTo() {}, lineTo() {}, stroke() {}, fill() {}, arc() {},
   quadraticCurveTo() {}, bezierCurveTo() {},
   fillRect() {}, strokeRect() {}, clearRect() {}, setTransform() {}, scale() {},
+  translate() {}, rotate() {},
   fillText() {}, strokeText() {}, measureText(t) { return { width: (t || '').length * 8 }; },
   setLineDash() {}, createLinearGradient() { return { addColorStop() {} }; },
   strokeStyle: '#000', fillStyle: '#000', lineWidth: 1, font: '12px sans',
@@ -67,7 +68,7 @@ const mockWindow = {
   addEventListener() {},
   innerWidth: 1200,
   devicePixelRatio: 2,
-  location: { hash: '' },
+  location: { hash: '', search: '' },
   AudioContext: class {
     constructor() { this.state = 'running'; this.currentTime = 0; }
     createOscillator() { return { type: 'sine', frequency: { setValueAtTime() {} }, connect() {}, start() {}, stop() {} }; }
@@ -159,4 +160,55 @@ console.log('7. Quiz modal opens & renders correctly for both standard and AI co
 });
 console.log('8. Code snippets verified for JS, Python, and C++ across core & AI concepts.');
 
-console.log('\n--- ALL TEST SUITE CHECKS PASSED PERFECTLY! ---');
+// 7. Test Big-O Complexity and Graph Modal
+const complexityData = vm.runInContext('complexityData', ctx);
+console.log(`9. Validating Big-O metadata across all ${concepts.length} concepts...`);
+concepts.forEach(c => {
+  const comp = complexityData[c.id];
+  if (!comp || !comp.time || !comp.space || !comp.curve) {
+    throw new Error(`Missing Big-O complexity metadata for ${c.id}`);
+  }
+});
+vm.runInContext('openBigOModal(); drawBigOGraph(); closeBigOModal();', ctx);
+console.log('10. Big-O chart canvas and complexity badges verified.');
+
+// 8. Test Battle Arena (Showdown Mode)
+console.log('11. Testing Algorithm Battle Arena simulation (QuickSort vs BubbleSort)...');
+vm.runInContext("setupBattleMatchup('sort')", ctx);
+let stepsLimit = 200;
+while (stepsLimit-- > 0) {
+  const isDoneA = vm.runInContext('battleState.algoA.stepIdx >= battleState.algoA.steps.length - 1', ctx);
+  const isDoneB = vm.runInContext('battleState.algoB.stepIdx >= battleState.algoB.steps.length - 1', ctx);
+  if (isDoneA && isDoneB) break;
+  vm.runInContext(`
+    if (battleState.algoA.stepIdx < battleState.algoA.steps.length - 1) {
+      battleState.algoA.stepIdx++;
+      battleState.algoA.currentArr = battleState.algoA.steps[battleState.algoA.stepIdx].arr;
+    } else { battleState.algoA.done = true; }
+    if (battleState.algoB.stepIdx < battleState.algoB.steps.length - 1) {
+      battleState.algoB.stepIdx++;
+      battleState.algoB.currentArr = battleState.algoB.steps[battleState.algoB.stepIdx].arr;
+    } else { battleState.algoB.done = true; }
+    if (!battleState.winner) {
+      if (battleState.algoA.done && !battleState.algoB.done) battleState.winner = battleState.algoA;
+      else if (battleState.algoB.done && !battleState.algoA.done) battleState.winner = battleState.algoB;
+    }
+  `, ctx);
+}
+vm.runInContext('announceWinner();', ctx);
+const winner = vm.runInContext('battleState.winner.name', ctx);
+if (winner !== 'QuickSort') throw new Error(`Expected QuickSort to win race against BubbleSort, got ${winner}`);
+const unlockedAfterBattle = vm.runInContext('unlockedBadges', ctx);
+if (!unlockedAfterBattle.has('speed_demon')) throw new Error('Badge speed_demon was not unlocked after race!');
+console.log(`12. Battle Arena simulation passed: ${winner} won and unlocked 'speed_demon' badge!`);
+
+// 9. Test Variable Inspector on all steps
+concepts.forEach(c => {
+  vm.runInContext(`currentConcept = concepts.find(x => x.id === "${c.id}");`, ctx);
+  for (let s = 0; s < c.steps.length; s++) {
+    vm.runInContext(`currentStep = ${s}; renderVariableInspector();`, ctx);
+  }
+});
+console.log('13. Variable Inspector verified across all steps of all 53 concepts.');
+
+console.log('\n--- ALL 13 TEST SUITE SUITES PASSED PERFECTLY! ---');

@@ -11,12 +11,16 @@ A new concept every day — from data structures to design patterns — with ste
 ## Features
 
 - **53 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, OS concepts, and modern AI models (Vector Embeddings, Perceptron, Token Bucket)
-- **Gamification & Badges**: 9 unlockable achievement badges with celebration audio chords
+- **Algorithm Showdown Arena (⚔️ Race Mode)**: Pit algorithms head-to-head (QuickSort vs BubbleSort, Binary Search vs Linear Search) in real-time with step comparison, operations metrics, and speedup winner detection
+- **Big-O Complexity Analyzer & Cheat Sheet**: Dynamic Time and Space complexity badges on concepts with an interactive canvas modal plotting $O(1), O(\log n), O(n), O(n \log n), O(n^2), O(2^n)$ curves
+- **Dynamic Variable Inspector (Step Debugger HUD)**: Real-time pill indicators tracking live algorithm variables (`low, mid, high, pivot, w1, w2, z, tokens`) on every animation step
+- **Audio Sorting & Step Sonification**: Frequency sweeps mapped dynamically to element values and array indices for musical ascending order
+- **Gamification & Badges**: 10 unlockable achievement badges (including `⚔️ Speed Demon`) with fanfare celebration chords
 - **Active Recall Concept Quizzes**: Interactive modal testing comprehension with real-time feedback and scoring
 - **Enhanced Social Share Card**: Export beautiful PNG cards showcasing concept visualization, synchronized code, streak, and achievements
 - **Interactive Playground**: Custom live input for Stack, Queue, Binary Search, and Array Shuffle for sorting algorithms
 - **Multi-language code tabs**: Switch between JavaScript, Python, and C++ implementations
-- **Web Audio sound effects**: Melodic synthesized tones synchronized with animation steps and comparisons
+- **Embed Mode Widget**: Embed lightweight standalone visualizations into documentation or blogs via `?embed=true` or `#embed`
 - **High-DPI Canvas**: Retina-ready rendering with smooth easing animations
 - **Active code highlighting**: Current line synchronized with animation
 - **Playback controls**: Play, Pause, Next, Previous + keyboard shortcuts
@@ -40,7 +44,7 @@ A new concept every day — from data structures to design patterns — with ste
 |-------|-----------|
 | Frontend | HTML5, CSS3, JavaScript (ES6+) |
 | Graphics | Canvas API (High-DPI scaled) |
-| Audio | Web Audio API Synthesizer |
+| Audio | Web Audio API Synthesizer (Tones, Chords, Harmonic Sonification) |
 | Storage | localStorage |
 | Build & CI | Pure Node.js (`scripts/build.js`, `scripts/test.js`, GitHub Actions) |
 | Hosting | GitHub Pages |
@@ -53,7 +57,7 @@ A new concept every day — from data structures to design patterns — with ste
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
 # Open index.html directly in your browser, or:
-npm test        # Run simulation tests across all 53 concepts
+npm test        # Run 13-suite simulation tests across all 53 concepts & battle arena
 npm run build   # Compile modular data & src into index.html
 ```
 
@@ -68,14 +72,18 @@ npm run build   # Compile modular data & src into index.html
 CodeVis maintains single-file zero-dependency distribution while having a clean modular developer structure:
 
 - `data/concepts.js`: Definitions and step sequences for all 53 visual concepts
+- `data/complexity.js`: Big-O Time and Space metadata and runtime step variables
 - `data/quizzes.js`: Active recall comprehension quizzes (EN/FA)
 - `data/badges.js`: Achievement specifications and unlocking requirements
 - `src/snippets.js`: Multi-language code implementations (JS, Python, C++)
-- `src/audio.js`: Web Audio tone and celebration chord synthesizer
+- `src/audio.js`: Web Audio tone, chord, and harmonic sonification synthesizer
 - `src/badges.js`: Badge tracker and shelf renderer
 - `src/quiz.js`: Interactive quiz modal and scoring controller
+- `src/bigO.js`: Big-O Complexity Graph Visualizer and Cheat Sheet modal
+- `src/battle.js`: Algorithm Showdown Arena (Race Mode) controller
+- `src/vars.js`: Dynamic Variable Inspector HUD controller
 - `scripts/build.js`: Compiles `data/` and `src/` into the root `index.html`
-- `scripts/test.js`: Comprehensive headless canvas simulation test suite
+- `scripts/test.js`: Comprehensive 13-suite headless simulation test suite
 
 ## How It Works
 
@@ -109,12 +117,20 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 - [x] Multi-language code panel (JS, Python, C++)
 
 ### Phase 3: Gamification, AI & Architecture ✅
-- [x] Achievement badges system (9 unlockable badges)
+- [x] Achievement badges system (10 unlockable badges)
 - [x] Active recall concept comprehension quiz modal
 - [x] Enhanced social share card with streak and badge metrics
 - [x] Modern AI & system concepts (Vector Embeddings, Perceptron, Token Bucket Rate Limiting)
 - [x] Modular codebase architecture (`src/`, `data/`, `scripts/build.js`, `scripts/test.js`)
 - [x] 53 total concepts fully rendered and tested in EN and FA
+
+### Phase 4: Battle Arena, Big-O Analyzer & Variable Inspector ✅
+- [x] Algorithm Showdown Arena (Head-to-head race mode with real-time telemetry)
+- [x] Big-O Complexity Cheat Sheet modal with interactive curve canvas
+- [x] Dynamic Variable Inspector (Step Debugger HUD)
+- [x] Audio sorting harmonic sonification (pitch mapped to element values)
+- [x] Embed Mode Widget support (`?embed=true`)
+- [x] 13 automated test suites in CI verifying all features and edge cases
 
 ## Contributing
 
@@ -141,11 +157,16 @@ MIT
 ## ویژگی‌ها
 
 - **۵۳ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، برنامه‌نویسی پویا (DP)، وب، سیستم‌عامل و مدل‌های نوین هوش مصنوعی (بردارهای تعبیه، نورون پرسپترون، و سطل توکن)
-- **گیمیفیکیشن و نشان‌ها (Badges)**: ۹ نشان دستاورد قابل بازگشایی همراه با افکت‌های صوتی ملودیک جشن موفقیت
+- **میدان رقابت الگوریتم‌ها (⚔️ Race Mode)**: شبیه‌سازی همزمان و دوطرفه رقابت دو الگوریتم (QuickSort در برابر BubbleSort، جستجوی دودویی در برابر خطی) با شمارش دقیق مقایسه‌ها، جابجایی‌ها و اعلام سرعت برنده
+- **راهنمای پیچیدگی زمانی و حافظه (Big-O Cheat Sheet)**: نشان‌های داینامیک پیچیدگی روی هدر هر مفهوم همراه با مدال تعاملی رسم منحنی‌های $O(1)، O(\log n)، O(n)، O(n \log n)، O(n^2)، O(2^n)$
+- **نمایشگر زنده متغیرها (Step Debugger HUD)**: کپسول‌های پویای وضعیت متغیرهای زنده الگوریتم (`low, mid, high, pivot, w1, w2, z, tokens`) در هر گام انیمیشن
+- **سونیکیشن هارمونیک صوتی**: تولید نت‌های ملودیک هماهنگ با مقادیر و آرایه‌ها در هنگام مرتب‌سازی و جستجو
+- **گیمیفیکیشن و نشان‌ها (Badges)**: ۱۰ نشان دستاورد قابل بازگشایی (شامل نشان `⚔️ قهرمان سرعت`) با افکت‌های صوتی ملودیک
 - **آزمون‌های درک مطلب (Active Recall)**: مدال تعاملی آزمون چهارگزینه‌ای با بازخورد بلادرنگ، توضیحات آموزشی و سیستم امتیازدهی
 - **کارت اشتراک‌گذاری اجتماعی پیشرفته**: استخراج تصویر باکیفیت شامل انیمیشن مفهوم، کد همگام، استریک یادگیری و نشان‌های کاربر
 - **آزمایشگاه تعاملی (Playground)**: ورودی دلخواه کاربر برای پشته، صف، جستجوی دودویی و شافل آرایه مرتب‌سازی
 - **تب‌های چندزبانه کد**: سوییچ بین پیاده‌سازی‌های JavaScript، Python و ++C
+- **پشتیبانی از حالت ویجت و Embed**: امکان قرار دادن مستقیم انیمیشن‌ها در مقالات و وبلاگ‌ها با پارامتر `?embed=true` یا `#embed`
 - **جلوه‌های صوتی ملودیک**: تون‌های صوتی هماهنگ با مراحل الگوریتم‌ها با Web Audio API
 - **انیمیشن Canvas**: نمایش مرحله‌به‌مرحله هر مفهوم با رندرینگ High-DPI
 - **کنترل پخش**: پخش، توقف، بعدی، قبلی و کلیدهای میانبر کیبورد
@@ -167,7 +188,7 @@ MIT
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
 # باز کردن مستقیم index.html در مرورگر یا:
-npm test        # اجرای تست شبیه‌سازی روی هر ۵۳ مفهوم
+npm test        # اجرای تست‌های ۱۳گانه شبیه‌سازی روی تمام ۵۳ مفهوم و میدان نبرد
 npm run build   # کامپایل ماژول‌های src و data درون index.html
 ```
 
@@ -209,12 +230,20 @@ npm run build   # کامپایل ماژول‌های src و data درون index.
 - [x] پنل کد چندزبانه (JS، Python و ++C)
 
 ### فاز ۳: گیمیفیکیشن، هوش مصنوعی و معماری مدرن ✅
-- [x] سیستم نشان‌ها و دستاوردهای یادگیری (۹ نشان)
+- [x] سیستم نشان‌ها و دستاوردهای یادگیری (۱۰ نشان)
 - [x] مدال کوئیز و آزمون درک مطلب تعاملی
 - [x] کارت اشتراک‌گذاری اجتماعی پیشرفته همراه با آمار و استریک
 - [x] مفاهیم مدرن هوش مصنوعی و سیستم (بردار تعبیه، پرسپترون، سطل توکن)
 - [x] معماری ماژولار و اسکریپت‌های بیلد و تست بدون پکیج‌های خارجی
 - [x] رندر و اعتبارسنجی کامل ۵۳ مفهوم به دو زبان فارسی و انگلیسی
+
+### فاز ۴: میدان رقابت، تحلیلگر Big-O و نمایشگر متغیرها ✅
+- [x] میدان رقابت الگوریتم‌ها (حالت مسابقه همزمان با دورسنجی زنده)
+- [x] راهنمای جامع پیچیدگی Big-O با نمودار پویا روی Canvas
+- [x] نمایشگر متغیرهای زنده الگوریتم (Step Debugger HUD)
+- [x] سونیکیشن صوتی مقادیر آرایه در الگوریتم‌های مرتب‌سازی
+- [x] حالت ویجت و جاسازی در وبلاگ‌ها (`?embed=true`)
+- [x] ۱۳ مجموعه تست خودکار و پاس شدن ۱۰۰٪ در CI
 
 ## مشارکت
 

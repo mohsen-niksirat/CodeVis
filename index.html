@@ -87,13 +87,39 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 .badge-name{font-size:.75rem;font-weight:600;color:var(--text)}
 .modal-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px}
 .modal-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:480px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+
+.quiz-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent2);padding:6px 14px;border-radius:20px;font-size:.85rem;cursor:pointer;font-weight:600;transition:opacity .2s}
+.quiz-btn:hover{opacity:.75}
+.complexity-pill{cursor:pointer;transition:transform .15s,opacity .15s}
+.complexity-pill:hover{transform:scale(1.05);opacity:.85}
+.var-pill{display:inline-flex;align-items:center;gap:4px;background:var(--surface2,#161b22);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:.75rem;font-family:monospace}
+#variableInspector{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;min-height:36px}
+.badges-shelf{width:100%;max-width:900px;padding:0 20px 24px}
+.badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:10px}
+.badge-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;transition:all .2s;cursor:default}
+.badge-item.unlocked{border-color:var(--accent);box-shadow:0 0 10px rgba(139,92,246,0.25)}
+.badge-item.locked{opacity:0.35;filter:grayscale(1)}
+.badge-icon{font-size:1.5rem}
+.badge-name{font-size:.75rem;font-weight:600;color:var(--text)}
+.modal-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px}
+.modal-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:540px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+body.embed-mode header,
+body.embed-mode .calendar-container,
+body.embed-mode .badges-shelf,
+body.embed-mode #studyListCard,
+body.embed-mode .stats-card,
+body.embed-mode footer{display:none!important}
+body.embed-mode{padding:0!important;background:transparent!important}
+body.embed-mode .container{max-width:100%!important;padding:4px!important}
 </style>
 </head>
 <body>
 <header>
 <h1>CodeVis</h1>
 <div class="header-right">
-<button class="quiz-btn" id="quizBtn" aria-label="Take concept quiz">💡 Quiz</button>
+<button class="quiz-btn" id="bigOBtn" aria-label="Big-O Complexity Cheat Sheet">📊 Big-O</button>
+    <button class="quiz-btn" id="battleBtn" aria-label="Algorithm Race Arena">⚔️ Race</button>
+    <button class="quiz-btn" id="quizBtn" aria-label="Take concept quiz">💡 Quiz</button>
     <button class="sound-btn" id="soundBtn" aria-label="Toggle sound" title="Sound Effects">🔇</button>
 <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
 <button class="lang-btn" id="langBtn" aria-label="Toggle language">فا</button>
@@ -117,8 +143,10 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 <div class="card">
 <h2 id="conceptTitle"></h2>
 <span class="level" id="conceptLevel"></span>
+<span id="conceptComplexity" style="margin-inline-start:8px;cursor:pointer;display:inline-flex;gap:6px;vertical-align:middle"></span>
 <p class="desc" id="conceptDesc"></p>
 <div id="playgroundBar" class="playground-bar" style="display:none"></div>
+<div id="variableInspector" style="display:none"></div>
 <canvas id="animCanvas" width="800" height="600" aria-label="Concept visualization canvas" role="img"></canvas>
 <div class="step-controls">
 <button class="secondary" id="prevBtn" aria-label="Previous step"></button>
@@ -160,6 +188,56 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 <div class="modal-backdrop" id="quizModal">
   <div class="modal-card" id="quizCardBody"></div>
 </div>
+
+<div class="modal-backdrop" id="bigOModal" style="display:none">
+  <div class="modal-card" style="max-width:640px;width:95%">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="font-size:1.1rem;color:var(--accent2);margin:0">📊 <span id="bigOModalTitle">Big-O Complexity Guide</span></h3>
+      <button class="secondary" onclick="closeBigOModal()" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button>
+    </div>
+    <div id="bigOConceptInfo"></div>
+    <canvas id="bigOCanvas" width="600" height="260" style="width:100%;height:auto;border-radius:8px;border:1px solid var(--border);display:block"></canvas>
+    <div style="margin-top:14px;display:flex;justify-content:flex-end">
+      <button class="secondary" onclick="closeBigOModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="battleModal" style="display:none">
+  <div class="modal-card" style="max-width:750px;width:95%">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="font-size:1.1rem;color:var(--accent2);margin:0">⚔️ <span id="battleModalTitle">Algorithm Showdown Arena</span></h3>
+      <button class="secondary" onclick="closeBattleModal()" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <button class="secondary" id="matchupSortBtn" onclick="setupBattleMatchup('sort')" style="padding:6px 14px;border-radius:8px;cursor:pointer">🔀 QuickSort vs BubbleSort</button>
+      <button class="secondary" id="matchupSearchBtn" onclick="setupBattleMatchup('search')" style="padding:6px 14px;border-radius:8px;cursor:pointer">🔍 Binary vs Linear Search</button>
+    </div>
+    <div id="battleResultBanner" style="display:none;margin-bottom:12px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div style="background:var(--surface2,#161b22);border:1px solid var(--border);border-radius:10px;padding:10px">
+        <div id="battleTitleA" style="font-weight:700;margin-bottom:6px">Algorithm A</div>
+        <canvas id="battleCanvasA" width="340" height="150" style="width:100%;height:auto;background:#0d1117;border-radius:6px;display:block"></canvas>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.8rem;color:#8b949e">
+          <span>Steps: <strong id="battleStepsA" style="color:var(--text)">0</strong></span>
+          <span>Cmps: <strong id="battleCmpA" style="color:var(--text)">0</strong></span>
+        </div>
+      </div>
+      <div style="background:var(--surface2,#161b22);border:1px solid var(--border);border-radius:10px;padding:10px">
+        <div id="battleTitleB" style="font-weight:700;margin-bottom:6px">Algorithm B</div>
+        <canvas id="battleCanvasB" width="340" height="150" style="width:100%;height:auto;background:#0d1117;border-radius:6px;display:block"></canvas>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:.8rem;color:#8b949e">
+          <span>Steps: <strong id="battleStepsB" style="color:var(--text)">0</strong></span>
+          <span>Cmps: <strong id="battleCmpB" style="color:var(--text)">0</strong></span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <button class="primary" id="battleStartBtn" onclick="startBattle()" style="padding:8px 20px;border-radius:8px;font-weight:600;cursor:pointer">▶️ Start Race</button>
+      <button class="secondary" onclick="closeBattleModal()">Close</button>
+    </div>
+  </div>
+</div>
 <canvas id="shareCanvas" width="1200" height="675"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 <script>
@@ -170,7 +248,7 @@ allLevels:"All Levels",beginner:"Beginner",intermediate:"Intermediate",advanced:
 searchPh:"Search concepts...",random:"Random",share:"Share as PNG",
 play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",
 totalDays:"Total Days",bestStreak:"Best Streak",conceptsSeen:"Concepts Seen",langToggle:"فا",
-  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen",sound:"Sound",playground:"Interactive Playground",shuffle:"Shuffle Array",searchTarget:"Search",conceptQuiz:"Concept Quiz",achievements:"Achievements",close:"Close",correct:"Correct!",incorrect:"Not quite."
+  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen",sound:"Sound",playground:"Interactive Playground",shuffle:"Shuffle Array",searchTarget:"Search",bigO:"Big-O",battle:"Race",battleTitle:"Algorithm Showdown Arena",bigOTitle:"Big-O Complexity Guide",variables:"Variables",conceptQuiz:"Concept Quiz",achievements:"Achievements",close:"Close",correct:"Correct!",incorrect:"Not quite."
   },
   fa:{
 streak:"روز متوالی",allCategories:"همه دسته‌ها",ds:"ساختمان داده",algo:"الگوریتم‌ها",pattern:"الگوها",web:"وب",
@@ -178,24 +256,31 @@ allLevels:"همه سطوح",beginner:"مبتدی",intermediate:"متوسط",adva
 searchPh:"جستجوی مفاهیم...",random:"تصادفی",share:"اشتراک PNG",
 play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",
 totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:"مفاهیم دیده‌شده",langToggle:"EN",
-  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده",sound:"صدا",playground:"آزمایشگاه تعاملی",shuffle:"تصادفی",searchTarget:"جستجو",conceptQuiz:"آزمون درک مطلب",achievements:"نشان‌ها و دستاوردها",close:"بستن",correct:"صحیح!",incorrect:"اشتباه بود."
+  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده",sound:"صدا",playground:"آزمایشگاه تعاملی",shuffle:"تصادفی",searchTarget:"جستجو",bigO:"راهنمای Big-O",battle:"مسابقه",battleTitle:"میدان رقابت الگوریتم‌ها",bigOTitle:"راهنمای پیچیدگی زمانی و حافظه",variables:"متغیرها",conceptQuiz:"آزمون درک مطلب",achievements:"نشان‌ها و دستاوردها",close:"بستن",correct:"صحیح!",incorrect:"اشتباه بود."
   }
 };
 let lang=localStorage.getItem("cv_lang")||"en";
 function t(k){return i18n[lang][k]||i18n.en[k]}
 
-const quizzes = {"stack":{"q":{"en":"Which order does a Stack follow for element removal?","fa":"پشته (Stack) از چه ترتیبی برای حذف عناصر پیروی می‌کند؟"},"opts":{"en":["FIFO (First In First Out)","LIFO (Last In First Out)","Random Order"],"fa":["FIFO (اولین ورودی اولین خروجی)","LIFO (آخرین ورودی اولین خروجی)","ترتیب تصادفی"]},"ans":1,"exp":{"en":"Stack is LIFO: the most recently pushed element is the first one popped.","fa":"پشته LIFO است: آخرین عنصری که اضافه شده، اولین عنصری است که حذف می‌شود."}},"queue":{"q":{"en":"Where are new elements added in a Queue?","fa":"در صف (Queue)، عناصر جدید در کدام قسمت اضافه می‌شوند؟"},"opts":{"en":["At the front","At the back (rear)","In the middle"],"fa":["در ابتدا (Front)","در انتها (Rear)","در وسط"]},"ans":1,"exp":{"en":"Queue is FIFO: elements enter at the rear and exit from the front.","fa":"صف FIFO است: عناصر از انتها وارد و از ابتدا خارج می‌شوند."}},"binarysearch":{"q":{"en":"What prerequisite must an array satisfy for Binary Search to work?","fa":"آرایه برای اجرای جستجوی دودویی چه پیش‌شرطی باید داشته باشد؟"},"opts":{"en":["Must have unique values only","Must be sorted in ascending/descending order","Must have an even length"],"fa":["فقط دارای مقادیر یکتا باشد","باید مرتب‌شده (Sorted) باشد","طول آن زوج باشد"]},"ans":1,"exp":{"en":"Binary Search requires a sorted array to divide the search space in half.","fa":"جستجوی دودویی به آرایه مرتب نیاز دارد تا بتواند فضای جستجو را در هر مرحله نصف کند."}},"quicksort":{"q":{"en":"What is the average time complexity of QuickSort?","fa":"پیچیدگی زمانی میانگین الگوریتم QuickSort چقدر است؟"},"opts":{"en":["O(n log n)","O(n²)","O(log n)"],"fa":["O(n log n)","O(n²)","O(log n)"]},"ans":0,"exp":{"en":"On average, dividing around balanced pivots takes O(n log n) time.","fa":"در حالت میانگین با انتخاب مناسب pivot، پیچیدگی O(n log n) حاصل می‌شود."}},"websocket":{"q":{"en":"How does WebSocket differ from standard HTTP request/response?","fa":"وب‌سوکت چه تفاوتی با چرخه درخواست/پاسخ استاندارد HTTP دارد؟"},"opts":{"en":["Requires reconnecting for every request","Provides a persistent, full-duplex bidirectional connection","Only transfers JSON strings"],"fa":["برای هر درخواست نیاز به اتصال مجدد دارد","یک اتصال پایدار و دوطرفه همزمان فراهم می‌کند","فقط رشته‌های JSON منتقل می‌کند"]},"ans":1,"exp":{"en":"WebSocket maintains an open TCP tunnel allowing client and server to stream frames anytime.","fa":"وب‌سوکت یک سوکت باز TCP نگه می‌دارد که هر دو طرف می‌توانند آزادانه داده بفرستند."}},"vector_embeddings":{"q":{"en":"How is semantic similarity between two embedding vectors measured in AI?","fa":"شباهت معنایی بین دو بردار تعبیه در هوش مصنوعی چگونه سنجیده می‌شود؟"},"opts":{"en":["Cosine similarity (angle between vectors)","String length comparison","Alphabetical sorting"],"fa":["شباهت کسینوسی (زاویه بین بردارها)","مقایسه طول رشته‌ها","ترتیب الفبایی"]},"ans":0,"exp":{"en":"Cosine similarity measures the angle between high-dimensional vectors; closer to 1 means semantically related.","fa":"شباهت کسینوسی زاویه بین بردارها را می‌سنجد؛ هرچه به ۱ نزدیک‌تر باشد معنای نزدیک‌تری دارند."}},"perceptron":{"q":{"en":"What is the role of an activation function in a Perceptron neuron?","fa":"نقش تابع فعال‌ساز در نورون پرسپترون چیست؟"},"opts":{"en":["To store database records","To decide whether the neuron fires based on weighted sum + bias","To sort the input array"],"fa":["برای ذخیره رکورد در پایگاه داده","تصمیم‌گیری برای شلیک/فعال‌شدن نورون بر اساس مجموع وزن‌ها و بایاس","مرتب‌سازی آرایه ورودی"]},"ans":1,"exp":{"en":"The activation function introduces non-linearity and maps weighted sum to an output (0 or 1).","fa":"تابع فعال‌ساز مجموع وزن‌دار را به خروجی تصمیم‌گیری (۰ یا ۱) تبدیل می‌کند."}},"token_bucket":{"q":{"en":"What HTTP status code is returned when the token bucket has no tokens left?","fa":"وقتی سطل توکن خالی است، سرور چه کد خطای HTTP برمی‌گرداند؟"},"opts":{"en":["404 Not Found","429 Too Many Requests","500 Internal Server Error"],"fa":["404 Not Found","429 Too Many Requests","500 Internal Server Error"]},"ans":1,"exp":{"en":"HTTP 429 Too Many Requests is the standard status code for rate limiting.","fa":"کد وضعیت 429 نشان‌دهنده فراتر رفتن از سقف مجاز نرخ درخواست‌هاست."}},"observer":{"q":{"en":"Which design pattern is best for decoupling event producers from subscribers?","fa":"کدام الگوی طراحی برای جداسازی تولیدکننده رویداد از شنوندگان مناسب است؟"},"opts":{"en":["Observer Pattern","Singleton Pattern","Factory Pattern"],"fa":["الگوی ناظر (Observer)","الگوی تک‌نمونه (Singleton)","الگوی کارخانه (Factory)"]},"ans":0,"exp":{"en":"Observer pattern maintains a subscriber list and automatically notifies them upon state changes.","fa":"الگوی ناظر با نگه داشتن لیستی از مشترکین، تغییرات را به صورت خودکار به آن‌ها اطلاع می‌دهد."}},"heapvsstack":{"q":{"en":"Where are dynamic objects with unknown lifetime typically allocated in memory?","fa":"اشیاء پویا با طول عمر نامشخص معمولاً در کدام بخش حافظه تخصیص می‌یابند؟"},"opts":{"en":["Stack Memory","Heap Memory","CPU Registers"],"fa":["حافظه پشته (Stack)","حافظه هیپ (Heap)","رجیسترهای CPU"]},"ans":1,"exp":{"en":"The Heap holds dynamically allocated objects managed by Garbage Collection or pointers.","fa":"حافظه هیپ اشیاء با تخصیص پویا را نگهداری می‌کند که توسط زباله‌روب مدیریت می‌شوند."}}};
-const badges = [{"id":"first_step","icon":"🌟","title":{"en":"First Step","fa":"اولین گام"},"desc":{"en":"Explored your first visual programming concept","fa":"اولین مفهوم برنامه‌نویسی را مشاهده کردید"}},{"id":"explorer","icon":"🧭","title":{"en":"Explorer","fa":"کاوشگر"},"desc":{"en":"Completed 5 visual concepts","fa":"۵ مفهوم برنامه‌نویسی را یاد گرفتید"}},{"id":"scholar","icon":"📚","title":{"en":"Scholar","fa":"پژوهشگر"},"desc":{"en":"Explored 15 concepts in your journey","fa":"۱۵ مفهوم را در مسیر یادگیری مرور کردید"}},{"id":"ds_master","icon":"🌲","title":{"en":"Data Structure Ace","fa":"استاد ساختار داده"},"desc":{"en":"Explored all foundational Data Structures","fa":"تمام مفاهیم پایه ساختار داده را مشاهده کردید"}},{"id":"algo_ace","icon":"⚡","title":{"en":"Algorithm Master","fa":"قهرمان الگوریتم"},"desc":{"en":"Explored sorting, searching and graph algorithms","fa":"مفاهیم مرتب‌سازی، جستجو و گراف را یاد گرفتید"}},{"id":"ai_pioneer","icon":"🤖","title":{"en":"AI Pioneer","fa":"پیشگام هوش مصنوعی"},"desc":{"en":"Learned Vector Embeddings & Perceptron neural models","fa":"مفاهیم بردارهای تعبیه و پرسپترون عصبی را مرور کردید"}},{"id":"web_guru","icon":"🌐","title":{"en":"Web Architect","fa":"متخصص وب"},"desc":{"en":"Explored WebSocket, HTTP, CORS, and Token Bucket","fa":"مفاهیم وب‌سوکت، CORS و سطل توکن را یاد گرفتید"}},{"id":"week_streak","icon":"🔥","title":{"en":"Week Warrior","fa":"رزمنده هفته"},"desc":{"en":"Maintained a 7-day learning streak","fa":"استریک یادگیری ۷ روزه ثبت کردید"}},{"id":"quiz_whiz","icon":"🎯","title":{"en":"Quiz Whiz","fa":"استاد کوئیز"},"desc":{"en":"Answered concept quiz questions correctly","fa":"به پرسش‌های مفهومی آزمون پاسخ صحیح دادید"}}];
 
+
+
+
+const quizzes = {"stack":{"q":{"en":"Which order does a Stack follow for element removal?","fa":"پشته (Stack) از چه ترتیبی برای حذف عناصر پیروی می‌کند؟"},"opts":{"en":["FIFO (First In First Out)","LIFO (Last In First Out)","Random Order"],"fa":["FIFO (اولین ورودی اولین خروجی)","LIFO (آخرین ورودی اولین خروجی)","ترتیب تصادفی"]},"ans":1,"exp":{"en":"Stack is LIFO: the most recently pushed element is the first one popped.","fa":"پشته LIFO است: آخرین عنصری که اضافه شده، اولین عنصری است که حذف می‌شود."}},"queue":{"q":{"en":"Where are new elements added in a Queue?","fa":"در صف (Queue)، عناصر جدید در کدام قسمت اضافه می‌شوند؟"},"opts":{"en":["At the front","At the back (rear)","In the middle"],"fa":["در ابتدا (Front)","در انتها (Rear)","در وسط"]},"ans":1,"exp":{"en":"Queue is FIFO: elements enter at the rear and exit from the front.","fa":"صف FIFO است: عناصر از انتها وارد و از ابتدا خارج می‌شوند."}},"binarysearch":{"q":{"en":"What prerequisite must an array satisfy for Binary Search to work?","fa":"آرایه برای اجرای جستجوی دودویی چه پیش‌شرطی باید داشته باشد؟"},"opts":{"en":["Must have unique values only","Must be sorted in ascending/descending order","Must have an even length"],"fa":["فقط دارای مقادیر یکتا باشد","باید مرتب‌شده (Sorted) باشد","طول آن زوج باشد"]},"ans":1,"exp":{"en":"Binary Search requires a sorted array to divide the search space in half.","fa":"جستجوی دودویی به آرایه مرتب نیاز دارد تا بتواند فضای جستجو را در هر مرحله نصف کند."}},"quicksort":{"q":{"en":"What is the average time complexity of QuickSort?","fa":"پیچیدگی زمانی میانگین الگوریتم QuickSort چقدر است؟"},"opts":{"en":["O(n log n)","O(n²)","O(log n)"],"fa":["O(n log n)","O(n²)","O(log n)"]},"ans":0,"exp":{"en":"On average, dividing around balanced pivots takes O(n log n) time.","fa":"در حالت میانگین با انتخاب مناسب pivot، پیچیدگی O(n log n) حاصل می‌شود."}},"websocket":{"q":{"en":"How does WebSocket differ from standard HTTP request/response?","fa":"وب‌سوکت چه تفاوتی با چرخه درخواست/پاسخ استاندارد HTTP دارد؟"},"opts":{"en":["Requires reconnecting for every request","Provides a persistent, full-duplex bidirectional connection","Only transfers JSON strings"],"fa":["برای هر درخواست نیاز به اتصال مجدد دارد","یک اتصال پایدار و دوطرفه همزمان فراهم می‌کند","فقط رشته‌های JSON منتقل می‌کند"]},"ans":1,"exp":{"en":"WebSocket maintains an open TCP tunnel allowing client and server to stream frames anytime.","fa":"وب‌سوکت یک سوکت باز TCP نگه می‌دارد که هر دو طرف می‌توانند آزادانه داده بفرستند."}},"vector_embeddings":{"q":{"en":"How is semantic similarity between two embedding vectors measured in AI?","fa":"شباهت معنایی بین دو بردار تعبیه در هوش مصنوعی چگونه سنجیده می‌شود؟"},"opts":{"en":["Cosine similarity (angle between vectors)","String length comparison","Alphabetical sorting"],"fa":["شباهت کسینوسی (زاویه بین بردارها)","مقایسه طول رشته‌ها","ترتیب الفبایی"]},"ans":0,"exp":{"en":"Cosine similarity measures the angle between high-dimensional vectors; closer to 1 means semantically related.","fa":"شباهت کسینوسی زاویه بین بردارها را می‌سنجد؛ هرچه به ۱ نزدیک‌تر باشد معنای نزدیک‌تری دارند."}},"perceptron":{"q":{"en":"What is the role of an activation function in a Perceptron neuron?","fa":"نقش تابع فعال‌ساز در نورون پرسپترون چیست؟"},"opts":{"en":["To store database records","To decide whether the neuron fires based on weighted sum + bias","To sort the input array"],"fa":["برای ذخیره رکورد در پایگاه داده","تصمیم‌گیری برای شلیک/فعال‌شدن نورون بر اساس مجموع وزن‌ها و بایاس","مرتب‌سازی آرایه ورودی"]},"ans":1,"exp":{"en":"The activation function introduces non-linearity and maps weighted sum to an output (0 or 1).","fa":"تابع فعال‌ساز مجموع وزن‌دار را به خروجی تصمیم‌گیری (۰ یا ۱) تبدیل می‌کند."}},"token_bucket":{"q":{"en":"What HTTP status code is returned when the token bucket has no tokens left?","fa":"وقتی سطل توکن خالی است، سرور چه کد خطای HTTP برمی‌گرداند؟"},"opts":{"en":["404 Not Found","429 Too Many Requests","500 Internal Server Error"],"fa":["404 Not Found","429 Too Many Requests","500 Internal Server Error"]},"ans":1,"exp":{"en":"HTTP 429 Too Many Requests is the standard status code for rate limiting.","fa":"کد وضعیت 429 نشان‌دهنده فراتر رفتن از سقف مجاز نرخ درخواست‌هاست."}},"observer":{"q":{"en":"Which design pattern is best for decoupling event producers from subscribers?","fa":"کدام الگوی طراحی برای جداسازی تولیدکننده رویداد از شنوندگان مناسب است؟"},"opts":{"en":["Observer Pattern","Singleton Pattern","Factory Pattern"],"fa":["الگوی ناظر (Observer)","الگوی تک‌نمونه (Singleton)","الگوی کارخانه (Factory)"]},"ans":0,"exp":{"en":"Observer pattern maintains a subscriber list and automatically notifies them upon state changes.","fa":"الگوی ناظر با نگه داشتن لیستی از مشترکین، تغییرات را به صورت خودکار به آن‌ها اطلاع می‌دهد."}},"heapvsstack":{"q":{"en":"Where are dynamic objects with unknown lifetime typically allocated in memory?","fa":"اشیاء پویا با طول عمر نامشخص معمولاً در کدام بخش حافظه تخصیص می‌یابند؟"},"opts":{"en":["Stack Memory","Heap Memory","CPU Registers"],"fa":["حافظه پشته (Stack)","حافظه هیپ (Heap)","رجیسترهای CPU"]},"ans":1,"exp":{"en":"The Heap holds dynamically allocated objects managed by Garbage Collection or pointers.","fa":"حافظه هیپ اشیاء با تخصیص پویا را نگهداری می‌کند که توسط زباله‌روب مدیریت می‌شوند."}}};
+const badges = [{"id":"first_step","icon":"🌟","title":{"en":"First Step","fa":"اولین گام"},"desc":{"en":"Explored your first visual programming concept","fa":"اولین مفهوم برنامه‌نویسی را مشاهده کردید"}},{"id":"explorer","icon":"🧭","title":{"en":"Explorer","fa":"کاوشگر"},"desc":{"en":"Completed 5 visual concepts","fa":"۵ مفهوم برنامه‌نویسی را یاد گرفتید"}},{"id":"scholar","icon":"📚","title":{"en":"Scholar","fa":"پژوهشگر"},"desc":{"en":"Explored 15 concepts in your journey","fa":"۱۵ مفهوم را در مسیر یادگیری مرور کردید"}},{"id":"ds_master","icon":"🌲","title":{"en":"Data Structure Ace","fa":"استاد ساختار داده"},"desc":{"en":"Explored all foundational Data Structures","fa":"تمام مفاهیم پایه ساختار داده را مشاهده کردید"}},{"id":"algo_ace","icon":"⚡","title":{"en":"Algorithm Master","fa":"قهرمان الگوریتم"},"desc":{"en":"Explored sorting, searching and graph algorithms","fa":"مفاهیم مرتب‌سازی، جستجو و گراف را یاد گرفتید"}},{"id":"ai_pioneer","icon":"🤖","title":{"en":"AI Pioneer","fa":"پیشگام هوش مصنوعی"},"desc":{"en":"Learned Vector Embeddings & Perceptron neural models","fa":"مفاهیم بردارهای تعبیه و پرسپترون عصبی را مرور کردید"}},{"id":"web_guru","icon":"🌐","title":{"en":"Web Architect","fa":"متخصص وب"},"desc":{"en":"Explored WebSocket, HTTP, CORS, and Token Bucket","fa":"مفاهیم وب‌سوکت، CORS و سطل توکن را یاد گرفتید"}},{"id":"week_streak","icon":"🔥","title":{"en":"Week Warrior","fa":"رزمنده هفته"},"desc":{"en":"Maintained a 7-day learning streak","fa":"استریک یادگیری ۷ روزه ثبت کردید"}},{"id":"quiz_whiz","icon":"🎯","title":{"en":"Quiz Whiz","fa":"استاد کوئیز"},"desc":{"en":"Answered concept quiz questions correctly","fa":"به پرسش‌های مفهومی آزمون پاسخ صحیح دادید"}},{"id":"speed_demon","icon":"⚔️","title":{"en":"Speed Demon","fa":"قهرمان سرعت"},"desc":{"en":"Simulated an algorithm showdown in the Battle Arena","fa":"شاهد رقابت زنده دو الگوریتم در میدان نبرد بودید"}}];
+const complexityData = {"stack":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"action":"push('A')","top":"'A'","size":1,"memory":"Stack Frame"},{"action":"push('B')","top":"'B'","size":2,"memory":"Stack Frame"},{"action":"push('C')","top":"'C'","size":3,"memory":"Stack Frame"},{"action":"pop() -> 'C'","top":"'B'","size":2,"memory":"Deallocated"},{"action":"pop() -> 'B'","top":"'A'","size":1,"memory":"Deallocated"}]},"queue":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"action":"enqueue('A')","front":"'A'","rear":"'A'","size":1},{"action":"enqueue('B')","front":"'A'","rear":"'B'","size":2},{"action":"enqueue('C')","front":"'A'","rear":"'C'","size":3},{"action":"dequeue() -> 'A'","front":"'B'","rear":"'C'","size":2},{"action":"dequeue() -> 'B'","front":"'C'","rear":"'C'","size":1}]},"linkedlist":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair","vars":[{"node":"Head","val":10,"next":"0x1A","ptr":"head"},{"node":"Node 1","val":20,"next":"0x2B","ptr":"curr"},{"node":"Node 2","val":30,"next":"null","ptr":"curr.next"},{"action":"insert(25)","prev":"0x1A","new":"0x3C","next":"0x2B"},{"action":"linked","count":4,"status":"traversed"}]},"binarysearch":{"time":"O(log n)","space":"O(1)","curve":"O_log_n","timeRating":"good","spaceRating":"good","vars":[{"low":0,"high":6,"mid":3,"arrMid":31,"target":42,"cmp":"31 < 42"},{"low":4,"high":6,"mid":5,"arrMid":55,"target":42,"cmp":"55 > 42"},{"low":4,"high":4,"mid":4,"arrMid":42,"target":42,"cmp":"42 == 42"},{"status":"FOUND","index":4,"comparisons":3},{"status":"COMPLETED","searchSpace":"1/8 of N","efficiency":"Logarithmic"}]},"recursion":{"time":"O(2ⁿ)","space":"O(n)","curve":"O_2_n","timeRating":"poor","spaceRating":"fair","vars":[{"call":"fib(4)","depth":1,"stackFrames":1},{"call":"fib(3) + fib(2)","depth":2,"stackFrames":3},{"call":"fib(2) + fib(1)","depth":3,"stackFrames":5},{"call":"baseCase fib(1)=1","depth":4,"returning":1},{"call":"unwinding","result":3,"totalCalls":9}]},"bubbleSort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good","vars":[{"pass":1,"i":0,"j":0,"cmp":"arr[0] > arr[1]","swapped":true},{"pass":1,"i":0,"j":2,"cmp":"arr[2] > arr[3]","swapped":true},{"pass":2,"i":1,"j":1,"cmp":"arr[1] < arr[2]","swapped":false},{"pass":3,"i":2,"j":0,"cmp":"in-order","sortedTail":3},{"status":"SORTED","totalPasses":4,"totalSwaps":6}]},"hashmap":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"key":"'name'","hash":"hash('name') % 8","bucket":3},{"action":"store","bucket":3,"val":"'Alice'","collisions":0},{"key":"'age'","hash":"hash('age') % 8","bucket":7},{"action":"store","bucket":7,"val":28,"collisions":0},{"action":"lookup('name')","bucket":3,"found":"'Alice'","time":"O(1)"}]},"observer":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair","vars":[{"event":"register","subscribers":["UI_Logger","Analytics"]},{"event":"register","subscribers":["UI_Logger","Analytics","Notification"]},{"event":"publish('USER_LOGIN')","activeSubscriber":"UI_Logger"},{"event":"notified","activeSubscriber":"Analytics","payload":"{id:42}"},{"event":"complete","totalNotified":3,"decoupled":true}]},"dom":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"closure":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"bintree":{"time":"O(n)","space":"O(h)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"bfs":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"queue":["A"],"visited":["A"],"curr":"A"},{"queue":["B","C"],"visited":["A","B","C"],"curr":"B"},{"queue":["C","D"],"visited":["A","B","C","D"],"curr":"C"},{"queue":["D","E"],"visited":["A","B","C","D","E"],"curr":"D"},{"status":"TRAVERSED","order":"Level-Order","totalVisited":5}]},"dfs":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"stack":["A"],"visited":["A"],"curr":"A"},{"stack":["A","B"],"visited":["A","B"],"curr":"B"},{"stack":["A","B","D"],"visited":["A","B","D"],"curr":"D (leaf)"},{"backtrack":"to B -> to C","stack":["A","C"],"curr":"C"},{"status":"TRAVERSED","order":"Depth-First","totalVisited":5}]},"mergesort":{"time":"O(n log n)","space":"O(n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair","vars":[{"divide":"split [38, 27, 43, 3]","left":"[38, 27]","right":"[43, 3]"},{"divide":"atomic sub-arrays","units":"[38], [27], [43], [3]"},{"conquer":"merge pairs","left":"[27, 38]","right":"[3, 43]"},{"merge":"compare 27 vs 3","result":"[3, ...]"},{"status":"SORTED","result":"[3, 27, 38, 43]","stable":true}]},"quicksort":{"time":"O(n log n)","space":"O(log n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good","vars":[{"pivot":45,"low":0,"high":5,"array":"[23, 76, 12, 89, 45]"},{"partition":"i=0, j=2","swap":"76 <-> 12","pivot":45},{"partition":"pivot placed","index":2,"left":"[23, 12]","right":"[76, 89]"},{"recursive":"left sort [12, 23]","rightSort":"[76, 89]"},{"status":"SORTED","final":"[12, 23, 45, 76, 89]","avgTime":"O(n log n)"}]},"quicksortAvg":{"time":"O(n log n)","space":"O(log n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good"},"singleton":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"factory":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"promise":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"eventloop":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"http":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"array":{"time":"O(1) access","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"deque":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"heap":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair"},"trie":{"time":"O(k)","space":"O(ALPHABET * k)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"insertionsort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good"},"selectionsort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good"},"strategy":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"decorator":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"boxmodel":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"flexbox":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"avl":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair"},"dijkstra":{"time":"O((V + E) log V)","space":"O(V)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair"},"toposort":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"fib_dp":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"knapsack":{"time":"O(n * W)","space":"O(n * W)","curve":"O_n_2","timeRating":"fair","spaceRating":"fair"},"virtualmem":{"time":"O(1)","space":"O(pages)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"callstack":{"time":"O(1)","space":"O(depth)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"heapvsstack":{"time":"O(1)","space":"O(heap)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"jwt":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"webworker":{"time":"O(1)","space":"O(thread)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"gc":{"time":"O(live objects)","space":"O(1)","curve":"O_n","timeRating":"fair","spaceRating":"good"},"bloom":{"time":"O(k)","space":"O(m bits)","curve":"O_1","timeRating":"good","spaceRating":"good"},"lru":{"time":"O(1)","space":"O(capacity)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"debounce":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"promiseAll":{"time":"O(max(t))","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"cors":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"regex":{"time":"O(n)","space":"O(states)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"heapSort":{"time":"O(n log n)","space":"O(1)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good"},"websocket":{"time":"O(1) frames","space":"O(buffer)","curve":"O_1","timeRating":"good","spaceRating":"good"},"vector_embeddings":{"time":"O(d)","space":"O(v * d)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"space":"2D Latent Grid","vocabulary":["king","queen","apple"],"dim":2},{"query":"monarch","coords":[490,190],"status":"vectorized"},{"metric":"Cosine Sim","formula":"dot(A,B)/(||A||*||B||)","angle":"θ ≈ 4°"},{"topNeighbors":["king (0.98)","queen (0.97)"],"rejected":"apple (0.12)"},{"status":"RETRIEVED","searchType":"Approx Nearest Neighbor (ANN)"}]},"perceptron":{"time":"O(inputs)","space":"O(weights)","curve":"O_1","timeRating":"good","spaceRating":"good","vars":[{"x1":1,"x2":0.5,"status":"signals input"},{"w1":0.8,"w2":-0.4,"weightedSum":"(1*0.8) + (0.5*-0.4) = 0.6"},{"bias":0.2,"preActivation_z":"0.6 + 0.2 = 0.8"},{"activationFunc":"Heaviside step(z)","threshold":"z >= 0 ? 1 : 0"},{"output_y":1,"decision":"Neuron Fired (Class 1)"}]},"token_bucket":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good","vars":[{"capacity":4,"tokens":2,"refillRate":"1 token/sec","status":"IDLE"},{"capacity":4,"tokens":4,"status":"BUCKET FULL"},{"incoming":"GET /api/data","tokensAvailable":3,"check":"tokens >= 1"},{"consumed":1,"remaining":2,"httpResponse":"200 OK"},{"burstReq":"Excess traffic","remaining":0,"httpResponse":"429 Too Many Requests"}]}};
+
+// Badges & Achievements Manager
 let unlockedBadges = new Set(JSON.parse((typeof localStorage !== 'undefined' ? localStorage.getItem("cv_unlocked_badges") : null) || "[]"));
-let quizScore = parseInt((typeof localStorage !== 'undefined' ? localStorage.getItem("cv_quiz_score") : null) || "0");
 
 function checkBadges(stats) {
   if (typeof badges === 'undefined') return;
-  let newlyUnlocked = false;
+  const newlyUnlocked = [];
+  
   badges.forEach(b => {
     if (unlockedBadges.has(b.id)) return;
     let unlocked = false;
+    
     if (b.id === "first_step" && stats.seenCount >= 1) unlocked = true;
     else if (b.id === "explorer" && stats.seenCount >= 5) unlocked = true;
     else if (b.id === "scholar" && stats.seenCount >= 15) unlocked = true;
@@ -203,14 +288,21 @@ function checkBadges(stats) {
     else if (b.id === "ai_pioneer" && stats.seenIds && stats.seenIds.has("vector_embeddings") && stats.seenIds.has("perceptron")) unlocked = true;
     else if (b.id === "web_guru" && stats.seenIds && stats.seenIds.has("websocket") && stats.seenIds.has("token_bucket")) unlocked = true;
     else if (b.id === "quiz_whiz" && stats.quizScore >= 3) unlocked = true;
+    else if (b.id === "speed_demon" && stats.battleDone) unlocked = true;
+
     if (unlocked) {
       unlockedBadges.add(b.id);
-      newlyUnlocked = true;
+      newlyUnlocked.push(b);
     }
   });
-  if (newlyUnlocked) {
-    if (typeof localStorage !== 'undefined') localStorage.setItem("cv_unlocked_badges", JSON.stringify([...unlockedBadges]));
-    if (typeof playChord === 'function') playChord([587.33, 739.99, 880]);
+
+  if (newlyUnlocked.length > 0) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem("cv_unlocked_badges", JSON.stringify([...unlockedBadges]));
+    }
+    if (typeof playChord === 'function') {
+      playChord([587.33, 739.99, 880]); // Celebration fanfare
+    }
     renderBadges();
   }
 }
@@ -218,60 +310,86 @@ function checkBadges(stats) {
 function renderBadges() {
   const container = document.getElementById("badgesList");
   if (!container || typeof badges === 'undefined') return;
-  const titleEl = document.getElementById("badgesTitle");
-  if (titleEl) titleEl.textContent = t("achievements") || "Achievements";
+  
   let html = "";
   badges.forEach(b => {
     const isUnlocked = unlockedBadges.has(b.id);
     const title = (b.title[lang] || b.title.en);
     const desc = (b.desc[lang] || b.desc.en);
-    html += `<div class="badge-item ${isUnlocked ? 'unlocked' : 'locked'}" title="${title}: ${desc}">
-      <span class="badge-icon">${b.icon}</span>
-      <span class="badge-name">${title}</span>
-    </div>`;
+    html += `
+      <div class="badge-item \${isUnlocked ? 'unlocked' : 'locked'}" title="\${title}: \${desc}">
+        <span class="badge-icon">\${b.icon}</span>
+        <span class="badge-name">\${title}</span>
+      </div>
+    `;
   });
   container.innerHTML = html;
 }
 
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { checkBadges, renderBadges };
+}
+
+// Active Learning Concept Quiz Controller
+let quizScore = parseInt((typeof localStorage !== 'undefined' ? localStorage.getItem("cv_quiz_score") : null) || "0");
+
 function openConceptQuiz() {
   if (typeof quizzes === 'undefined' || !currentConcept) return;
-  const qData = quizzes[currentConcept.id] || {
-    q: { en: `What is the primary purpose of ${currentConcept.title.en}?`, fa: `هدف اصلی مفهوم ${currentConcept.title[lang] || currentConcept.title.en} چیست؟` },
-    opts: {
-      en: [currentConcept.desc.en, "A low-level hardware interrupt handler", "A legacy protocol discontinued in modern runtimes"],
-      fa: [currentConcept.desc[lang] || currentConcept.desc.en, "یک مدیریت‌کننده وقفه سخت‌افزاری", "یک پروتکل قدیمی که دیگر استفاده نمی‌شود"]
-    },
-    ans: 0,
-    exp: { en: "That is the foundational definition of this concept.", fa: "این تعریف اصلی و پایه‌ای این مفهوم است." }
-  };
-  renderQuizUI(qData);
+  const qData = quizzes[currentConcept.id];
   const modal = document.getElementById("quizModal");
-  if (modal) modal.style.display = "flex";
+  if (!modal) return;
+  
+  if (!qData) {
+    // Generate a default question if specific quiz not defined
+    renderQuizUI({
+      q: { en: `What is the core purpose of ${currentConcept.title.en}?`, fa: `هدف اصلی مفهوم ${currentConcept.title.fa || currentConcept.title.en} چیست؟` },
+      opts: {
+        en: [currentConcept.desc.en, "A sorting algorithm for hardware buses", "An operating system process scheduler"],
+        fa: [currentConcept.desc.fa || currentConcept.desc.en, "یک الگوریتم مرتب‌سازی برای باس‌های سخت‌افزار", "یک زمان‌بند فرآیند سیستم‌عامل"]
+      },
+      ans: 0,
+      exp: { en: "That is the foundational definition of this concept.", fa: "این تعریف اصلی و پایه‌ای این مفهوم است." }
+    });
+    modal.style.display = "flex";
+    return;
+  }
+  
+  renderQuizUI(qData);
+  modal.style.display = "flex";
 }
 
 function renderQuizUI(qData) {
   const container = document.getElementById("quizCardBody");
   if (!container) return;
+  
   const questionText = qData.q[lang] || qData.q.en;
   const options = qData.opts[lang] || qData.opts.en;
   const explanation = qData.exp[lang] || qData.exp.en;
+  
   let html = `
     <h3 style="font-size:1.1rem;margin-bottom:12px;color:var(--accent2)">💡 ${t("conceptQuiz") || "Concept Quiz"}</h3>
     <p style="font-size:.95rem;margin-bottom:16px;line-height:1.5">${questionText}</p>
     <div style="display:flex;flex-direction:column;gap:8px" id="quizOptions">
   `;
+  
   options.forEach((opt, idx) => {
-    html += `<button class="secondary quiz-option-btn" data-idx="${idx}" style="text-align:start;padding:10px 14px;border-radius:8px">
-      ${idx + 1}. ${opt}
-    </button>`;
+    html += `
+      <button class="secondary quiz-option-btn" data-idx="${idx}" style="text-align:start;padding:10px 14px;border-radius:8px">
+        ${idx + 1}. ${opt}
+      </button>
+    `;
   });
-  html += `</div>
+  
+  html += `
+    </div>
     <div id="quizFeedback" style="margin-top:14px;display:none;padding:10px;border-radius:8px;font-size:.9rem"></div>
     <div style="margin-top:16px;display:flex;justify-content:flex-end">
       <button class="secondary" onclick="document.getElementById('quizModal').style.display='none'">${t("close") || "Close"}</button>
-    </div>`;
+    </div>
+  `;
+  
   container.innerHTML = html;
-
+  
   const optBtns = container.querySelectorAll(".quiz-option-btn");
   optBtns.forEach(btn => {
     btn.onclick = () => {
@@ -279,18 +397,25 @@ function renderQuizUI(qData) {
       const isCorrect = selected === qData.ans;
       const feedback = document.getElementById("quizFeedback");
       optBtns.forEach(b => b.disabled = true);
+      
       if (isCorrect) {
         btn.style.borderColor = "var(--green)";
         btn.style.background = "rgba(63, 185, 80, 0.15)";
         feedback.style.display = "block";
         feedback.style.background = "rgba(63, 185, 80, 0.15)";
         feedback.style.color = "var(--green)";
-        feedback.innerHTML = "<strong>✓ " + (t("correct") || "Correct!") + "</strong> " + explanation;
+        feedback.innerHTML = `<strong>✓ ${t("correct") || "Correct!"}</strong> ${explanation}`;
         quizScore++;
-        if (typeof localStorage !== 'undefined') localStorage.setItem("cv_quiz_score", quizScore.toString());
-        playTone(600, 0.08);
-        setTimeout(() => playTone(800, 0.12), 80);
-        checkBadges({ seenCount: seenIds ? seenIds.size : 0, streak: getStreak(), seenIds, quizScore });
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem("cv_quiz_score", quizScore.toString());
+        }
+        if (typeof playTone === 'function') {
+          playTone(600, 0.08);
+          setTimeout(() => playTone(800, 0.12), 80);
+        }
+        if (typeof checkBadges === 'function') {
+          checkBadges({ seenCount: seenIds ? seenIds.size : 0, streak: typeof getStreak === 'function' ? getStreak() : 0, seenIds, quizScore });
+        }
       } else {
         btn.style.borderColor = "var(--red)";
         btn.style.background = "rgba(248, 81, 73, 0.15)";
@@ -298,11 +423,503 @@ function renderQuizUI(qData) {
         feedback.style.display = "block";
         feedback.style.background = "rgba(248, 81, 73, 0.15)";
         feedback.style.color = "var(--red)";
-        feedback.innerHTML = "<strong>✗ " + (t("incorrect") || "Not quite.") + "</strong> " + explanation;
-        playTone(220, 0.15, "sawtooth");
+        feedback.innerHTML = `<strong>✗ ${t("incorrect") || "Not quite."}</strong> ${explanation}`;
+        if (typeof playTone === 'function') {
+          playTone(220, 0.15, "sawtooth");
+        }
       }
     };
   });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { openConceptQuiz };
+}
+
+// Dynamic Variable Inspector (Step Debugger HUD)
+function renderVariableInspector() {
+  const container = document.getElementById("variableInspector");
+  if (!container || !currentConcept) return;
+
+  const comp = typeof complexityData !== 'undefined' ? complexityData[currentConcept.id] : null;
+  let varsObj = null;
+
+  if (comp && comp.vars && comp.vars[currentStep]) {
+    varsObj = comp.vars[currentStep];
+  } else if (currentConcept.steps && currentConcept.steps[currentStep]) {
+    const s = currentConcept.steps[currentStep];
+    varsObj = {
+      step: `${currentStep + 1}/${currentConcept.steps.length}`,
+      type: s.type || "state",
+      ...(s.val !== undefined ? { val: s.val } : {})
+    };
+  }
+
+  if (!varsObj) {
+    container.style.display = "none";
+    return;
+  }
+
+  container.style.display = "flex";
+  let html = `<div style="display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:0.5px">🔍 ${lang === 'fa' ? 'متغیرها' : 'Variables'}:</div>`;
+  
+  for (const [k, v] of Object.entries(varsObj)) {
+    html += `
+      <div class="var-pill" style="display:inline-flex;align-items:center;gap:4px;background:var(--surface2, #161b22);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:.75rem;font-family:monospace">
+        <span style="color:#8b949e">${k}:</span>
+        <span style="color:#58a6ff;font-weight:600">${typeof v === 'object' ? JSON.stringify(v) : v}</span>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { renderVariableInspector };
+}
+
+// Big-O Complexity Graph Visualizer & Cheat Sheet Modal
+function openBigOModal() {
+  const modal = document.getElementById("bigOModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  drawBigOGraph();
+  updateBigOInfo();
+}
+
+function closeBigOModal() {
+  const modal = document.getElementById("bigOModal");
+  if (modal) modal.style.display = "none";
+}
+
+function updateBigOInfo() {
+  const infoEl = document.getElementById("bigOConceptInfo");
+  if (!infoEl || !currentConcept) return;
+
+  const comp = (typeof complexityData !== 'undefined' && complexityData[currentConcept.id]) || {
+    time: "O(1)", space: "O(1)", curve: "O_1"
+  };
+
+  const title = currentConcept.title[lang] || currentConcept.title.en;
+  const isFa = lang === "fa";
+
+  infoEl.innerHTML = `
+    <div style="background:var(--surface2, #161b22);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <span style="font-weight:700;font-size:1.05rem;color:var(--text)">${title}</span>
+        <div style="display:flex;gap:8px">
+          <span class="complexity-badge time" style="background:rgba(63,185,80,0.15);border:1px solid #3fb950;color:#3fb950;padding:4px 10px;border-radius:12px;font-size:.8rem;font-weight:600">
+            ⏱️ ${isFa ? 'زمان' : 'Time'}: ${comp.time}
+          </span>
+          <span class="complexity-badge space" style="background:rgba(139,92,246,0.15);border:1px solid #8b5cf6;color:#a78bfa;padding:4px 10px;border-radius:12px;font-size:.8rem;font-weight:600">
+            💾 ${isFa ? 'حافظه' : 'Space'}: ${comp.space}
+          </span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function drawBigOGraph() {
+  const canvas = document.getElementById("bigOCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Background
+  ctx.fillStyle = "#0d1117";
+  ctx.fillRect(0, 0, w, h);
+
+  // Coordinates
+  const padL = 50, padB = 40, padR = 20, padT = 30;
+  const graphW = w - padL - padR;
+  const graphH = h - padT - padB;
+
+  // Grid lines
+  ctx.strokeStyle = "#21262d";
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (graphH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(w - padR, y); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = "#484f58";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, h - padB);
+  ctx.lineTo(w - padR, h - padB);
+  ctx.stroke();
+
+  // Axis Labels
+  ctx.fillStyle = "#8b949e";
+  ctx.font = "11px 'Segoe UI', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(lang === "fa" ? "اندازه ورودی (n) →" : "Input Size (n) →", padL + graphW / 2, h - 12);
+  ctx.save();
+  ctx.translate(16, padT + graphH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(lang === "fa" ? "عملیات / زمان →" : "Operations / Time →", 0, 0);
+  ctx.restore();
+
+  // Curves definitions
+  const curves = [
+    { name: "O(1)", color: "#3fb950", label: "Excellent", fn: (n) => 12 },
+    { name: "O(log n)", color: "#2ea043", label: "Good", fn: (n) => Math.log2(n + 1) * 22 + 10 },
+    { name: "O(n)", color: "#d29922", label: "Fair", fn: (n) => n * 2.2 + 8 },
+    { name: "O(n log n)", color: "#db6d28", label: "Bad", fn: (n) => (n * Math.log2(n + 1)) * 0.45 + 10 },
+    { name: "O(n²)", color: "#f85149", label: "Horrible", fn: (n) => Math.pow(n, 2) * 0.05 + 10 },
+    { name: "O(2ⁿ)", color: "#da3633", label: "Terrible", fn: (n) => Math.pow(2, n * 0.14) * 8 }
+  ];
+
+  const currentCurveId = (typeof complexityData !== 'undefined' && currentConcept && complexityData[currentConcept.id]) 
+    ? complexityData[currentConcept.id].curve 
+    : "O_1";
+
+  // Plot curves
+  curves.forEach((c) => {
+    ctx.strokeStyle = c.color;
+    ctx.lineWidth = (c.name.toLowerCase().replace(/[^a-z0-9]/g, '_') === currentCurveId.toLowerCase()) ? 4 : 2;
+    ctx.beginPath();
+    let started = false;
+
+    for (let x = 0; x <= graphW; x += 4) {
+      const n = (x / graphW) * 70;
+      const op = c.fn(n);
+      const y = (h - padB) - (op / 160) * graphH;
+      if (y < padT) break;
+      if (!started) { ctx.moveTo(padL + x, y); started = true; }
+      else ctx.lineTo(padL + x, y);
+    }
+    ctx.stroke();
+  });
+
+  // Curve legend on top
+  let legX = padL + 10;
+  curves.forEach((c) => {
+    ctx.fillStyle = c.color;
+    ctx.beginPath(); ctx.arc(legX, padT - 14, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#c9d1d9";
+    ctx.font = "bold 10px monospace";
+    ctx.textAlign = "left";
+    ctx.fillText(c.name, legX + 8, padT - 11);
+    legX += ctx.measureText(c.name).width + 24;
+  });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { openBigOModal, closeBigOModal, drawBigOGraph };
+}
+
+// Algorithm Battle Arena (Race & Comparison Mode)
+let battleActive = false;
+let battleInterval = null;
+let battleMatchup = "sort"; // "sort" | "search"
+
+const battleState = {
+  array: [45, 12, 85, 32, 89, 21, 67, 9, 54, 76],
+  algoA: { id: "quicksort", name: "QuickSort", complexity: "O(n log n)", steps: [], stepIdx: 0, comparisons: 0, swaps: 0, done: false, currentArr: [] },
+  algoB: { id: "bubbleSort", name: "BubbleSort", complexity: "O(n²)", steps: [], stepIdx: 0, comparisons: 0, swaps: 0, done: false, currentArr: [] },
+  winner: null
+};
+
+function openBattleModal() {
+  const modal = document.getElementById("battleModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  setupBattleMatchup("sort");
+}
+
+function closeBattleModal() {
+  stopBattle();
+  const modal = document.getElementById("battleModal");
+  if (modal) modal.style.display = "none";
+}
+
+function setupBattleMatchup(type = "sort") {
+  stopBattle();
+  battleMatchup = type;
+  battleState.winner = null;
+
+  const resultEl = document.getElementById("battleResultBanner");
+  if (resultEl) { resultEl.style.display = "none"; resultEl.innerHTML = ""; }
+
+  if (type === "sort") {
+    // Generate random 10 elements
+    const raw = [55, 18, 92, 36, 73, 22, 64, 9, 41, 83];
+    battleState.array = [...raw];
+    battleState.algoA = { id: "quicksort", name: "QuickSort", complexity: "O(n log n)", steps: buildQuickSortSteps([...raw]), stepIdx: 0, comparisons: 0, swaps: 0, done: false, currentArr: [...raw] };
+    battleState.algoB = { id: "bubbleSort", name: "BubbleSort", complexity: "O(n²)", steps: buildBubbleSortSteps([...raw]), stepIdx: 0, comparisons: 0, swaps: 0, done: false, currentArr: [...raw] };
+  } else if (type === "search") {
+    const raw = [12, 19, 27, 34, 45, 56, 68, 77, 85, 94];
+    const target = 77;
+    battleState.array = [...raw];
+    battleState.algoA = { id: "binarysearch", name: "Binary Search", complexity: "O(log n)", steps: buildBinarySearchSteps([...raw], target), stepIdx: 0, comparisons: 0, swaps: 0, done: false, currentArr: [...raw] };
+    battleState.algoB = { id: "linearSearch", name: "Linear Search", complexity: "O(n)", steps: buildLinearSearchSteps([...raw], target), stepIdx: 0, comparisons: 0, swaps: 0, done: false, currentArr: [...raw] };
+  }
+
+  updateBattleDOM();
+  renderBattleCanvases();
+}
+
+function buildBubbleSortSteps(arr) {
+  const steps = [];
+  const a = [...arr];
+  const n = a.length;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n - i - 1; j++) {
+      steps.push({ type: "cmp", i: j, j: j + 1, arr: [...a] });
+      if (a[j] > a[j + 1]) {
+        const tmp = a[j]; a[j] = a[j + 1]; a[j + 1] = tmp;
+        steps.push({ type: "swap", i: j, j: j + 1, arr: [...a] });
+      }
+    }
+  }
+  steps.push({ type: "done", arr: [...a] });
+  return steps;
+}
+
+function buildQuickSortSteps(arr) {
+  const steps = [];
+  const a = [...arr];
+  function qs(l, r) {
+    if (l >= r) return;
+    const pivot = a[r];
+    steps.push({ type: "pivot", p: r, arr: [...a] });
+    let i = l - 1;
+    for (let j = l; j < r; j++) {
+      steps.push({ type: "cmp", i: j, j: r, arr: [...a] });
+      if (a[j] < pivot) {
+        i++;
+        const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+        steps.push({ type: "swap", i, j, arr: [...a] });
+      }
+    }
+    const tmp = a[i + 1]; a[i + 1] = a[r]; a[r] = tmp;
+    steps.push({ type: "swap", i: i + 1, j: r, arr: [...a] });
+    const pi = i + 1;
+    qs(l, pi - 1);
+    qs(pi + 1, r);
+  }
+  qs(0, a.length - 1);
+  steps.push({ type: "done", arr: [...a] });
+  return steps;
+}
+
+function buildLinearSearchSteps(arr, target) {
+  const steps = [];
+  for (let i = 0; i < arr.length; i++) {
+    steps.push({ type: "cmp", i, target, arr: [...arr] });
+    if (arr[i] === target) {
+      steps.push({ type: "found", i, arr: [...arr] });
+      break;
+    }
+  }
+  steps.push({ type: "done", arr: [...arr] });
+  return steps;
+}
+
+function buildBinarySearchSteps(arr, target) {
+  const steps = [];
+  let l = 0, r = arr.length - 1;
+  while (l <= r) {
+    const mid = Math.floor((l + r) / 2);
+    steps.push({ type: "cmp", i: mid, l, r, target, arr: [...arr] });
+    if (arr[mid] === target) {
+      steps.push({ type: "found", i: mid, arr: [...arr] });
+      break;
+    } else if (arr[mid] < target) {
+      l = mid + 1;
+    } else {
+      r = mid - 1;
+    }
+  }
+  steps.push({ type: "done", arr: [...arr] });
+  return steps;
+}
+
+function startBattle() {
+  if (battleActive) return;
+  battleActive = true;
+  const btn = document.getElementById("battleStartBtn");
+  if (btn) btn.textContent = "⏸️ " + (lang === "fa" ? "توقف" : "Pause");
+
+  battleInterval = setInterval(() => {
+    let bothDone = true;
+
+    // Advance Algo A
+    if (battleState.algoA.stepIdx < battleState.algoA.steps.length - 1) {
+      battleState.algoA.stepIdx++;
+      const s = battleState.algoA.steps[battleState.algoA.stepIdx];
+      battleState.algoA.currentArr = s.arr;
+      if (s.type === "cmp") battleState.algoA.comparisons++;
+      if (s.type === "swap") battleState.algoA.swaps++;
+      bothDone = false;
+      if (typeof playSonification === "function" && s.i !== undefined) {
+        playSonification(battleState.algoA.currentArr[s.i] || 40);
+      }
+    } else {
+      battleState.algoA.done = true;
+    }
+
+    // Advance Algo B
+    if (battleState.algoB.stepIdx < battleState.algoB.steps.length - 1) {
+      battleState.algoB.stepIdx++;
+      const s = battleState.algoB.steps[battleState.algoB.stepIdx];
+      battleState.algoB.currentArr = s.arr;
+      if (s.type === "cmp") battleState.algoB.comparisons++;
+      if (s.type === "swap") battleState.algoB.swaps++;
+      bothDone = false;
+    } else {
+      battleState.algoB.done = true;
+    }
+
+    // Check winner
+    if (!battleState.winner) {
+      if (battleState.algoA.done && !battleState.algoB.done) {
+        battleState.winner = battleState.algoA;
+      } else if (battleState.algoB.done && !battleState.algoA.done) {
+        battleState.winner = battleState.algoB;
+      }
+    }
+
+    updateBattleDOM();
+    renderBattleCanvases();
+
+    if (bothDone) {
+      stopBattle();
+      announceWinner();
+    }
+  }, 120);
+}
+
+function stopBattle() {
+  battleActive = false;
+  if (battleInterval) { clearInterval(battleInterval); battleInterval = null; }
+  const btn = document.getElementById("battleStartBtn");
+  if (btn) btn.textContent = "▶️ " + (lang === "fa" ? "شروع مسابقه" : "Start Race");
+}
+
+function announceWinner() {
+  const winner = battleState.winner || battleState.algoA;
+  const loser = winner === battleState.algoA ? battleState.algoB : battleState.algoA;
+  const speedup = Math.max(1.1, (loser.stepIdx / Math.max(1, winner.stepIdx))).toFixed(1);
+
+  if (typeof playChord === 'function') {
+    playChord([587.33, 739.99, 880]); // Fanfare
+  }
+
+  const resultEl = document.getElementById("battleResultBanner");
+  if (resultEl) {
+    resultEl.style.display = "block";
+    resultEl.innerHTML = `
+      <div style="background:rgba(63,185,80,0.15);border:1px solid #3fb950;color:#3fb950;border-radius:10px;padding:12px 16px;text-align:center">
+        <strong style="font-size:1.1rem">🏆 ${winner.name} ${lang === "fa" ? "پیروز شد!" : "Wins the Showdown!"}</strong>
+        <p style="margin:4px 0 0;font-size:.9rem;color:var(--text)">
+          ${lang === "fa" 
+            ? `${winner.name} در ${winner.stepIdx} عملیات به پایان رسید (${speedup} برابر سریع‌تر از ${loser.name} با ${loser.stepIdx} گام)`
+            : `${winner.name} completed in ${winner.stepIdx} operations (${speedup}x faster than ${loser.name}'s ${loser.stepIdx} steps)!`
+          }
+        </p>
+      </div>
+    `;
+  }
+
+  // Unlock Speed Demon badge
+  if (typeof unlockedBadges !== 'undefined' && typeof checkBadges === 'function') {
+    unlockedBadges.add("speed_demon");
+    if (typeof localStorage !== 'undefined') localStorage.setItem("cv_unlocked_badges", JSON.stringify([...unlockedBadges]));
+    if (typeof renderBadges === 'function') renderBadges();
+  }
+}
+
+function updateBattleDOM() {
+  const aSteps = document.getElementById("battleStepsA");
+  const aCmp = document.getElementById("battleCmpA");
+  const bSteps = document.getElementById("battleStepsB");
+  const bCmp = document.getElementById("battleCmpB");
+  const titleA = document.getElementById("battleTitleA");
+  const titleB = document.getElementById("battleTitleB");
+
+  if (titleA) titleA.innerHTML = `${battleState.algoA.name} <span style="font-size:.8rem;color:#3fb950">(${battleState.algoA.complexity})</span>`;
+  if (titleB) titleB.innerHTML = `${battleState.algoB.name} <span style="font-size:.8rem;color:#f85149">(${battleState.algoB.complexity})</span>`;
+
+  if (aSteps) aSteps.textContent = battleState.algoA.stepIdx;
+  if (aCmp) aCmp.textContent = battleState.algoA.comparisons;
+  if (bSteps) bSteps.textContent = battleState.algoB.stepIdx;
+  if (bCmp) bCmp.textContent = battleState.algoB.comparisons;
+}
+
+function renderBattleCanvases() {
+  drawBattleArray("battleCanvasA", battleState.algoA);
+  drawBattleArray("battleCanvasB", battleState.algoB);
+}
+
+function drawBattleArray(canvasId, state) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  const arr = state.currentArr;
+  const n = arr.length;
+  const barW = (w - 40) / n;
+  const maxVal = 100;
+  const currStep = state.steps[state.stepIdx] || {};
+
+  arr.forEach((val, idx) => {
+    const barH = (val / maxVal) * (h - 50);
+    const x = 20 + idx * barW;
+    const y = h - 25 - barH;
+
+    let color = "#8b5cf6";
+    if (state.done) {
+      color = "#3fb950";
+    } else if (currStep.type === "swap" && (idx === currStep.i || idx === currStep.j)) {
+      color = "#f85149";
+    } else if (currStep.type === "cmp" && (idx === currStep.i || idx === currStep.j)) {
+      color = "#e3b341";
+    } else if (currStep.type === "found" && idx === currStep.i) {
+      color = "#3fb950";
+    }
+
+    ctx.fillStyle = color;
+    ctx.fillRect(x + 2, y, barW - 4, barH);
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 11px monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(val, x + barW / 2, h - 10);
+  });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    openBattleModal, closeBattleModal, setupBattleMatchup, startBattle, stopBattle,
+    buildBubbleSortSteps, buildQuickSortSteps, buildBinarySearchSteps, buildLinearSearchSteps, battleState
+  };
+}
+
+
+function renderComplexityBadge(c) {
+  const el = document.getElementById("conceptComplexity");
+  if (!el || !c) return;
+  const comp = typeof complexityData !== 'undefined' ? complexityData[c.id] : null;
+  if (!comp) { el.innerHTML = ""; return; }
+  const isFa = lang === "fa";
+  el.innerHTML = `
+    <span class="complexity-pill time" title="${isFa ? 'پیچیدگی زمانی (کلیک برای نمودار Big-O)' : 'Time Complexity (Click for Big-O chart)'}" onclick="openBigOModal()" style="background:rgba(63,185,80,0.15);border:1px solid #3fb950;color:#3fb950;padding:2px 8px;border-radius:12px;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:3px">
+      ⏱️ ${comp.time}
+    </span>
+    <span class="complexity-pill space" title="${isFa ? 'پیچیدگی حافظه (کلیک برای نمودار Big-O)' : 'Space Complexity (Click for Big-O chart)'}" onclick="openBigOModal()" style="background:rgba(139,92,246,0.15);border:1px solid #8b5cf6;color:#a78bfa;padding:2px 8px;border-radius:12px;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:3px">
+      💾 ${comp.space}
+    </span>
+  `;
 }
 
 function applyLang(){
@@ -319,6 +936,12 @@ document.getElementById("randomBtn").textContent=t("random");
 document.getElementById("shareBtn").textContent=t("share");
 renderBadges();
 const qb = document.getElementById("quizBtn"); if(qb) qb.textContent="💡 " + (t("conceptQuiz") || "Quiz");
+const bo = document.getElementById("bigOBtn"); if(bo) bo.textContent="📊 " + (t("bigO") || "Big-O");
+const bt = document.getElementById("battleBtn"); if(bt) bt.textContent="⚔️ " + (t("battle") || "Race");
+if(document.getElementById("bigOModalTitle")) document.getElementById("bigOModalTitle").textContent = t("bigOTitle") || "Big-O Complexity Guide";
+if(document.getElementById("battleModalTitle")) document.getElementById("battleModalTitle").textContent = t("battleTitle") || "Algorithm Showdown Arena";
+renderComplexityBadge(currentConcept);
+renderVariableInspector();
 document.getElementById("prevBtn").textContent=t("prev");
 document.getElementById("playBtn").textContent=isPlaying?t("pause"):t("play");
 document.getElementById("nextBtn").textContent=t("next");
@@ -406,12 +1029,15 @@ function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStor
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
 
-let soundEnabled = localStorage.getItem("cv_sound") === "true";
+// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
+let soundEnabled = (typeof localStorage !== 'undefined' ? localStorage.getItem("cv_sound") : null) === "true";
 let audioCtx = null;
+
 function updateSoundBtn() {
   const btn = document.getElementById("soundBtn");
   if (btn) btn.textContent = soundEnabled ? "🔊" : "🔇";
 }
+
 function playTone(freq = 440, duration = 0.08, type = "sine") {
   if (!soundEnabled) return;
   try {
@@ -434,6 +1060,17 @@ function playChord(notes = [523.25, 659.25, 783.99]) {
   notes.forEach((freq, idx) => {
     setTimeout(() => playTone(freq, 0.15, "triangle"), idx * 100);
   });
+}
+
+function playSonification(val = 50, min = 0, max = 100, duration = 0.06) {
+  if (!soundEnabled) return;
+  const clamped = Math.max(min, Math.min(max, val));
+  const freq = 200 + ((clamped - min) / Math.max(1, max - min)) * 680;
+  playTone(freq, duration, "triangle");
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { playTone, playChord, playSonification, updateSoundBtn };
 }
 
 const sBtn = document.getElementById("soundBtn");
@@ -626,6 +1263,8 @@ if(typeof c==="string"){c=concepts.find(x=>x.id===c);if(!c)return}
 currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
 document.getElementById("conceptTitle").textContent=c.title[lang]||c.title.en;
 document.getElementById("conceptLevel").textContent=t(c.level);
+renderComplexityBadge(c);
+renderVariableInspector();
 document.getElementById("conceptDesc").textContent=c.desc[lang]||c.desc.en;
 document.getElementById("codeBlock").innerHTML=esc(c.code);
 document.getElementById("playBtn").textContent=t("play");
@@ -663,6 +1302,14 @@ if(filtered.length)loadConcept(filtered[0]);
 function drawStep(){
 if(!currentConcept)return;
 ctx.clearRect(0,0,800,600);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
 document.getElementById("stepInfo").textContent=`${t("step")} ${currentStep+1} / ${currentConcept.steps.length}`;
 const step=currentConcept.steps[currentStep],id=currentConcept.id;
 ctx.fillStyle="#e6edf3";ctx.font="16px 'Segoe UI',sans-serif";ctx.textAlign="center";
@@ -1455,6 +2102,9 @@ updateStreak();
 buildCalendar();
 renderBadges();
 if(document.getElementById("quizBtn")) document.getElementById("quizBtn").onclick = openConceptQuiz;
+if(document.getElementById("bigOBtn")) document.getElementById("bigOBtn").onclick = openBigOModal;
+if(document.getElementById("battleBtn")) document.getElementById("battleBtn").onclick = openBattleModal;
+if(window.location.search.includes("embed=true") || window.location.hash.includes("embed=true")) document.body.classList.add("embed-mode");
 
 window.addEventListener("hashchange",()=>{
 const match = window.location.hash.match(/#concept\/(.+)/);

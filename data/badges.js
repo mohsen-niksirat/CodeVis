@@ -53,6 +53,12 @@ const badges = [
     icon: "🎯",
     title: { en: "Quiz Whiz", fa: "استاد کوئیز" },
     desc: { en: "Answered concept quiz questions correctly", fa: "به پرسش‌های مفهومی آزمون پاسخ صحیح دادید" }
+  },
+  {
+    id: "speed_demon",
+    icon: "⚔️",
+    title: { en: "Speed Demon", fa: "قهرمان سرعت" },
+    desc: { en: "Simulated an algorithm showdown in the Battle Arena", fa: "شاهد رقابت زنده دو الگوریتم در میدان نبرد بودید" }
   }
 ];
 
