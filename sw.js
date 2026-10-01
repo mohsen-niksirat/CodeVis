@@ -1,5 +1,5 @@
-const CACHE="codevis-v2";
-const ASSETS=["./","./index.html","./manifest.json"];
+const CACHE="codevis-v3";
+const ASSETS=["./","./index.html","./manifest.json","./icon.svg"];
 
 self.addEventListener("install",e=>{
 e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));
@@ -22,5 +22,5 @@ return;
 e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
 if(res.status===200){const c=res.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c))}
 return res;
-})));
+})).catch(()=>caches.match(e.request)));
 });

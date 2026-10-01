@@ -86,7 +86,7 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 <input type="range" id="speedSlider" min="500" max="2000" value="1200" step="100" title="Step duration (ms)" aria-label="Step duration">
 <span id="speedValue" aria-live="polite">1200ms</span>
 <button class="secondary" id="fullscreenBtn" title="Fullscreen" aria-label="Toggle fullscreen">🌐</button>
-<input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step">
+<input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step" aria-label="Timeline scrubber">
 </div>
 <div class="main">
 <div class="card">
@@ -115,7 +115,7 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 <div class="cal-grid" id="calGrid"></div>
 </div>
   <div class="stats"><div class="stat-card"><div class="val" id="statTotal">0</div><div class="lbl" id="statTotalLbl"></div></div><div class="stat-card"><div class="val" id="statBest">0</div><div class="lbl" id="statBestLbl"></div></div><div class="stat-card"><div class="val" id="statConcepts">0</div><div class="lbl" id="statConceptsLbl"></div></div></div>
-  <div class="card" id="studyListCard" style="margin-top:20px">
+  <div class="card" id="studyListCard" style="width:100%;max-width:900px;margin:0 20px 40px;box-sizing:border-box">
     <h2 id="studyListTitle"></h2>
     <div id="studyList"><div class="desc" id="studyListEmpty"></div></div>
   </div><canvas id="shareCanvas" width="1200" height="675"></canvas>
@@ -159,6 +159,9 @@ document.getElementById("nextBtn").textContent=t("next");
 document.getElementById("codeTitle").textContent=t("code");
 document.getElementById("progressTitle").textContent=t("progress");
 if(currentConcept)loadConcept(currentConcept);
+updateStats();
+buildCalendar();
+buildLearningPaths();
 }
 document.getElementById("langBtn").onclick=()=>{lang=lang==="en"?"fa":"en";localStorage.setItem("cv_lang",lang);applyLang()};
 
@@ -291,7 +294,7 @@ steps:[{type:"container"},{type:"items"},{type:"justify"},{type:"align"},{type:"
 {id:"avl",title:{en:"AVL Tree",fa:"درخت AVL"},category:"ds",level:"advanced",desc:{en:"Self-balancing binary search tree with height rotation.",fa:"درخت دودویی جستجو با تعادل خودکار با چرخش ارتفاع."},code:"function getBalance(n){return n?n.left.height-n.right.height:0}\nfunction rotateRight(y){const x=y.left;x.right=y.left;x.height=Math.max(x.left.height,x.right.height)+1;y.height=Math.max(y.left.height,y.right.height)+1;return x}",steps:[{type:"insert"},{"type":"check"},{"type":"rotate"},{"type":"balance"},{"type":"done"}]},
 {id:"dijkstra",title:{en:"Dijkstra",fa:"دیکسترا"},category:"algo",level:"advanced",desc:{en:"Shortest path in weighted graph with non-negative edges.",fa:"کوتاه‌ترین مسیر در گراف وزن‌دار با یک‌جهت‌گیری مثبت."},code:"function dijkstra(graph,s){const d={},pq=new PriorityQueue();for(const n in graph)d[n]=Infinity;d[s]=0;pq.enqueue([s,0]);while(!pq.isEmpty()){const[u,w]=pq.dequeue();if(w>d[u])continue;for(const[v,c]of graph[u]){if(d[u]+c<d[v]){d[v]=d[u]+c;pq.enqueue([v,d[v]])}}}return d}",steps:[{type:"init"},{"type":"visit"},{"type":"relax"},{"type":"update"},{"type":"done"}]},
 {id:"toposort",title:{en:"Topological Sort",fa:"مرتب‌سازی شی‌داری"},category:"algo",level:"advanced",desc:{en:"Linear ordering of vertices where each edge goes from earlier to later.",fa:"ترتیب خطی رئوی گراف که هر یک‌جهت‌گیری از زودتر به بعد می‌رود."},code:"function topoSort(g){const v=new Set(),r=[];function visit(n){if(v.has(n))return;v.add(n);for(const x of g[n])visit(x);r.push(n)}for(const n in g)visit(n);return r.reverse()}",steps:[{type:"start"},{"type":"dfs"},{"type":"reached"},{"type":"add"},{"type":"reverse"}]},
-{id:"fib_dp",title:{en:"Fibonacci DP",fa:"فیبوناچی با پویا"},category:"algo",level:"intermediate",desc:{en:"Memoization vs tabulation for optimal substructure.",fa:"حافظه موقت مقابل جدول‌بندی برای زیرساختار بهینه."},code:"function fibMem(n,c={}){if(n<=1)return n;if(c[n])return c[n];c[n]=fibMemo(n-1,c)+fibMemo(n-2,c);return c[n]}\nfunction fibTab(n){const d=[0,1];for(let i=2;i<=n;i++)d[i]=d[i-1]+d[i-2];return d[n]}",steps:[{type:"memo"},{"type":"cache"},{"type":"tab"},{"type":"iter"},{type:"result"}]},
+{id:"fib_dp",title:{en:"Fibonacci DP",fa:"فیبوناچی با پویا"},category:"algo",level:"intermediate",desc:{en:"Memoization vs tabulation for optimal substructure.",fa:"حافظه موقت مقابل جدول‌بندی برای زیرساختار بهینه."},code:"function fibMem(n,c={}){if(n<=1)return n;if(c[n])return c[n];c[n]=fibMemo(n-1,c)+fibMemo(n-2,c);return c[n]}\nfunction fibTab(n){const d=[0,1];for(let i=2;i<=n;i++)d[i]=d[i-1]+d[i-2];return d[n]}",steps:[{type:"fib0"},{type:"fib1"},{type:"fib2"},{type:"fib3"},{type:"fib4"},{type:"fib5"}]},
 {id:"knapsack",title:{en:"0/1 Knapsack",fa:"کپس‌پی"},category:"algo",level:"advanced",desc:{en:"Maximize value within weight capacity using dynamic programming.",fa:"بیشینه کردن ارزش در محدودیت وزن با پویای برنامه‌نویسی."},code:"function knap(items,W){const dp=Array(W+1).fill(0);for(const{w,v}of items)for(let c=W;c>=w;c--)dp[c]=Math.max(dp[c],dp[c-w]+v);return dp[W]}",steps:[{type:"init"},{"type":"iterate"},{type:"choose"},{type:"fill"},{type:"result"}]},
 {id:"virtualmem",title:{en:"Virtual Memory",fa:"حافظه مجازی"},category:"ds",level:"advanced",desc:{en:"Page table translation from virtual to physical addresses.",fa:"ترجمه آدرس مجازی به فیزیکی با جدول صفحه."},code:"// VirtualAddr: 32-bit\n// Page = VirtualAddr >> 12 (high 20 bits)\n// Offset = VirtualAddr & 0xFFF (low 12 bits)\nphysicalAddr = (pageTable[page] << 12) | offset",steps:[{type:"virtual"},{"type":"split"},{type:"lookup"},{"type":"translate"},{type:"cache"}]},
 {id:"callstack",title:{en:"Call Stack",fa:"پشته فراخوانی"},category:"web",level:"beginner",desc:{en:"Function call frames pushed onto and popped from the call stack in LIFO order.",fa:"فریم‌های فراخوانی تابع به صورت LIFO روی پشته فراخوانی افزوده و حذف می‌شوند."},code:"function outer(){\n  const a=1;        // Stack frame 1\n  function inner(){\n    const b=2;      // Stack frame 2\n    return a+b;\n  }\n  return inner();    // frames: outer->inner->return->pop\n}\nouter();",steps:[{type:"push"},{"type":"local"},{type:"nested"},{"type":"return"},{type:"pop"}]},
@@ -335,10 +338,6 @@ function buildLearningPaths(){
   document.getElementById("studyListTitle").textContent=t("studyList");
   const container=document.getElementById("studyList");
   const seen=[...seenIds];
-  if(seen.length===0){
-    container.innerHTML='<div class="desc">'+t("studyEmpty")+'</div>';
-    return;
-  }
   let html="";
   const review=seen.slice(-5).reverse();
   if(review.length){
@@ -381,6 +380,7 @@ function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStor
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
 function loadConcept(c){
+if(typeof c==="string"){c=concepts.find(x=>x.id===c);if(!c)return}
 currentConcept=c;currentStep=0;isPlaying=false;clearInterval(playInterval);
 document.getElementById("conceptTitle").textContent=c.title[lang]||c.title.en;
 document.getElementById("conceptLevel").textContent=t(c.level);
@@ -473,9 +473,9 @@ ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#8b5cf6";ctx.fillRect(300,120,200,60);ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText("Subject",400,155);
 const subs=currentStep>=1?2:currentStep>=0?1:0;
 for(let i=0;i<subs;i++){const x=200+i*300;ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,180);ctx.lineTo(x+50,280);ctx.stroke();ctx.fillStyle="#161b22";ctx.strokeStyle="#30363d";ctx.strokeRect(x,280,100,50);ctx.fillStyle="#e6edf3";ctx.font="14px sans-serif";ctx.fillText("Obs "+["A","B"][i],x+50,310)}
-if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("Event: '"+currentConcept.steps[currentStep].val+"'",400,400)}
+if(currentStep>=2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("Event: '"+(currentConcept.steps[2].val||"update")+"'",400,400)}
 if(currentStep>=3){ctx.fillStyle="#f85149";for(let i=0;i<=(currentStep-3);i++){const x=200+i*300;ctx.fillText("notified!",x+50,360)}}
-ctx.font="16px 'Segoe UI',sans-serif";
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["Observer A subscribes","Observer B subscribes","Subject triggers 'update' event","Observer A notified","Observer B notified"][currentStep],400,480);
 }else if(id==="dom"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 const nodes=[{t:"html",x:400,y:100,c:["body"]},{t:"body",x:400,y:200,c:["div"]},{t:"div",x:400,y:300,c:[]}];
@@ -646,7 +646,7 @@ if(show>=2){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo
 if(show>=3){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(400,158);ctx.lineTo(520,238);ctx.stroke()}
 if(show>=4){ctx.strokeStyle="#a78bfa";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(280,262);ctx.lineTo(400,388);ctx.stroke()}
 if(currentStep===3){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("LL rotation to rebalance",400,500)}
-ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["insert(10)","insert(20)","insert(30)","rotate to balance"][currentStep],400,560);
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["insert(10)","insert(20)","insert(30)","rotate to balance","balanced AVL tree"][currentStep],400,560);
 }else if(id==="dijkstra"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 var dpos={A:[200,180],B:[400,120],C:[600,180],D:[150,380],E:[550,380]};
@@ -666,9 +666,19 @@ ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["vis
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+" - fib(5)",400,40);
 var memo={0:0,1:1,2:1,3:2,4:3,5:5};
 var labels=["memo[0]=0","memo[1]=1","memo[2]=1","memo[3]=2","memo[4]=3","memo[5]=5"];
-for(var i=0;i<6;i++){ctx.fillStyle=i<=currentStep?"#3fb950":"#30363d";ctx.fillRect(150+i*110,200,100,60);ctx.fillStyle="#fff";ctx.font="bold 16px monospace";ctx.fillText(labels[i].split("=")[0],200,220);ctx.fillStyle=i<=currentStep?"#8b5cf6":"#484f58";ctx.font="14px sans-serif";ctx.fillText(memo[labels[i].split("=")[0][5]]||0,200,250)}
-ctx.fillStyle="#e6edf3";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText("memoization avoids O(2^n) recompute",400,350);
-ctx.fillStyle="#3fb950";ctx.fillText(["compute fib(0)","compute fib(1)","fib(2)=1","fib(3)=2","fib(4)=3","fib(5)=5 ✓"][currentStep],400,500);
+for(var i=0;i<6;i++){
+  var bx=70+i*110;
+  ctx.fillStyle=i<=currentStep?"#3fb950":"#30363d";
+  ctx.fillRect(bx,200,95,60);
+  ctx.fillStyle="#fff";
+  ctx.font="bold 14px monospace";
+  ctx.fillText(labels[i].split("=")[0],bx+47,225);
+  ctx.fillStyle=i<=currentStep?"#8b5cf6":"#484f58";
+  ctx.font="14px sans-serif";
+  ctx.fillText(memo[i]!==undefined?memo[i]:0,bx+47,250);
+}
+ctx.fillStyle="#e6edf3";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText("memoization avoids O(2^n) exponential recompute",400,350);
+ctx.fillStyle="#3fb950";ctx.fillText(["compute fib(0) = 0","compute fib(1) = 1","fib(2) = 1 (0+1)","fib(3) = 2 (1+1)","fib(4) = 3 (1+2)","fib(5) = 5 (2+3) ✓"][currentStep],400,500);
 }else if(id==="knapsack"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en+" - W=5",400,40);
 var ksItems=[{n:"Item1",w:2,v:3},{n:"Item2",w:3,v:4},{n:"Item3",w:4,v:5},{n:"Item4",w:5,v:8}];
@@ -684,13 +694,27 @@ cur.forEach(function(v,i){var x=150+i*120;ctx.fillStyle=v==hsSorted[i]&&currentS
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["original array","build max-heap","heapify","extract max","sorted"][currentStep],400,400);
 }else if(id==="quicksortAvg"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
-var qa=[5,3,8,1,7];var steps=[[5,3,8,1,7],[1,3,5,8,7],[1,3,5,7,8]];
-var curA=currentStep<2?qa:steps[currentStep-1];
-curA.forEach(function(v,i){var x=150+i*120;ctx.fillStyle="#8b5cf6";ctx.fillRect(x,200,80,60);ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(v,x+40,235)});
-if(currentStep===0){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("pivot=5",160,180)}
-if(currentStep===1){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("partition around pivot",400,180)}
-if(currentStep===2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("recurse on subarrays",400,180)}
-ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["avg: pivot splits evenly","O(n log n) expected","avoid worst O(n²)"][Math.min(currentStep,2)],400,400);
+var states=[[5,3,8,1,7],[3,1,5,8,7],[1,3,5,7,8],[1,3,5,7,8],[1,3,5,7,8]];
+var curA=states[currentStep]||states[states.length-1];
+curA.forEach(function(v,i){
+  var x=130+i*110;
+  ctx.fillStyle=(currentStep===0&&v===5)||(currentStep===1&&v===5)?"#f85149":(currentStep>=2&&v===5)?"#3fb950":"#8b5cf6";
+  ctx.fillRect(x,200,85,60);
+  ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(v,x+42,238);
+});
+if(currentStep===0){ctx.fillStyle="#f85149";ctx.font="14px sans-serif";ctx.fillText("pivot = 5 chosen",400,170)}
+if(currentStep===1){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("partition: [3, 1] <= 5 <= [8, 7]",400,170)}
+if(currentStep===2){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("recurse on subarrays: sort [1, 3] and [7, 8]",400,170)}
+if(currentStep===3){ctx.fillStyle="#a78bfa";ctx.font="14px sans-serif";ctx.fillText("median-of-three pivot avoids worst O(n²)",400,170)}
+if(currentStep===4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("all subarrays sorted! O(n log n) expected",400,170)}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";
+ctx.fillText([
+  "initial array: select pivot (5)",
+  "partition around pivot into smaller and larger",
+  "recurse independently on left and right halves",
+  "good pivots yield balanced tree depth log(n)",
+  "expected average time complexity: O(n log n)"
+][currentStep],400,400);
 }else if(id==="virtualmem"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#8b5cf6";ctx.fillRect(150,150,500,80);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Virtual Address (32-bit)",400,195);
@@ -706,6 +730,52 @@ for(var li=0;li<=Math.min(currentStep,2);li++){var lv=levels[li];ctx.fillStyle="
 if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("pop inner()",400,480)}
 if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("pop outer()",400,520)}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["call outer()","call inner()","execute inner","return inner","return outer"][currentStep],400,560);
+}else if(id==="heapvsstack"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+ctx.fillStyle="#161b22";ctx.strokeStyle="#30363d";ctx.lineWidth=2;
+ctx.strokeRect(100,100,260,340);
+ctx.fillStyle="#8b5cf6";ctx.font="bold 16px sans-serif";ctx.fillText("Stack (Fast, Fixed, LIFO)",230,130);
+ctx.strokeRect(440,100,260,340);
+ctx.fillStyle="#a78bfa";ctx.fillText("Heap (Dynamic, GC managed)",570,130);
+
+ctx.fillStyle="#3fb950";ctx.fillRect(120,360,220,50);
+ctx.fillStyle="#fff";ctx.font="bold 14px monospace";ctx.fillText("let primitive = 42",230,390);
+
+if(currentStep>=1){
+  ctx.fillStyle=currentStep>=3?"#484f58":"#8b5cf6";ctx.fillRect(120,290,220,50);
+  ctx.fillStyle="#fff";ctx.font="bold 14px monospace";ctx.fillText(currentStep>=3?"let obj = null (orphan)":"let obj -> ref 0x1A",230,320);
+  ctx.fillStyle=currentStep>=3?"#f85149":"#8b5cf6";ctx.fillRect(470,200,200,80);
+  ctx.fillStyle="#fff";ctx.font="bold 14px monospace";ctx.fillText("{ x: 1, y: 2 }",570,235);
+  ctx.font="12px sans-serif";ctx.fillText(currentStep>=3?"unreachable / 0 refs":"allocated at 0x1A",570,260);
+  if(currentStep<3){
+    ctx.strokeStyle="#3fb950";ctx.lineWidth=2;ctx.beginPath();
+    ctx.moveTo(340,315);ctx.lineTo(470,240);ctx.stroke();
+  }
+}
+if(currentStep===2){
+  ctx.fillStyle="#3fb950";ctx.font="13px sans-serif";
+  ctx.fillText("Stack: Top pointer +1 (instant)",230,250);
+  ctx.fillText("Heap: Memory allocator search (slower)",570,320);
+}
+if(currentStep>=3){
+  ctx.strokeStyle="#f85149";ctx.lineWidth=2;ctx.setLineDash([4,4]);
+  ctx.strokeRect(465,195,210,90);ctx.setLineDash([]);
+  ctx.fillStyle="#f85149";ctx.font="13px sans-serif";
+  ctx.fillText("GC detects 0 incoming references",570,320);
+}
+if(currentStep>=4){
+  ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";
+  ctx.fillText("Stack frame pops automatically",230,220);
+  ctx.fillText("GC frees heap block (sweep)",570,350);
+}
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";
+ctx.fillText([
+  "Stack: fast allocation for primitive variables (42)",
+  "Heap: reference types stored on heap, pointer on stack",
+  "Stack is O(1) contiguous; Heap requires allocation table",
+  "Reference cleared: heap object has 0 refs (garbage)",
+  "Stack pops on scope exit; Garbage Collector reclaims heap"
+][currentStep],400,500);
 }else if(id==="jwt"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#8b5cf6";ctx.fillRect(150,150,180,60);ctx.fillStyle="#fff";ctx.font="13px monospace";ctx.fillText('{"alg":"HS256"}',240,180);
@@ -733,7 +803,7 @@ ctx.fillStyle="#f85149";ctx.fillRect(500,180,80,40);ctx.fillStyle="#fff";ctx.fil
 if(currentStep>=1){ctx.fillStyle="#3fb950";ctx.font="12px sans-serif";ctx.fillText("mark phase",200,260);ctx.fillRect(150,280,80,40);ctx.fillRect(300,280,80,40);ctx.fillStyle="#fff";ctx.fillText("marked",190,305);ctx.fillText("marked",340,305)}
 if(currentStep>=2){ctx.fillStyle="#f85149";ctx.fillRect(500,180,80,40);ctx.fillStyle="#fff";ctx.fillText("swept",540,205)}
 if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("heap compacted",400,380)}
-ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["mark roots","mark reachable","sweep garbage","compact heap"][currentStep],400,480);
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["mark roots","mark reachable","sweep garbage","compact heap","heap compacted & clean"][currentStep],400,480);
 }else if(id==="bloom"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#0a0e14";ctx.fillRect(150,100,500,350);
@@ -741,7 +811,7 @@ for(var bi=0;bi<32;bi++){var bx=170+(bi%8)*55;var by=130+Math.floor(bi/8)*45;ctx
 if(currentStep>=1){for(var h=0;h<3;h++){var hx=170+((h*13%8))*55;var hy=130+Math.floor(h%4)*45;ctx.fillStyle="#8b5cf6";ctx.fillRect(hx,hy,45,35)}}
 if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="14px sans-serif";ctx.fillText("contains('cat')?",400,400)}
 if(currentStep>=3){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("maybe in set",400,430)}
-ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["initialize bit array","add items (hash)","query set","check bits \u2192 maybe yes"][currentStep],400,520);
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["initialize bit array","add items (hash)","query set","check bits \u2192 maybe yes","result: element probably in set"][currentStep],400,520);
 }else if(id==="lru"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 var lru=[{k:"A",v:"10"},{k:"B",v:"20"},{k:"C",v:"30"}];
@@ -749,7 +819,7 @@ for(var li=0;li<3;li++){var lx=250+li*180;ctx.fillStyle="#8b5cf6";ctx.fillRect(l
 if(currentStep>=1){ctx.fillStyle="#3fb950";ctx.fillRect(250,300,120,50);ctx.fillStyle="#fff";ctx.font="14px monospace";ctx.fillText("get(A)",310,330)}
 if(currentStep>=2){ctx.fillStyle="#a78bfa";ctx.fillRect(400,370,120,50);ctx.fillStyle="#fff";ctx.fillText("put(D,40)",460,400)}
 if(currentStep>=3){ctx.fillStyle="#f85149";ctx.fillRect(250,200,120,50);ctx.fillStyle="#fff";ctx.fillText("evict LRU (B)",310,235)}
-ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cache: A,B,C","access A \u2192 reorder","add D \u2192 evict","A,C,D in cache"][currentStep],400,500);
+ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cache: A,B,C","access A \u2192 reorder","add D \u2192 evict","A,C,D in cache","LRU item evicted, capacity maintained"][currentStep],400,500);
 }else if(id==="debounce"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#0a0e14";ctx.fillRect(100,150,600,80);ctx.fillStyle="#fff";ctx.font="18px sans-serif";ctx.fillText("Input: search",400,195);
@@ -776,7 +846,7 @@ ctx.fillStyle="#f85149";ctx.fillRect(150,150,200,200);ctx.fillStyle="#fff";ctx.f
 ctx.fillStyle="#3fb950";ctx.fillRect(550,150,200,200);ctx.fillStyle="#fff";ctx.font="16px sans-serif";ctx.fillText("Server (api.com)",650,180);
 if(currentStep>=1){ctx.strokeStyle="#a78bfa";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(250,250);ctx.lineTo(650,250);ctx.stroke()}
 if(currentStep>=2){ctx.fillStyle="#e6edf3";ctx.font="12px sans-serif";ctx.fillText("GET /data - no CORS",400,280)}
-if(currentStep>=3){ctx.fillStyle="#a78bfa";ctx.font="12px sans-serif";ctx.fillText("Access-Control-Allow-Origin: *",400,320);ctx.fillRect(350,340,200,40);ctx.fillStyle("#fff");ctx.fillText("response",450,365)}
+if(currentStep>=3){ctx.fillStyle="#a78bfa";ctx.font="12px sans-serif";ctx.fillText("Access-Control-Allow-Origin: *",400,320);ctx.fillRect(350,340,200,40);ctx.fillStyle="#fff";ctx.fillText("response",450,365)}
 if(currentStep>=4){ctx.fillStyle="#3fb950";ctx.font="14px sans-serif";ctx.fillText("CORS allowed!",400,420)}
 ctx.font="16px 'Segoe UI',sans-serif";ctx.fillStyle="#3fb950";ctx.fillText(["cross-origin request","blocked by browser","server adds CORS header","response returned","data loaded!"][currentStep],400,480);
 }else if(id==="regex"){
@@ -801,8 +871,8 @@ ctx.restore();
 animRAF=requestAnimationFrame(animateTransition);
 }
 
-function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();if(currentStep===currentConcept.steps.length-1)markDone()}
-function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine()}
+function nextStep(){if(!currentConcept)return;currentStep=(currentStep+1)%currentConcept.steps.length;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();updateTimelineSlider();if(currentStep===currentConcept.steps.length-1)markDone()}
+function prevStep(){if(!currentConcept||currentStep===0)return;currentStep--;animProgress=0;cancelAnimationFrame(animRAF);animateTransition();syncCodeLine();updateTimelineSlider()}
 function togglePlay(){if(isPlaying){clearInterval(playInterval);isPlaying=false;document.getElementById("playBtn").textContent=t("play")}else{isPlaying=true;document.getElementById("playBtn").textContent=t("pause");playInterval=setInterval(nextStep,stepDuration)}}
 
 document.getElementById("nextBtn").onclick=nextStep;
@@ -812,8 +882,9 @@ document.getElementById("randomBtn").onclick=()=>loadConcept(concepts[Math.floor
 document.getElementById("categoryFilter").onchange=filterAndLoad;
 document.getElementById("levelFilter").onchange=filterAndLoad;
 document.getElementById("search").oninput=filterAndLoad;
-document.getElementById("speedSlider").oninput=(e)=>{stepDuration=parseInt(e.target.value);document.getElementById("speedValue").textContent=stepDuration+"ms"};
-document.getElementById("fullscreenBtn").onclick=()=>{isFullscreen=!isFullscreen;if(isFullscreen){document.body.requestFullscreen();document.getElementById("fullscreenBtn").textContent="🗕";document.body.classList.add("fullscreen");}else{document.exitFullscreen();document.getElementById("fullscreenBtn").textContent="🌐";document.body.classList.remove("fullscreen")}};
+document.getElementById("speedSlider").oninput=(e)=>{stepDuration=parseInt(e.target.value);document.getElementById("speedValue").textContent=stepDuration+"ms";if(isPlaying){clearInterval(playInterval);playInterval=setInterval(nextStep,stepDuration)}};
+document.getElementById("fullscreenBtn").onclick=()=>{if(!document.fullscreenElement){document.body.requestFullscreen().catch(()=>{})}else{document.exitFullscreen().catch(()=>{})}};
+document.addEventListener("fullscreenchange",()=>{isFullscreen=!!document.fullscreenElement;document.getElementById("fullscreenBtn").textContent=isFullscreen?"🗕":"🌐";document.body.classList.toggle("fullscreen",isFullscreen)});
 document.getElementById("timelineSlider").oninput=(e)=>{
 currentStep=parseInt(e.target.value);drawStep();syncCodeLine();
 };
@@ -859,16 +930,44 @@ gif.render();
 
 document.getElementById("videoBtn").onclick=()=>{
 if(!currentConcept)return;
-const stream = canvas.captureStream(1000/stepDuration||1);
-const recorder = new MediaRecorder(stream,{mimeType:'video/webm'});
-const chunks = [];
-recorder.ondataavailable=e=>chunks.push(e.data);
-recorder.onstop=()=>{const blob=new Blob(chunks,{type:'video/webm'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='codevis-'+currentConcept.id+'.webm';a.click()};
+const stream=canvas.captureStream(30);
+let recorder;
+try{recorder=new MediaRecorder(stream,{mimeType:'video/webm'})}
+catch(e){recorder=new MediaRecorder(stream)}
+const chunks=[];
+recorder.ondataavailable=e=>{if(e.data&&e.data.size>0)chunks.push(e.data)};
+recorder.onstop=()=>{
+  const blob=new Blob(chunks,{type:'video/webm'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='codevis-'+currentConcept.id+'.webm';
+  a.click();
+};
 recorder.start();
 const savedStep=currentStep;
-for(let i=0;i<currentConcept.steps.length;i++){currentStep=i;drawStep();}
-currentStep=savedStep;drawStep();
-setTimeout(()=>{recorder.stop()},currentConcept.steps.length*stepDuration);
+let stepIdx=0;
+currentStep=0;
+drawStep();
+syncCodeLine();
+updateTimelineSlider();
+const recInt=setInterval(()=>{
+  stepIdx++;
+  if(stepIdx<currentConcept.steps.length){
+    currentStep=stepIdx;
+    drawStep();
+    syncCodeLine();
+    updateTimelineSlider();
+  }else{
+    clearInterval(recInt);
+    setTimeout(()=>{
+      try{recorder.stop()}catch(e){}
+      currentStep=savedStep;
+      drawStep();
+      syncCodeLine();
+      updateTimelineSlider();
+    },Math.max(500,stepDuration/2));
+  }
+},stepDuration);
 };
 
 const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
