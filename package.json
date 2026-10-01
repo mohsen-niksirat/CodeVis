@@ -1,0 +1,19 @@
+{
+  "name": "codevis",
+  "version": "2.0.0",
+  "description": "Visual, interactive, and bilingual computer science concept animations with gamification and active recall.",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js"
+  },
+  "keywords": [
+    "visualization",
+    "algorithms",
+    "data-structures",
+    "computer-science",
+    "gamification",
+    "education"
+  ],
+  "author": "Mohsen Niksirat",
+  "license": "MIT"
+}

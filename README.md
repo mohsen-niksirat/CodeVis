@@ -10,36 +10,39 @@ A new concept every day — from data structures to design patterns — with ste
 
 ## Features
 
-- **50 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, and OS concepts
+- **53 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, OS concepts, and modern AI models (Vector Embeddings, Perceptron, Token Bucket)
+- **Gamification & Badges**: 9 unlockable achievement badges with celebration audio chords
+- **Active Recall Concept Quizzes**: Interactive modal testing comprehension with real-time feedback and scoring
+- **Enhanced Social Share Card**: Export beautiful PNG cards showcasing concept visualization, synchronized code, streak, and achievements
 - **Interactive Playground**: Custom live input for Stack, Queue, Binary Search, and Array Shuffle for sorting algorithms
 - **Multi-language code tabs**: Switch between JavaScript, Python, and C++ implementations
 - **Web Audio sound effects**: Melodic synthesized tones synchronized with animation steps and comparisons
 - **High-DPI Canvas**: Retina-ready rendering with smooth easing animations
-- **Canvas animations**: Step-by-step visual breakdown for each concept
 - **Active code highlighting**: Current line synchronized with animation
 - **Playback controls**: Play, Pause, Next, Previous + keyboard shortcuts
 - **Time-scaled animations**: 0.5x, 1x, 2x, with easing transitions
 - **Synced code panel**: Real code displayed alongside the animation
 - **Bilingual**: English and Persian (FA) with RTL support
 - **Daily streak tracker**: Calendar-based progress with month navigation
-- **Stats panel**: Total days, best streak, concepts seen
-- **Share as PNG/GIF**: One-click export of concept + code + animation
+- **Stats panel**: Total days, best streak, concepts seen, quiz score, and badges
 - **Search & filter**: By category, level, or keyword
 - **Learning paths**: Recommended concepts based on progress, with study list
 - **Keyboard shortcuts**: Arrow keys, Space, R for random
 - **Dark/Light theme**: Persistent preference saved in localStorage
 - **PWA support**: Installable, works offline with service worker
-- **Zero dependencies**: Vanilla HTML/CSS/JS, no frameworks, no build step
-- **Single file**: Everything in one `index.html`
-- **GitHub Pages ready**: Push and deploy instantly
+- **Modular build architecture**: Clean `src/` and `data/` structure with zero-dependency `npm run build` and `npm test`
+- **Zero external runtime dependencies**: Pure HTML/CSS/JS, runs directly on GitHub Pages
+- **Single file distribution**: Everything compiled cleanly in `index.html`
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | HTML5, CSS3, JavaScript |
-| Graphics | Canvas API |
+| Frontend | HTML5, CSS3, JavaScript (ES6+) |
+| Graphics | Canvas API (High-DPI scaled) |
+| Audio | Web Audio API Synthesizer |
 | Storage | localStorage |
+| Build & CI | Pure Node.js (`scripts/build.js`, `scripts/test.js`, GitHub Actions) |
 | Hosting | GitHub Pages |
 
 ## Getting Started
@@ -49,7 +52,9 @@ A new concept every day — from data structures to design patterns — with ste
 ```bash
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
-# Open index.html in your browser
+# Open index.html directly in your browser, or:
+npm test        # Run simulation tests across all 53 concepts
+npm run build   # Compile modular data & src into index.html
 ```
 
 ### GitHub Pages
@@ -57,6 +62,20 @@ cd CodeVis
 1. Go to repository Settings > Pages
 2. Set source to `main` branch, folder `/ (root)`
 3. Save — your site will be live at `https://mohsen-niksirat.github.io/CodeVis/`
+
+## Architecture & Modular Structure
+
+CodeVis maintains single-file zero-dependency distribution while having a clean modular developer structure:
+
+- `data/concepts.js`: Definitions and step sequences for all 53 visual concepts
+- `data/quizzes.js`: Active recall comprehension quizzes (EN/FA)
+- `data/badges.js`: Achievement specifications and unlocking requirements
+- `src/snippets.js`: Multi-language code implementations (JS, Python, C++)
+- `src/audio.js`: Web Audio tone and celebration chord synthesizer
+- `src/badges.js`: Badge tracker and shelf renderer
+- `src/quiz.js`: Interactive quiz modal and scoring controller
+- `scripts/build.js`: Compiles `data/` and `src/` into the root `index.html`
+- `scripts/test.js`: Comprehensive headless canvas simulation test suite
 
 ## How It Works
 
@@ -84,16 +103,18 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 ### Phase 2: Content & Export ✅
 - [x] Timeline scrubber for step navigation
 - [x] WebM video export
-- [x] 50 concepts live (including WebSocket & Memory models)
+- [x] 50 foundational & web concepts (including WebSocket & Memory models)
 - [x] Interactive playground & custom user inputs
 - [x] Web Audio melodic sound effects
 - [x] Multi-language code panel (JS, Python, C++)
 
-### Phase 3: Polish (In Progress)
-- [x] Learning paths / study list with recommended concepts
-- [x] ARIA labels for accessibility
-- [ ] Lighthouse enforced (currently optional)
-- [ ] More languages (Arabic, Spanish, etc.)
+### Phase 3: Gamification, AI & Architecture ✅
+- [x] Achievement badges system (9 unlockable badges)
+- [x] Active recall concept comprehension quiz modal
+- [x] Enhanced social share card with streak and badge metrics
+- [x] Modern AI & system concepts (Vector Embeddings, Perceptron, Token Bucket Rate Limiting)
+- [x] Modular codebase architecture (`src/`, `data/`, `scripts/build.js`, `scripts/test.js`)
+- [x] 53 total concepts fully rendered and tested in EN and FA
 
 ## Contributing
 
@@ -119,22 +140,24 @@ MIT
 
 ## ویژگی‌ها
 
-- **۵۰ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، پویا (DP)، APIهای وب و مفاهیم سیستم‌عامل
+- **۵۳ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، برنامه‌نویسی پویا (DP)، وب، سیستم‌عامل و مدل‌های نوین هوش مصنوعی (بردارهای تعبیه، نورون پرسپترون، و سطل توکن)
+- **گیمیفیکیشن و نشان‌ها (Badges)**: ۹ نشان دستاورد قابل بازگشایی همراه با افکت‌های صوتی ملودیک جشن موفقیت
+- **آزمون‌های درک مطلب (Active Recall)**: مدال تعاملی آزمون چهارگزینه‌ای با بازخورد بلادرنگ، توضیحات آموزشی و سیستم امتیازدهی
+- **کارت اشتراک‌گذاری اجتماعی پیشرفته**: استخراج تصویر باکیفیت شامل انیمیشن مفهوم، کد همگام، استریک یادگیری و نشان‌های کاربر
 - **آزمایشگاه تعاملی (Playground)**: ورودی دلخواه کاربر برای پشته، صف، جستجوی دودویی و شافل آرایه مرتب‌سازی
 - **تب‌های چندزبانه کد**: سوییچ بین پیاده‌سازی‌های JavaScript، Python و ++C
 - **جلوه‌های صوتی ملودیک**: تون‌های صوتی هماهنگ با مراحل الگوریتم‌ها با Web Audio API
-- **انیمیشن Canvas**: نمایش مرحله‌به‌مرحله هر مفهوم
-- **کنترل پخش**: پخش، توقف، بعدی، قبلی
+- **انیمیشن Canvas**: نمایش مرحله‌به‌مرحله هر مفهوم با رندرینگ High-DPI
+- **کنترل پخش**: پخش، توقف، بعدی، قبلی و کلیدهای میانبر کیبورد
 - **پنل کد همگام**: نمایش کد واقعی کنار انیمیشن
-- **دوزبانه**: فارسی و انگلیسی با پشتیبانی RTL
+- **دوزبانه کامل**: فارسی و انگلیسی با پشتیبانی RTL
 - **ردیاب استریک روزانه**: تقویم پیشرفت ذخیره‌شده در localStorage
-- **اشتراک PNG**: خروجی تصویر با یک کلیک شامل مفهوم + کد + توضیح
-- **جستجو و فیلتر**: بر اساس دسته (ساختمان داده، الگوریتم، الگو، وب)، سطح (مبتدی، متوسط، پیشرفته) یا کلمه کلیدی
+- **پنل آمار**: مجموع روزها، بهترین استریک، مفاهیم مشاهده‌شده، امتیاز کوئیز و نشان‌ها
+- **جستجو و فیلتر**: بر اساس دسته (ساختمان داده، الگوریتم، الگو، وب، هوش مصنوعی)، سطح یا کلمه کلیدی
 - **مسیرهای یادگیری**: مفاهیم پیشنهادی بر اساس پیشرفت، با لیست مطالعه
-- **حالت تصادفی**: پرش به مفهوم تصادفی
-- **بدون وابستگی**: HTML/CSS/JS خالص، بدون فریمورک، بدون بیلد
-- **تک‌فایل**: همه چیز در یک `index.html`
-- **آماده GitHub Pages**: پوش و دیپلوی فوری
+- **معماری ماژولار و بیلد اختصاصی**: ساختار تمیز `src/` و `data/` با دستورات `npm run build` و `npm test` بدون هیچ وابستگی خارجی
+- **بدون وابستگی خارجی**: HTML/CSS/JS خالص، آماده استقرار در GitHub Pages
+- **توزیع تک‌فایلی**: تمام کدهای بیلدشده درون فایل ریشه `index.html`
 
 ## شروع سریع
 
@@ -143,7 +166,9 @@ MIT
 ```bash
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
-# فایل index.html را در مرورگر باز کنید
+# باز کردن مستقیم index.html در مرورگر یا:
+npm test        # اجرای تست شبیه‌سازی روی هر ۵۳ مفهوم
+npm run build   # کامپایل ماژول‌های src و data درون index.html
 ```
 
 ### GitHub Pages
@@ -178,16 +203,18 @@ cd CodeVis
 ### فاز ۲: محتوا و خروجی ✅
 - [x] اسکرول‌تایم‌لاین برای ناوبری گام‌ها
 - [x] صدور ویدیو WebM
-- [x] ۵۰ مفهوم فعال (شامل وب‌سوکت و مدل‌های حافظه)
+- [x] ۵۰ مفهوم فعال پایه و وب (شامل وب‌سوکت و مدل‌های حافظه)
 - [x] آزمایشگاه تعاملی و ورودی سفارشی کاربر
 - [x] جلوه‌های صوتی سینتی‌سایزر Web Audio
 - [x] پنل کد چندزبانه (JS، Python و ++C)
 
-### فاز ۳: تمیزکاری (در حال اجرا)
-- [x] مسیرهای یادگیری / لیست مطالعه با مفاهیم پیشنهادی
-- [x] برچسب‌های ARIA برای دسترسی‌پذیری
-- [ ] الزام‌آور کردن Lighthouse
-- [ ] زبان‌های بیشتر (عربی، اسپانیایی و...)
+### فاز ۳: گیمیفیکیشن، هوش مصنوعی و معماری مدرن ✅
+- [x] سیستم نشان‌ها و دستاوردهای یادگیری (۹ نشان)
+- [x] مدال کوئیز و آزمون درک مطلب تعاملی
+- [x] کارت اشتراک‌گذاری اجتماعی پیشرفته همراه با آمار و استریک
+- [x] مفاهیم مدرن هوش مصنوعی و سیستم (بردار تعبیه، پرسپترون، سطل توکن)
+- [x] معماری ماژولار و اسکریپت‌های بیلد و تست بدون پکیج‌های خارجی
+- [x] رندر و اعتبارسنجی کامل ۵۳ مفهوم به دو زبان فارسی و انگلیسی
 
 ## مشارکت
 

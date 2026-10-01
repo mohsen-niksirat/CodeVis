@@ -1,0 +1,162 @@
+const fs = require('fs');
+
+console.log('Running CodeVis Complete Test Suite across all 53 concepts...');
+
+const html = fs.readFileSync('index.html', 'utf8');
+
+// Mock browser DOM and Canvas Context
+const mockCtx = {
+  save() {}, restore() {}, beginPath() {}, closePath() {},
+  moveTo() {}, lineTo() {}, stroke() {}, fill() {}, arc() {},
+  quadraticCurveTo() {}, bezierCurveTo() {},
+  fillRect() {}, strokeRect() {}, clearRect() {}, setTransform() {}, scale() {},
+  fillText() {}, strokeText() {}, measureText(t) { return { width: (t || '').length * 8 }; },
+  setLineDash() {}, createLinearGradient() { return { addColorStop() {} }; },
+  strokeStyle: '#000', fillStyle: '#000', lineWidth: 1, font: '12px sans',
+  textAlign: 'center', textBaseline: 'middle'
+};
+
+const mockCanvas = {
+  width: 800, height: 550,
+  getContext() { return mockCtx; },
+  style: {}
+};
+
+const domStore = {};
+function createMockEl(id) {
+  return {
+    id,
+    style: {},
+    classList: { add() {}, remove() {}, contains() { return false; }, toggle() {} },
+    innerHTML: '',
+    textContent: '',
+    children: [],
+    querySelectorAll() { return []; },
+    querySelector() { return null; },
+    appendChild() {},
+    setAttribute() {},
+    getAttribute() { return null; },
+    dataset: {},
+    getContext() { return mockCtx; }
+  };
+}
+
+const mockDoc = {
+  getElementById(id) {
+    if (!domStore[id]) domStore[id] = createMockEl(id);
+    return domStore[id];
+  },
+  createElement(tag) { return createMockEl(tag); },
+  documentElement: { dir: 'ltr', lang: 'en', setAttribute() {} },
+  querySelectorAll() { return []; },
+  body: createMockEl('body'),
+  addEventListener() {},
+  removeEventListener() {},
+  fullscreenElement: null
+};
+
+const mockLocalStorage = {
+  _data: {},
+  getItem(k) { return this._data[k] || null; },
+  setItem(k, v) { this._data[k] = String(v); },
+  removeItem(k) { delete this._data[k]; },
+  clear() { this._data = {}; }
+};
+
+const mockWindow = {
+  addEventListener() {},
+  innerWidth: 1200,
+  devicePixelRatio: 2,
+  location: { hash: '' },
+  AudioContext: class {
+    constructor() { this.state = 'running'; this.currentTime = 0; }
+    createOscillator() { return { type: 'sine', frequency: { setValueAtTime() {} }, connect() {}, start() {}, stop() {} }; }
+    createGain() { return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {} }, connect() {} }; }
+    resume() {}
+  }
+};
+
+// Extract JS environment from index.html
+const sIdx = html.indexOf('<script>');
+const eIdx = html.indexOf('</script>', sIdx);
+const jsCode = html.substring(sIdx + 8, eIdx);
+
+// Execute in sandbox
+const sandbox = {
+  window: mockWindow,
+  document: mockDoc,
+  localStorage: mockLocalStorage,
+  console,
+  setTimeout(fn) { fn(); },
+  clearTimeout() {},
+  setInterval() {},
+  clearInterval() {},
+  navigator: { language: 'en-US' },
+  requestAnimationFrame(fn) { fn(); },
+  cancelAnimationFrame() {},
+  URL: { createObjectURL() { return 'blob:mock'; } }
+};
+
+const vm = require('vm');
+const ctx = vm.createContext(sandbox);
+
+vm.runInContext(jsCode, ctx);
+
+console.log('1. Script parsed & evaluated in sandbox.');
+
+// 2. Validate concepts
+const concepts = vm.runInContext('concepts', ctx);
+console.log(`2. Total concepts loaded: ${concepts.length}`);
+if (concepts.length !== 53) throw new Error(`Expected 53 concepts, got ${concepts.length}`);
+
+let totalStepsTested = 0;
+
+['en', 'fa'].forEach(lang => {
+  vm.runInContext(`lang = "${lang}"`, ctx);
+  concepts.forEach(c => {
+    if (!c.id || !c.title.en || !c.title.fa || !c.desc.en || !c.desc.fa || !c.code || !c.steps) {
+      throw new Error(`Incomplete concept schema for ${c.id}`);
+    }
+    vm.runInContext(`currentConcept = concepts.find(x => x.id === "${c.id}")`, ctx);
+    for (let step = 0; step < c.steps.length; step++) {
+      vm.runInContext(`currentStep = ${step}; drawStep();`, ctx);
+      totalStepsTested++;
+    }
+  });
+});
+
+console.log(`3. Verified all 53 concepts across ${totalStepsTested} rendered step passes (EN & FA).`);
+
+// 4. Test Badges
+const badges = vm.runInContext('badges', ctx);
+console.log(`4. Total badges loaded: ${badges.length}`);
+if (badges.length < 9) throw new Error(`Expected at least 9 badges, got ${badges.length}`);
+
+vm.runInContext('checkBadges({ seenCount: 1, streak: 1, seenIds: new Set(["stack"]), quizScore: 0 })', ctx);
+const unlockedBadges = vm.runInContext('unlockedBadges', ctx);
+if (!unlockedBadges.has('first_step')) throw new Error('Badge first_step was not unlocked!');
+
+vm.runInContext('checkBadges({ seenCount: 15, streak: 7, seenIds: new Set(["vector_embeddings", "perceptron", "websocket", "token_bucket"]), quizScore: 5 })', ctx);
+['explorer', 'scholar', 'week_streak', 'ai_pioneer', 'web_guru', 'quiz_whiz'].forEach(bId => {
+  if (!unlockedBadges.has(bId)) throw new Error(`Badge ${bId} was not unlocked!`);
+});
+vm.runInContext('renderBadges()', ctx);
+console.log('5. Badges unlock and render logic verified.');
+
+// 5. Test Quizzes
+const quizzes = vm.runInContext('quizzes', ctx);
+console.log(`6. Total custom quizzes defined: ${Object.keys(quizzes).length}`);
+vm.runInContext('currentConcept = concepts[0]; openConceptQuiz();', ctx);
+vm.runInContext('currentConcept = concepts.find(x => x.id === "vector_embeddings"); openConceptQuiz();', ctx);
+console.log('7. Quiz modal opens & renders correctly for both standard and AI concepts.');
+
+// 6. Test Multi-language snippets
+['js', 'py', 'cpp'].forEach(l => {
+  ['vector_embeddings', 'perceptron', 'token_bucket', 'websocket', 'stack'].forEach(id => {
+    const code = vm.runInContext(`getCodeForLang(concepts.find(x => x.id === "${id}"), "${l}")`, ctx);
+    if (!code || code.length === 0) throw new Error(`Missing ${l} snippet for ${id}`);
+  });
+});
+console.log('8. Code snippets verified for JS, Python, and C++ across core & AI concepts.');
+
+console.log('\n--- ALL TEST SUITE CHECKS PASSED PERFECTLY! ---');

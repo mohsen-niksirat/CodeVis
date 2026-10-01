@@ -18,6 +18,8 @@ jobs:
       - name: Validate HTML/JS syntax
         run: |
           node -e "const fs=require('fs');const h=fs.readFileSync('index.html','utf8');const i=h.indexOf('<script>');const j=h.indexOf('</script>',i);new Function(h.substring(i+8,j));console.log('JS syntax OK')"
+      - name: Run Concept Simulation Test Suite
+        run: node scripts/test.js
       - name: Run Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
