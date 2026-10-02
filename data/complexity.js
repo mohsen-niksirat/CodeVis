@@ -1044,6 +1044,11 @@ const complexityData = {
       }
     ]
   }
+,
+"bellman_ford":{"time":"O(V·E)","space":"O(V)","curve":"O_n_2","timeRating":"fair","spaceRating":"good","vars":[{"src":"S","dist":"{S:0, rest:∞}"},{"relax":"S→A","dist":"{S:0, A:4}"},{"relax":"A→B","dist":"{A:4, B:2}"},{"relax":"B→C","dist":"{B:2, C:-1}"},{"status":"DONE","noNegCycle":true,"rounds":4}]},
+"kruskal":{"time":"O(E log E)","space":"O(V)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good","vars":[{"sorted":"weights ascending"},{"accept":"B-C(1)","mstW":1},{"accept":"A-B(2)","mstW":3},{"reject":"A-C","reason":"cycle (same set)"},{"status":"MST DONE","weight":9,"edges":4}]},
+"segment_tree":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair","vars":[{"arr":"[2,4,1,7]","leaves":4},{"internal":"[14,6,7][2,4][1,7]","height":3},{"query":"sum[1,3)","covered":"[4]+[1]","sum":5},{"update":"t[2]=9","propagate":"up the tree"},{"status":"UPDATED","newSum":13}]},
+"huffman":{"time":"O(n log n)","space":"O(n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good","vars":[{"freqs":"{a:5,b:2,c:1}","symbols":3},{"merge":"c(1)+b(2)=3","pq":"[3,5]"},{"merge":"3+5=8","root":8},{"codes":"a→0, b→10, c→11","bits":"5+4+4=13"},{"status":"ENCODED","raw":24,"compressed":16,"saved":"33%"}]}
 };
 
 if (typeof module !== 'undefined' && module.exports) {

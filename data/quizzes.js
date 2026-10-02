@@ -344,9 +344,13 @@ const quizzes = {
       "en": "Each element is pushed and popped at most once, resolving next-greater queries in a single pass.",
       "fa": "هر عنصر حداکثر یک بار push و pop می‌شود و پرسش‌های بزرگ‌تر-بعدی در یک پیمایش حل می‌شوند."
     }
-  }
+  },
+  "bellman_ford": {"q":{"en":"What does Bellman-Ford detect that Dijkstra cannot?","fa":"بلمن-فورد چه چیزی را تشخیص می‌دهد که دیکسترا نمی‌تواند؟"},"opts":{"en":["Negative weight cycles","Disconnected graphs","Self loops","Parallel edges"],"fa":["سیکل‌های با وزن منفی","گراف‌های جدا","حلقه خودی","یال‌های موازی"]},"ans":0,"exp":{"en":"Dijkstra fails with negative weights; Bellman-Ford detects negative cycles via a final relaxation pass.","fa":"دیکسترا با وزن منفی شکست می‌خورد؛ بلمن-فورد با یک پاس نهایی relax سیکل منفی را تشخیص می‌دهد."}},
+  "kruskal": {"q":{"en":"Which data structure powers Kruskal's cycle check?","fa":"بررسی سیکل در کروسکال از چه ساختاری استفاده می‌کند؟"},"opts":{"en":["Union-Find (DSU)","Hash Map","Heap only","Stack"],"fa":["Union-Find (DSU)","جدول هش","فقط هیپ","پشته"]},"ans":0,"exp":{"en":"Union-Find quickly checks whether two vertices are already connected.","fa":"Union-Find سریع بررسی می‌کند دو رأس قبلاً متصل هستند یا نه."}},
+  "segment_tree": {"q":{"en":"What is the cost of a range sum query in a segment tree?","fa":"هزینه پرس‌وجوی جمع بازه‌ای در درخت قطعه‌ای چقدر است؟"},"opts":{"en":["O(log n)","O(n)","O(1)","O(n log n)"],"fa":["O(log n)","O(n)","O(1)","O(n log n)"]},"ans":0,"exp":{"en":"Each query decomposes into O(log n) canonical segments.","fa":"هر پرس‌وجو به O(log n) قطعه معیار تجزیه می‌شود."}},
+  "huffman": {"q":{"en":"In Huffman coding, which characters get the shortest codes?","fa":"در کدگذاری هافمن چه کاراکترهایی کد کوتاه‌تر می‌گیرند؟"},"opts":{"en":["Most frequent","Least frequent","Alphabetically first","Random"],"fa":["پربسامدترین","کم‌بسامدترین","اولین از نظر الفبایی","تصادفی"]},"ans":0,"exp":{"en":"Frequent symbols sit near the root, so their prefix is shortest.","fa":"نمادهای پربسامد نزدیک ریشه‌اند، پس پیشوندشان کوتاه‌ترین است."}}
 };
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = quizzes;
 }

@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-console.log('Running CodeVis Complete Test Suite across all 58 concepts...');
+console.log('Running CodeVis Complete Test Suite across all 62 concepts...');
 
 const html = fs.readFileSync('index.html', 'utf8');
 
@@ -108,7 +108,7 @@ console.log('1. Script parsed & evaluated in sandbox.');
 // 2. Validate concepts
 const concepts = vm.runInContext('concepts', ctx);
 console.log(`2. Total concepts loaded: ${concepts.length}`);
-if (concepts.length !== 58) throw new Error(`Expected 58 concepts, got ${concepts.length}`);
+if (concepts.length !== 62) throw new Error(`Expected 62 concepts, got ${concepts.length}`);
 
 let totalStepsTested = 0;
 
@@ -126,7 +126,7 @@ let totalStepsTested = 0;
   });
 });
 
-console.log(`3. Verified all 58 concepts across ${totalStepsTested} rendered step passes (EN & FA).`);
+console.log(`3. Verified all 62 concepts across ${totalStepsTested} rendered step passes (EN & FA).`);
 
 // 4. Test Badges
 const badges = vm.runInContext('badges', ctx);
@@ -209,7 +209,7 @@ concepts.forEach(c => {
     vm.runInContext(`currentStep = ${s}; renderVariableInspector();`, ctx);
   }
 });
-console.log('13. Variable Inspector verified across all steps of all 58 concepts.');
+console.log('13. Variable Inspector verified across all steps of all 62 concepts.');
 
 // 10. Test Code Drill engine
 console.log('14. Testing Code Drill engine...');

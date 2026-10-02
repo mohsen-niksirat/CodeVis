@@ -1,3 +1,8 @@
+### v3.1.1 🛠
+- Fixed: confetti spam at animation end (autoplay no longer loops into re-celebration; celebration once per concept)
+- Fixed: frozen confetti overlay (robust drain loop, canvas auto-hides)
+- Fixed: fullscreen — concept card now fills the screen with scrollable content and sticky playback controls
+
 # CodeVis
 
 **Visual programming concepts explained through interactive canvas animations.**
@@ -9,6 +14,13 @@ A new concept every day — from data structures to design patterns — with ste
 ---
 
 ## Features
+
+### v3.1.0 🔊
+- Sound of Code: value-driven sonification (WebAudio) with mute toggle
+- Live metrics HUD (comparisons/swaps/accesses) + custom array input & patterns (mountain/wave/nearly-sorted/reverse)
+- Daily Challenge (date-seeded concept of the day + streak + share)
+- Speed presets (0.5x–4x) + auto-replay loop
+- 4 new concepts: Bellman-Ford, Kruskal MST, Segment Tree, Huffman Coding (62 total)
 
 ### v3.0.0 — Visual Overhaul ✨
 - Animated aurora particle-network background + gradient blobs

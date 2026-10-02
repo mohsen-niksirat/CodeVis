@@ -41,3 +41,20 @@ function playSonification(val = 50, min = 0, max = 100, duration = 0.06) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { playTone, playChord, playSonification, updateSoundBtn };
 }
+
+// Value-driven tone: derive a frequency from the current step's numeric payloads
+function stepToneFreq() {
+  try {
+    const st = currentConcept && currentConcept.steps && currentConcept.steps[currentStep];
+    if (!st) return 440;
+    const pick = (o, depth) => {
+      if (depth > 3 || o == null) return null;
+      if (typeof o === 'number' && isFinite(o)) return o;
+      if (typeof o === 'object') { for (const k of Object.keys(o)) { const v = pick(o[k], depth+1); if (v !== null) return v; } }
+      return null;
+    };
+    const n = pick(st, 0);
+    if (n === null) return 440;
+    return 200 + ((Math.abs(n) % 100) / 100) * 680;
+  } catch (e) { return 440; }
+}

@@ -1,9 +1,9 @@
 {
   "name": "codevis",
-  "version": "3.0.0",
+  "version": "3.1.1",
   "description": "Visual, interactive, and bilingual computer science concept animations with gamification and active recall.",
   "scripts": {
-    "build": "node scripts/build.js && node scripts/phase5.js && node scripts/phase6.js && node scripts/phase7.js && node scripts/phase8.js && node scripts/phase9.js && node scripts/phase10.js && node scripts/phase11.js && node scripts/phase12.js",
+    "build": "node scripts/build.js       &&       node scripts/phase5.js       &&       node scripts/phase6.js       &&       node scripts/phase7.js       &&       node scripts/phase8.js       &&       node scripts/phase9.js       &&       node scripts/phase10.js       &&       node scripts/phase11.js       &&       node scripts/phase12.js      &&      node scripts/phase14.js     &&     node scripts/phase15.js    &&    node scripts/phase16.js   &&   node scripts/phase17.js  &&  node scripts/fix19.js && node scripts/fix20.js",
     "test": "node scripts/test.js"
   },
   "keywords": [

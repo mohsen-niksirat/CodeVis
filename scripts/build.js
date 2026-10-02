@@ -209,7 +209,7 @@ console.log('[5/10] Quizzes, Badges, Complexity, Big-O, Battle, and Vars logic s
 // 6. Update Audio with playSonification
 const audioSrc = fs.readFileSync(path.resolve(__dirname, '../src/audio.js'), 'utf8')
   .replace(/if\s*\(typeof module[^}]+}\s*}/g, '');
-const toneStart = html.indexOf('let soundEnabled = localStorage.getItem("cv_sound")');
+const toneStart = html.indexOf('let soundEnabled =');
 const toneEnd = html.indexOf('const sBtn = document.getElementById("soundBtn");');
 if (toneStart !== -1 && toneEnd !== -1) {
   html = html.substring(0, toneStart) + audioSrc.replace(/\n/g, '\r\n') + '\r\n' + html.substring(toneEnd);
@@ -233,7 +233,7 @@ if (!html.includes('renderComplexityBadge(c);')) {
   );
 }
 
-if (!html.includes('renderVariableInspector();if(typeof playSonification')) {
+if (!/renderVariableInspector\(\);\s*\r?\n?\s*if\(typeof playSonification/.test(html)) {
   html = html.replace(
     'ctx.clearRect(0,0,800,600);',
     'ctx.clearRect(0,0,800,600);\r\nrenderVariableInspector();\r\nif(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);'
