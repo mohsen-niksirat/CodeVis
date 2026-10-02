@@ -10,7 +10,14 @@ A new concept every day — from data structures to design patterns — with ste
 
 ## Features
 
-- **53 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, OS concepts, and modern AI models (Vector Embeddings, Perceptron, Token Bucket)
+### v3.0.0 — Visual Overhaul ✨
+- Animated aurora particle-network background + gradient blobs
+- Glassmorphism UI, concept gallery grid, Hero "today concept" card
+- XP / Level gamification + confetti celebrations + achievement toasts
+- GitHub-style activity heatmap, Zen mode, keyboard shortcuts (press ?)
+- Code Drill mode (grounded random quiz) with Drill Master badge
+
+- **58 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, OS concepts, and modern AI models (Vector Embeddings, Perceptron, Token Bucket) — plus A* Pathfinding, N-Queens Backtracking, Kadane's Max Subarray, Union-Find (DSU), and Monotonic Stack
 - **Algorithm Showdown Arena (⚔️ Race Mode)**: Pit algorithms head-to-head (QuickSort vs BubbleSort, Binary Search vs Linear Search) in real-time with step comparison, operations metrics, and speedup winner detection
 - **Big-O Complexity Analyzer & Cheat Sheet**: Dynamic Time and Space complexity badges on concepts with an interactive canvas modal plotting $O(1), O(\log n), O(n), O(n \log n), O(n^2), O(2^n)$ curves
 - **Dynamic Variable Inspector (Step Debugger HUD)**: Real-time pill indicators tracking live algorithm variables (`low, mid, high, pivot, w1, w2, z, tokens`) on every animation step
@@ -83,7 +90,8 @@ CodeVis maintains single-file zero-dependency distribution while having a clean 
 - `src/battle.js`: Algorithm Showdown Arena (Race Mode) controller
 - `src/vars.js`: Dynamic Variable Inspector HUD controller
 - `scripts/build.js`: Compiles `data/` and `src/` into the root `index.html`
-- `scripts/test.js`: Comprehensive 13-suite headless simulation test suite
+- `scripts/phase5.js`: Idempotent post-build patcher (renderers, Code Drill, badge)
+- `scripts/test.js`: Comprehensive 15-suite headless simulation test suite
 
 ## How It Works
 
@@ -124,6 +132,12 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 - [x] Modular codebase architecture (`src/`, `data/`, `scripts/build.js`, `scripts/test.js`)
 - [x] 53 total concepts fully rendered and tested in EN and FA
 
+### Phase 5: Advanced Algorithms & Code Drill Mode ✅
+- [x] 5 new advanced concepts: A* Pathfinding, N-Queens Backtracking, Kadane (Max Subarray), Union-Find (DSU), Monotonic Stack — each with canvas renderer, Big-O metadata, Variable Inspector steps, active-recall quiz, and Python/C++ snippets
+- [x] ⚡ Code Drill mode: rapid-fire 5-question quiz drawn from concepts you have already seen, with instant scoring and replay
+- [x] New drill_master achievement badge for a perfect drill score (11 badges total)
+- [x] Reproducible post-build pipeline: `npm run build` now chains `scripts/phase5.js` (idempotent patches)
+
 ### Phase 4: Battle Arena, Big-O Analyzer & Variable Inspector ✅
 - [x] Algorithm Showdown Arena (Head-to-head race mode with real-time telemetry)
 - [x] Big-O Complexity Cheat Sheet modal with interactive curve canvas
@@ -156,7 +170,7 @@ MIT
 
 ## ویژگی‌ها
 
-- **۵۳ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، برنامه‌نویسی پویا (DP)، وب، سیستم‌عامل و مدل‌های نوین هوش مصنوعی (بردارهای تعبیه، نورون پرسپترون، و سطل توکن)
+- **۵۸ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، برنامه‌نویسی پویا (DP)، وب، سیستم‌عامل و مدل‌های نوین هوش مصنوعی — به‌علاوه مسیریابی A*، بازگشت‌زنی N-وزیر، کادان (بیشینه زیرآرایه)، ساختار اجتماع-یافتن (DSU) و پشته یکنوا
 - **میدان رقابت الگوریتم‌ها (⚔️ Race Mode)**: شبیه‌سازی همزمان و دوطرفه رقابت دو الگوریتم (QuickSort در برابر BubbleSort، جستجوی دودویی در برابر خطی) با شمارش دقیق مقایسه‌ها، جابجایی‌ها و اعلام سرعت برنده
 - **راهنمای پیچیدگی زمانی و حافظه (Big-O Cheat Sheet)**: نشان‌های داینامیک پیچیدگی روی هدر هر مفهوم همراه با مدال تعاملی رسم منحنی‌های $O(1)، O(\log n)، O(n)، O(n \log n)، O(n^2)، O(2^n)$
 - **نمایشگر زنده متغیرها (Step Debugger HUD)**: کپسول‌های پویای وضعیت متغیرهای زنده الگوریتم (`low, mid, high, pivot, w1, w2, z, tokens`) در هر گام انیمیشن
@@ -188,7 +202,7 @@ MIT
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
 # باز کردن مستقیم index.html در مرورگر یا:
-npm test        # اجرای تست‌های ۱۳گانه شبیه‌سازی روی تمام ۵۳ مفهوم و میدان نبرد
+npm test        # اجرای تست‌های ۱۵گانه شبیه‌سازی روی تمام ۵۸ مفهوم، میدان نبرد و آزمون برق‌آسا
 npm run build   # کامپایل ماژول‌های src و data درون index.html
 ```
 
@@ -235,7 +249,12 @@ npm run build   # کامپایل ماژول‌های src و data درون index.
 - [x] کارت اشتراک‌گذاری اجتماعی پیشرفته همراه با آمار و استریک
 - [x] مفاهیم مدرن هوش مصنوعی و سیستم (بردار تعبیه، پرسپترون، سطل توکن)
 - [x] معماری ماژولار و اسکریپت‌های بیلد و تست بدون پکیج‌های خارجی
-- [x] رندر و اعتبارسنجی کامل ۵۳ مفهوم به دو زبان فارسی و انگلیسی
+- [x] رندر و اعتبارسنجی کامل ۵۸ مفهوم به دو زبان فارسی و انگلیسی
+
+### فاز ۵: الگوریتم‌های پیشرفته و آزمون برق‌آسا ✅
+- [x] ۵ مفهوم جدید: مسیریابی A*، بازگشت‌زنی N-وزیر، کادان، اجتماع-یافتن (DSU) و پشته یکنوا — هرکدام با رندر Canvas، متادیتای Big-O، بازرس متغیر، آزمون درک مطلب و کد Python/C++
+- [x] ⚡ حالت آزمون برق‌آسا: ۵ سؤال سریع از مفاهیمی که دیده‌اید با امتیازدهی آنی
+- [x] نشان جدید drill_master برای نمره کامل (مجموعاً ۱۱ نشان)
 
 ### فاز ۴: میدان رقابت، تحلیلگر Big-O و نمایشگر متغیرها ✅
 - [x] میدان رقابت الگوریتم‌ها (حالت مسابقه همزمان با دورسنجی زنده)

@@ -111,14 +111,130 @@ body.embed-mode .stats-card,
 body.embed-mode footer{display:none!important}
 body.embed-mode{padding:0!important;background:transparent!important}
 body.embed-mode .container{max-width:100%!important;padding:4px!important}
+
+.cv-bg-wrap{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.cv-gradient-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:cvDrift 18s ease-in-out infinite alternate}
+.cv-blob-1{width:420px;height:420px;background:#8b5cf6;top:-120px;left:-100px}
+.cv-blob-2{width:360px;height:360px;background:#3fb950;bottom:-120px;right:-80px;animation-delay:-6s}
+.cv-blob-3{width:300px;height:300px;background:#1f6feb;top:40%;left:55%;animation-delay:-12s}
+@keyframes cvDrift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,-40px) scale(1.15)}100%{transform:translate(-40px,50px) scale(.95)}}
+[data-theme="light"] .cv-gradient-blob{opacity:.18}
+.glass{background:rgba(22,27,34,.55)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(139,92,246,.18)!important;box-shadow:0 8px 32px rgba(0,0,0,.35)}
+[data-theme="light"] .glass{background:rgba(255,255,255,.65)!important;border-color:rgba(139,92,246,.25)!important}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;width:100%;max-width:980px;margin:0 auto 40px;padding:0 20px;box-sizing:border-box}
+.gallery-card{position:relative;border-radius:14px;padding:16px 12px 12px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s;background:rgba(22,27,34,.55);backdrop-filter:blur(14px);border:1px solid var(--border)}
+.gallery-card:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 10px 24px rgba(139,92,246,.28)}
+.gallery-card.seen{border-color:rgba(63,185,80,.45)}
+.gallery-card .g-icon{font-size:1.9rem;display:block;margin-bottom:8px;filter:drop-shadow(0 2px 8px rgba(139,92,246,.4))}
+.gallery-card .g-title{font-size:.82rem;font-weight:600;color:var(--text);display:block;line-height:1.3}
+.gallery-card .g-cat{font-size:.68rem;color:#8b949e;margin-top:5px;display:block}
+.gallery-card .g-seen{position:absolute;top:8px;right:8px;font-size:.75rem;color:#3fb950}
+#galleryCard{width:100%;max-width:1020px;margin:0 20px 30px;box-sizing:border-box}
+#xpChip{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:20px;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.4);font-size:.8rem;font-weight:700;color:#a78bfa;cursor:default}
+#xpChip .lv{color:#3fb950}
+.xp-ring{width:26px;height:26px;border-radius:50%;background:conic-gradient(#8b5cf6 var(--p,0%),rgba(139,92,246,.18) 0);display:inline-flex;align-items:center;justify-content:center}
+.xp-ring::after{content:attr(data-lv);width:20px;height:20px;border-radius:50%;background:var(--surface,#161b22);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--text)}
+#confettiCanvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:99999;display:none}
+.cv-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(22,27,34,.92);backdrop-filter:blur(12px);border:1px solid rgba(139,92,246,.5);color:var(--text);padding:12px 22px;border-radius:12px;font-size:.9rem;font-weight:600;z-index:100000;opacity:0;transition:all .35s cubic-bezier(.2,.9,.3,1.2);box-shadow:0 8px 30px rgba(139,92,246,.35)}
+.cv-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+.hm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:3px;margin-top:10px}
+.hm-cell{aspect-ratio:1;border-radius:3px;background:rgba(139,92,246,.08);transition:transform .12s}
+.hm-cell:hover{transform:scale(1.3)}
+.hm-cell.l1{background:rgba(139,92,246,.35)}
+.hm-cell.l2{background:rgba(139,92,246,.6)}
+.hm-cell.l3{background:#8b5cf6;box-shadow:0 0 6px rgba(139,92,246,.6)}
+.hm-cell.today{outline:2px solid #3fb950;outline-offset:1px}
+#heatmapCard{width:100%;max-width:980px;margin:0 20px 30px;box-sizing:border-box}
+body.zen .container>*:not(.card):not(header){display:none}
+body.zen .card{display:none!important}
+body.zen .concept-card,body.zen #conceptCard,body.zen .glass{display:block!important}
+body.zen .cv-bg-wrap .cv-gradient-blob{animation-duration:9s;opacity:.5}
+body.zen{padding-top:8vh}
+#zenExit{position:fixed;top:18px;right:18px;z-index:99998;display:none}
+body.zen #zenExit{display:block}
+.kbd{display:inline-block;padding:2px 7px;border-radius:5px;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.4);font-family:monospace;font-size:.78rem;color:#a78bfa;margin:0 2px}
+.shortcut-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.shortcut-row:last-child{border-bottom:none}
+#topProgressBar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,#8b5cf6,#3fb950);z-index:100001;transition:width .3s;border-radius:0 3px 3px 0}
+
+/* Phase 8 polish */
+.quiz-btn,#bigOBtn,#battleBtn,#drillBtn,#quizBtn{white-space:nowrap}
+.code-block{scrollbar-color:#8b5cf6 rgba(13,17,23,.6);scrollbar-width:thin}
+.code-block::-webkit-scrollbar{width:8px;height:8px}
+.code-block::-webkit-scrollbar-track{background:rgba(13,17,23,.6);border-radius:4px}
+.code-block::-webkit-scrollbar-thumb{background:linear-gradient(#8b5cf6,#6d4ae0);border-radius:4px}
+body.zen{overflow:hidden}
+body.zen header{opacity:.25;pointer-events:none;transition:opacity .3s}
+body.zen header:hover{opacity:1;pointer-events:auto}
+body.zen .playground-bar{opacity:.35;transition:opacity .3s}
+body.zen .playground-bar:hover{opacity:1}
+body.zen .main{margin-top:0!important}
+body.zen #conceptDesc{font-size:.85rem;opacity:.85}
+body.zen .card{padding:14px 18px!important}
+body::-webkit-scrollbar{width:0}
+
+#auroraCanvas{position:fixed;inset:0;z-index:-2;width:100vw;height:100vh;opacity:.6;pointer-events:none}
+[data-theme="light"] #auroraCanvas{opacity:.35}
+#heroCard{width:100%;max-width:1020px;margin:0 20px 24px;box-sizing:border-box;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(63,185,80,.10)) , rgba(22,27,34,.6);}
+#heroCard::before{content:"";position:absolute;top:-40%;right:-10%;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.45),transparent 70%);filter:blur(20px)}
+#heroCard::after{content:"";position:absolute;bottom:-50%;left:-5%;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(63,185,80,.35),transparent 70%);filter:blur(20px)}
+.hero-inner{position:relative;z-index:2;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.hero-eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#8b949e;margin-bottom:4px}
+.hero-title{font-size:1.7rem;font-weight:800;margin:0 0 4px;background:linear-gradient(90deg,#a78bfa,#3fb950);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:.85rem;color:#8b949e;max-width:420px;line-height:1.5}
+.hero-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.hero-stat{text-align:center;padding:8px 14px;border-radius:12px;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.25)}
+.hero-stat .v{font-size:1.3rem;font-weight:800;color:#a78bfa}
+.hero-stat .k{font-size:.68rem;color:#8b949e}
+@keyframes cvFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card,.gallery-card{animation:cvFadeUp .45s cubic-bezier(.2,.8,.3,1) both}
+
+/* Phase 10: visual intensity */
+#auroraCanvas{opacity:.9!important}
+.cv-gradient-blob{opacity:.5!important;filter:blur(70px)!important}
+[data-theme="light"] #auroraCanvas{opacity:.5!important}
+.glass{border:1px solid rgba(139,92,246,.35)!important;box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(167,139,250,.15)!important}
+.glass:hover{border-color:rgba(139,92,246,.55)}
+input[type="range"]{accent-color:#8b5cf6}
+select,input[type="text"]{scrollbar-width:thin}
+.desc,.hero-sub{color:#adbac7!important}
+.cv-toast{border-color:rgba(63,185,80,.5)}
+.gallery-card{border-color:rgba(139,92,246,.28)!important}
+.gallery-card:hover{border-color:rgba(139,92,246,.7)!important;box-shadow:0 12px 28px rgba(139,92,246,.4)!important}
+/* cvAuroraBoost marker */
+/* cvFinalPunch */
+.glass{background:rgba(22,27,34,.42)!important;backdrop-filter:blur(22px) saturate(140%)!important;-webkit-backdrop-filter:blur(22px) saturate(140%)!important;border:1px solid rgba(167,139,250,.45)!important;box-shadow:0 10px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(200,180,255,.22)!important}
+[data-theme="light"] .glass{background:rgba(255,255,255,.55)!important}
+.cv-blob-3{background:#4c6ef5!important}
+.cv-blob-2{background:#20c997!important}
+
+/* cvPolishFinal */
+.glass{background:rgba(18,22,30,.30)!important;backdrop-filter:blur(30px) saturate(160%)!important;-webkit-backdrop-filter:blur(30px) saturate(160%)!important;border:1px solid rgba(180,155,255,.50)!important;box-shadow:0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.30)!important}
+.card pre,.card code{white-space:pre-wrap;word-break:break-word}
+#streakPill,#streakBadge,.streak{font-weight:700}
+[data-theme="light"] .glass{background:rgba(255,255,255,.45)!important}
+
+/* cvPolishFix2 */
+pre, code, .code-area, .codeblock {white-space:pre-wrap!important;word-break:break-word!important;overflow-x:hidden!important}
+.glass{border:1px solid rgba(190,160,255,.65)!important;box-shadow:0 0 0 1px rgba(139,92,246,.25),0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.35),0 0 24px rgba(139,92,246,.15)!important}
+\r\n/* cvPolishFix3 */\r\npre, code, .code-area, .codeblock, .code-block {white-space:pre-wrap!important;word-break:break-word!important;overflow-x:hidden!important}\r\n.glass{border:1px solid rgba(190,160,255,.65)!important;box-shadow:0 0 0 1px rgba(139,92,246,.25),0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.35),0 0 24px rgba(139,92,246,.15)!important}\r\n
+/* cvPolishFix4 */
+pre, code, .code-area, .codeblock, .code-block {white-space:pre-wrap!important;word-break:break-word!important;overflow-x:hidden!important}
+.glass{border:1px solid rgba(190,160,255,.65)!important;box-shadow:0 0 0 1px rgba(139,92,246,.25),0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.35),0 0 24px rgba(139,92,246,.15)!important}
 </style>
 </head>
+<canvas id="auroraCanvas" aria-hidden="true"></canvas>
+<div class="cv-bg-wrap" id="cvBg" aria-hidden="true"><div class="cv-gradient-blob cv-blob-1"></div><div class="cv-gradient-blob cv-blob-2"></div><div class="cv-gradient-blob cv-blob-3"></div></div>
+<canvas id="confettiCanvas"></canvas>
 <body>
 <header>
 <h1>CodeVis</h1>
 <div class="header-right">
 <button class="quiz-btn" id="bigOBtn" aria-label="Big-O Complexity Cheat Sheet">📊 Big-O</button>
     <button class="quiz-btn" id="battleBtn" aria-label="Algorithm Race Arena">⚔️ Race</button>
+    <button class="quiz-btn" id="drillBtn" aria-label="Code Drill mode">⚡ <span id="drillBtnLabel">Code Drill</span></button>
     <button class="quiz-btn" id="quizBtn" aria-label="Take concept quiz">💡 Quiz</button>
     <button class="sound-btn" id="soundBtn" aria-label="Toggle sound" title="Sound Effects">🔇</button>
 <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
@@ -140,7 +256,7 @@ body.embed-mode .container{max-width:100%!important;padding:4px!important}
 <input type="range" id="timelineSlider" min="0" max="0" step="1" title="Step" aria-label="Timeline scrubber">
 </div>
 <div class="main">
-<div class="card">
+<div class="card glass concept-card">
 <h2 id="conceptTitle"></h2>
 <span class="level" id="conceptLevel"></span>
 <span id="conceptComplexity" style="margin-inline-start:8px;cursor:pointer;display:inline-flex;gap:6px;vertical-align:middle"></span>
@@ -155,7 +271,7 @@ body.embed-mode .container{max-width:100%!important;padding:4px!important}
 <span class="step-indicator" id="stepInfo" aria-live="polite"></span>
 </div>
 </div>
-<div class="card">
+<div class="card glass">
 <div class="code-header">
 <h2 id="codeTitle" style="margin:0"></h2>
 <div class="code-tabs" id="codeLangTabs" role="tablist" aria-label="Code language">
@@ -181,7 +297,38 @@ body.embed-mode .container{max-width:100%!important;padding:4px!important}
     <h3 style="font-size:1rem;color:var(--accent2);margin-bottom:12px">🏆 <span id="badgesTitle">Achievements</span></h3>
     <div class="badges-grid" id="badgesList"></div>
   </div>
-  <div class="card" id="studyListCard" style="width:100%;max-width:900px;margin:0 20px 40px;box-sizing:border-box">
+  <div class="card glass" id="heroCard">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow" id="heroEyebrow">Concept of the day</div>
+        <h1 class="hero-title" id="heroTitle">CodeVis</h1>
+        <p class="hero-sub" id="heroSub"></p>
+        <div class="hero-actions" style="margin-top:12px">
+          <button class="primary" id="heroStart" style="padding:9px 20px;border-radius:10px;cursor:pointer;font-weight:600">▶ Start</button>
+          <button class="secondary" id="heroRandom" style="padding:9px 16px;border-radius:10px;cursor:pointer">🎲 Random</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap" id="heroStats"></div>
+    </div>
+  </div>
+  <div class="card glass" id="heatmapCard">
+    <h2 style="font-size:1.1rem">🔥 <span id="hmTitle">Activity Heatmap</span></h2>
+    <div class="hm-grid" id="hmGrid"></div>
+    <div style="display:flex;gap:14px;margin-top:8px;font-size:.7rem;color:#8b949e">
+      <span>◦ Less</span><span class="hm-cell l1" style="width:12px"></span><span class="hm-cell l2" style="width:12px"></span><span class="hm-cell l3" style="width:12px"></span><span>More</span>
+    </div>
+  </div>
+  <div class="card glass" id="galleryCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <h2 id="galleryTitle" style="font-size:1.1rem">🗺️ Concept Gallery</h2>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="xpChip" title="Experience"><span class="xp-ring" data-lv="1" style="--p:0%"></span><span id="xpText">Lv 1 · 0 XP</span></span>
+        <button class="quiz-btn" id="galleryBtn" aria-label="Toggle gallery">🗺️ Gallery</button>
+      </div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid" style="padding:14px 0 0;margin:0"></div>
+  </div>
+  <div class="card glass" id="studyListCard" style="width:100%;max-width:900px;margin:0 20px 40px;box-sizing:border-box">
     <h2 id="studyListTitle"></h2>
     <div id="studyList"><div class="desc" id="studyListEmpty"></div></div>
   </div>
@@ -238,6 +385,9 @@ body.embed-mode .container{max-width:100%!important;padding:4px!important}
     </div>
   </div>
 </div>
+<div class="modal-backdrop" id="drillModal" style="display:none">
+  <div class="modal-card" id="drillCardBody" style="max-width:560px;width:95%"></div>
+</div>
 <canvas id="shareCanvas" width="1200" height="675"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 <script>
@@ -248,7 +398,7 @@ allLevels:"All Levels",beginner:"Beginner",intermediate:"Intermediate",advanced:
 searchPh:"Search concepts...",random:"Random",share:"Share as PNG",
 play:"Play",pause:"Pause",prev:"Prev",next:"Next",step:"Step",code:"Code",progress:"Progress",
 totalDays:"Total Days",bestStreak:"Best Streak",conceptsSeen:"Concepts Seen",langToggle:"فا",
-  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen",sound:"Sound",playground:"Interactive Playground",shuffle:"Shuffle Array",searchTarget:"Search",bigO:"Big-O",battle:"Race",battleTitle:"Algorithm Showdown Arena",bigOTitle:"Big-O Complexity Guide",variables:"Variables",conceptQuiz:"Concept Quiz",achievements:"Achievements",close:"Close",correct:"Correct!",incorrect:"Not quite."
+  studyList:"Your Learning Path",studyEmpty:"All concepts completed! Explore via search or random.",studyStart:"Start with these foundational concepts:",studyNext:"Next in path:",studyReview:"Review recently seen:",seen:"seen",sound:"Sound",playground:"Interactive Playground",shuffle:"Shuffle Array",searchTarget:"Search",bigO:"Big-O",battle:"Race",battleTitle:"Algorithm Showdown Arena",bigOTitle:"Big-O Complexity Guide",variables:"Variables",conceptQuiz:"Concept Quiz",achievements:"Achievements",close:"Close",correct:"Correct!",incorrect:"Not quite.",ofTheDay:"Concept of the day",start:"Start",yourProgress:"Your progress",heatmap:"Activity Heatmap",zen:"Zen Mode",shortcuts:"Keyboard Shortcuts",gallery:"Gallery",level:"Level",xp:"XP",levelUp:"Level Up!",drill:"Code Drill",drillDesc:"Quick-fire questions from concepts you have already seen",startDrill:"Start Drill",score:"Score",drillDone:"Drill complete",again:"Play again",newInV5:"New in v3"
   },
   fa:{
 streak:"روز متوالی",allCategories:"همه دسته‌ها",ds:"ساختمان داده",algo:"الگوریتم‌ها",pattern:"الگوها",web:"وب",
@@ -256,7 +406,7 @@ allLevels:"همه سطوح",beginner:"مبتدی",intermediate:"متوسط",adva
 searchPh:"جستجوی مفاهیم...",random:"تصادفی",share:"اشتراک PNG",
 play:"پخش",pause:"توقف",prev:"قبلی",next:"بعدی",step:"مرحله",code:"کد",progress:"پیشرفت",
 totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:"مفاهیم دیده‌شده",langToggle:"EN",
-  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده",sound:"صدا",playground:"آزمایشگاه تعاملی",shuffle:"تصادفی",searchTarget:"جستجو",bigO:"راهنمای Big-O",battle:"مسابقه",battleTitle:"میدان رقابت الگوریتم‌ها",bigOTitle:"راهنمای پیچیدگی زمانی و حافظه",variables:"متغیرها",conceptQuiz:"آزمون درک مطلب",achievements:"نشان‌ها و دستاوردها",close:"بستن",correct:"صحیح!",incorrect:"اشتباه بود."
+  studyList:"مسیر یادگیری‌تان",studyEmpty:"همه مفاهیم تکمیل شدند! از طریق جستجو یا تصادفی بررسی کنید.",studyStart:"ابتدا با مفاهیم پایه شروع کنید:",studyNext:"بعدی در مسیر:",studyReview:"مرور مفاهیم اخیر:",seen:"دیده‌شده",sound:"صدا",playground:"آزمایشگاه تعاملی",shuffle:"تصادفی",searchTarget:"جستجو",bigO:"راهنمای Big-O",battle:"مسابقه",battleTitle:"میدان رقابت الگوریتم‌ها",bigOTitle:"راهنمای پیچیدگی زمانی و حافظه",variables:"متغیرها",conceptQuiz:"آزمون درک مطلب",achievements:"نشان‌ها و دستاوردها",close:"بستن",correct:"صحیح!",incorrect:"اشتباه بود.",ofTheDay:"مفهوم امروز",start:"شروع",yourProgress:"پیشرفت شما",heatmap:"نقشه فعالیت",zen:"حالت تمرکز",shortcuts:"میانبرهای صفحه‌کلید",gallery:"گالری",level:"سطح",xp:"امتیاز",levelUp:"ارتقای سطح!",drill:"آزمون برق‌آسا",drillDesc:"سؤال‌های سریع از مفاهیمی که دیده‌اید",startDrill:"شروع آزمون",score:"امتیاز",drillDone:"آزمون تمام شد",again:"دوباره",newInV5:"جدید در نسخه ۳"
   }
 };
 let lang=localStorage.getItem("cv_lang")||"en";
@@ -266,9 +416,37 @@ function t(k){return i18n[lang][k]||i18n.en[k]}
 
 
 
-const quizzes = {"stack":{"q":{"en":"Which order does a Stack follow for element removal?","fa":"پشته (Stack) از چه ترتیبی برای حذف عناصر پیروی می‌کند؟"},"opts":{"en":["FIFO (First In First Out)","LIFO (Last In First Out)","Random Order"],"fa":["FIFO (اولین ورودی اولین خروجی)","LIFO (آخرین ورودی اولین خروجی)","ترتیب تصادفی"]},"ans":1,"exp":{"en":"Stack is LIFO: the most recently pushed element is the first one popped.","fa":"پشته LIFO است: آخرین عنصری که اضافه شده، اولین عنصری است که حذف می‌شود."}},"queue":{"q":{"en":"Where are new elements added in a Queue?","fa":"در صف (Queue)، عناصر جدید در کدام قسمت اضافه می‌شوند؟"},"opts":{"en":["At the front","At the back (rear)","In the middle"],"fa":["در ابتدا (Front)","در انتها (Rear)","در وسط"]},"ans":1,"exp":{"en":"Queue is FIFO: elements enter at the rear and exit from the front.","fa":"صف FIFO است: عناصر از انتها وارد و از ابتدا خارج می‌شوند."}},"binarysearch":{"q":{"en":"What prerequisite must an array satisfy for Binary Search to work?","fa":"آرایه برای اجرای جستجوی دودویی چه پیش‌شرطی باید داشته باشد؟"},"opts":{"en":["Must have unique values only","Must be sorted in ascending/descending order","Must have an even length"],"fa":["فقط دارای مقادیر یکتا باشد","باید مرتب‌شده (Sorted) باشد","طول آن زوج باشد"]},"ans":1,"exp":{"en":"Binary Search requires a sorted array to divide the search space in half.","fa":"جستجوی دودویی به آرایه مرتب نیاز دارد تا بتواند فضای جستجو را در هر مرحله نصف کند."}},"quicksort":{"q":{"en":"What is the average time complexity of QuickSort?","fa":"پیچیدگی زمانی میانگین الگوریتم QuickSort چقدر است؟"},"opts":{"en":["O(n log n)","O(n²)","O(log n)"],"fa":["O(n log n)","O(n²)","O(log n)"]},"ans":0,"exp":{"en":"On average, dividing around balanced pivots takes O(n log n) time.","fa":"در حالت میانگین با انتخاب مناسب pivot، پیچیدگی O(n log n) حاصل می‌شود."}},"websocket":{"q":{"en":"How does WebSocket differ from standard HTTP request/response?","fa":"وب‌سوکت چه تفاوتی با چرخه درخواست/پاسخ استاندارد HTTP دارد؟"},"opts":{"en":["Requires reconnecting for every request","Provides a persistent, full-duplex bidirectional connection","Only transfers JSON strings"],"fa":["برای هر درخواست نیاز به اتصال مجدد دارد","یک اتصال پایدار و دوطرفه همزمان فراهم می‌کند","فقط رشته‌های JSON منتقل می‌کند"]},"ans":1,"exp":{"en":"WebSocket maintains an open TCP tunnel allowing client and server to stream frames anytime.","fa":"وب‌سوکت یک سوکت باز TCP نگه می‌دارد که هر دو طرف می‌توانند آزادانه داده بفرستند."}},"vector_embeddings":{"q":{"en":"How is semantic similarity between two embedding vectors measured in AI?","fa":"شباهت معنایی بین دو بردار تعبیه در هوش مصنوعی چگونه سنجیده می‌شود؟"},"opts":{"en":["Cosine similarity (angle between vectors)","String length comparison","Alphabetical sorting"],"fa":["شباهت کسینوسی (زاویه بین بردارها)","مقایسه طول رشته‌ها","ترتیب الفبایی"]},"ans":0,"exp":{"en":"Cosine similarity measures the angle between high-dimensional vectors; closer to 1 means semantically related.","fa":"شباهت کسینوسی زاویه بین بردارها را می‌سنجد؛ هرچه به ۱ نزدیک‌تر باشد معنای نزدیک‌تری دارند."}},"perceptron":{"q":{"en":"What is the role of an activation function in a Perceptron neuron?","fa":"نقش تابع فعال‌ساز در نورون پرسپترون چیست؟"},"opts":{"en":["To store database records","To decide whether the neuron fires based on weighted sum + bias","To sort the input array"],"fa":["برای ذخیره رکورد در پایگاه داده","تصمیم‌گیری برای شلیک/فعال‌شدن نورون بر اساس مجموع وزن‌ها و بایاس","مرتب‌سازی آرایه ورودی"]},"ans":1,"exp":{"en":"The activation function introduces non-linearity and maps weighted sum to an output (0 or 1).","fa":"تابع فعال‌ساز مجموع وزن‌دار را به خروجی تصمیم‌گیری (۰ یا ۱) تبدیل می‌کند."}},"token_bucket":{"q":{"en":"What HTTP status code is returned when the token bucket has no tokens left?","fa":"وقتی سطل توکن خالی است، سرور چه کد خطای HTTP برمی‌گرداند؟"},"opts":{"en":["404 Not Found","429 Too Many Requests","500 Internal Server Error"],"fa":["404 Not Found","429 Too Many Requests","500 Internal Server Error"]},"ans":1,"exp":{"en":"HTTP 429 Too Many Requests is the standard status code for rate limiting.","fa":"کد وضعیت 429 نشان‌دهنده فراتر رفتن از سقف مجاز نرخ درخواست‌هاست."}},"observer":{"q":{"en":"Which design pattern is best for decoupling event producers from subscribers?","fa":"کدام الگوی طراحی برای جداسازی تولیدکننده رویداد از شنوندگان مناسب است؟"},"opts":{"en":["Observer Pattern","Singleton Pattern","Factory Pattern"],"fa":["الگوی ناظر (Observer)","الگوی تک‌نمونه (Singleton)","الگوی کارخانه (Factory)"]},"ans":0,"exp":{"en":"Observer pattern maintains a subscriber list and automatically notifies them upon state changes.","fa":"الگوی ناظر با نگه داشتن لیستی از مشترکین، تغییرات را به صورت خودکار به آن‌ها اطلاع می‌دهد."}},"heapvsstack":{"q":{"en":"Where are dynamic objects with unknown lifetime typically allocated in memory?","fa":"اشیاء پویا با طول عمر نامشخص معمولاً در کدام بخش حافظه تخصیص می‌یابند؟"},"opts":{"en":["Stack Memory","Heap Memory","CPU Registers"],"fa":["حافظه پشته (Stack)","حافظه هیپ (Heap)","رجیسترهای CPU"]},"ans":1,"exp":{"en":"The Heap holds dynamically allocated objects managed by Garbage Collection or pointers.","fa":"حافظه هیپ اشیاء با تخصیص پویا را نگهداری می‌کند که توسط زباله‌روب مدیریت می‌شوند."}}};
-const badges = [{"id":"first_step","icon":"🌟","title":{"en":"First Step","fa":"اولین گام"},"desc":{"en":"Explored your first visual programming concept","fa":"اولین مفهوم برنامه‌نویسی را مشاهده کردید"}},{"id":"explorer","icon":"🧭","title":{"en":"Explorer","fa":"کاوشگر"},"desc":{"en":"Completed 5 visual concepts","fa":"۵ مفهوم برنامه‌نویسی را یاد گرفتید"}},{"id":"scholar","icon":"📚","title":{"en":"Scholar","fa":"پژوهشگر"},"desc":{"en":"Explored 15 concepts in your journey","fa":"۱۵ مفهوم را در مسیر یادگیری مرور کردید"}},{"id":"ds_master","icon":"🌲","title":{"en":"Data Structure Ace","fa":"استاد ساختار داده"},"desc":{"en":"Explored all foundational Data Structures","fa":"تمام مفاهیم پایه ساختار داده را مشاهده کردید"}},{"id":"algo_ace","icon":"⚡","title":{"en":"Algorithm Master","fa":"قهرمان الگوریتم"},"desc":{"en":"Explored sorting, searching and graph algorithms","fa":"مفاهیم مرتب‌سازی، جستجو و گراف را یاد گرفتید"}},{"id":"ai_pioneer","icon":"🤖","title":{"en":"AI Pioneer","fa":"پیشگام هوش مصنوعی"},"desc":{"en":"Learned Vector Embeddings & Perceptron neural models","fa":"مفاهیم بردارهای تعبیه و پرسپترون عصبی را مرور کردید"}},{"id":"web_guru","icon":"🌐","title":{"en":"Web Architect","fa":"متخصص وب"},"desc":{"en":"Explored WebSocket, HTTP, CORS, and Token Bucket","fa":"مفاهیم وب‌سوکت، CORS و سطل توکن را یاد گرفتید"}},{"id":"week_streak","icon":"🔥","title":{"en":"Week Warrior","fa":"رزمنده هفته"},"desc":{"en":"Maintained a 7-day learning streak","fa":"استریک یادگیری ۷ روزه ثبت کردید"}},{"id":"quiz_whiz","icon":"🎯","title":{"en":"Quiz Whiz","fa":"استاد کوئیز"},"desc":{"en":"Answered concept quiz questions correctly","fa":"به پرسش‌های مفهومی آزمون پاسخ صحیح دادید"}},{"id":"speed_demon","icon":"⚔️","title":{"en":"Speed Demon","fa":"قهرمان سرعت"},"desc":{"en":"Simulated an algorithm showdown in the Battle Arena","fa":"شاهد رقابت زنده دو الگوریتم در میدان نبرد بودید"}}];
-const complexityData = {"stack":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"action":"push('A')","top":"'A'","size":1,"memory":"Stack Frame"},{"action":"push('B')","top":"'B'","size":2,"memory":"Stack Frame"},{"action":"push('C')","top":"'C'","size":3,"memory":"Stack Frame"},{"action":"pop() -> 'C'","top":"'B'","size":2,"memory":"Deallocated"},{"action":"pop() -> 'B'","top":"'A'","size":1,"memory":"Deallocated"}]},"queue":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"action":"enqueue('A')","front":"'A'","rear":"'A'","size":1},{"action":"enqueue('B')","front":"'A'","rear":"'B'","size":2},{"action":"enqueue('C')","front":"'A'","rear":"'C'","size":3},{"action":"dequeue() -> 'A'","front":"'B'","rear":"'C'","size":2},{"action":"dequeue() -> 'B'","front":"'C'","rear":"'C'","size":1}]},"linkedlist":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair","vars":[{"node":"Head","val":10,"next":"0x1A","ptr":"head"},{"node":"Node 1","val":20,"next":"0x2B","ptr":"curr"},{"node":"Node 2","val":30,"next":"null","ptr":"curr.next"},{"action":"insert(25)","prev":"0x1A","new":"0x3C","next":"0x2B"},{"action":"linked","count":4,"status":"traversed"}]},"binarysearch":{"time":"O(log n)","space":"O(1)","curve":"O_log_n","timeRating":"good","spaceRating":"good","vars":[{"low":0,"high":6,"mid":3,"arrMid":31,"target":42,"cmp":"31 < 42"},{"low":4,"high":6,"mid":5,"arrMid":55,"target":42,"cmp":"55 > 42"},{"low":4,"high":4,"mid":4,"arrMid":42,"target":42,"cmp":"42 == 42"},{"status":"FOUND","index":4,"comparisons":3},{"status":"COMPLETED","searchSpace":"1/8 of N","efficiency":"Logarithmic"}]},"recursion":{"time":"O(2ⁿ)","space":"O(n)","curve":"O_2_n","timeRating":"poor","spaceRating":"fair","vars":[{"call":"fib(4)","depth":1,"stackFrames":1},{"call":"fib(3) + fib(2)","depth":2,"stackFrames":3},{"call":"fib(2) + fib(1)","depth":3,"stackFrames":5},{"call":"baseCase fib(1)=1","depth":4,"returning":1},{"call":"unwinding","result":3,"totalCalls":9}]},"bubbleSort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good","vars":[{"pass":1,"i":0,"j":0,"cmp":"arr[0] > arr[1]","swapped":true},{"pass":1,"i":0,"j":2,"cmp":"arr[2] > arr[3]","swapped":true},{"pass":2,"i":1,"j":1,"cmp":"arr[1] < arr[2]","swapped":false},{"pass":3,"i":2,"j":0,"cmp":"in-order","sortedTail":3},{"status":"SORTED","totalPasses":4,"totalSwaps":6}]},"hashmap":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"key":"'name'","hash":"hash('name') % 8","bucket":3},{"action":"store","bucket":3,"val":"'Alice'","collisions":0},{"key":"'age'","hash":"hash('age') % 8","bucket":7},{"action":"store","bucket":7,"val":28,"collisions":0},{"action":"lookup('name')","bucket":3,"found":"'Alice'","time":"O(1)"}]},"observer":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair","vars":[{"event":"register","subscribers":["UI_Logger","Analytics"]},{"event":"register","subscribers":["UI_Logger","Analytics","Notification"]},{"event":"publish('USER_LOGIN')","activeSubscriber":"UI_Logger"},{"event":"notified","activeSubscriber":"Analytics","payload":"{id:42}"},{"event":"complete","totalNotified":3,"decoupled":true}]},"dom":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"closure":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"bintree":{"time":"O(n)","space":"O(h)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"bfs":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"queue":["A"],"visited":["A"],"curr":"A"},{"queue":["B","C"],"visited":["A","B","C"],"curr":"B"},{"queue":["C","D"],"visited":["A","B","C","D"],"curr":"C"},{"queue":["D","E"],"visited":["A","B","C","D","E"],"curr":"D"},{"status":"TRAVERSED","order":"Level-Order","totalVisited":5}]},"dfs":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"stack":["A"],"visited":["A"],"curr":"A"},{"stack":["A","B"],"visited":["A","B"],"curr":"B"},{"stack":["A","B","D"],"visited":["A","B","D"],"curr":"D (leaf)"},{"backtrack":"to B -> to C","stack":["A","C"],"curr":"C"},{"status":"TRAVERSED","order":"Depth-First","totalVisited":5}]},"mergesort":{"time":"O(n log n)","space":"O(n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair","vars":[{"divide":"split [38, 27, 43, 3]","left":"[38, 27]","right":"[43, 3]"},{"divide":"atomic sub-arrays","units":"[38], [27], [43], [3]"},{"conquer":"merge pairs","left":"[27, 38]","right":"[3, 43]"},{"merge":"compare 27 vs 3","result":"[3, ...]"},{"status":"SORTED","result":"[3, 27, 38, 43]","stable":true}]},"quicksort":{"time":"O(n log n)","space":"O(log n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good","vars":[{"pivot":45,"low":0,"high":5,"array":"[23, 76, 12, 89, 45]"},{"partition":"i=0, j=2","swap":"76 <-> 12","pivot":45},{"partition":"pivot placed","index":2,"left":"[23, 12]","right":"[76, 89]"},{"recursive":"left sort [12, 23]","rightSort":"[76, 89]"},{"status":"SORTED","final":"[12, 23, 45, 76, 89]","avgTime":"O(n log n)"}]},"quicksortAvg":{"time":"O(n log n)","space":"O(log n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good"},"singleton":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"factory":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"promise":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"eventloop":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"http":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"array":{"time":"O(1) access","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"deque":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"heap":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair"},"trie":{"time":"O(k)","space":"O(ALPHABET * k)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"insertionsort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good"},"selectionsort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good"},"strategy":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"decorator":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"boxmodel":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"flexbox":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"avl":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair"},"dijkstra":{"time":"O((V + E) log V)","space":"O(V)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair"},"toposort":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"fib_dp":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"knapsack":{"time":"O(n * W)","space":"O(n * W)","curve":"O_n_2","timeRating":"fair","spaceRating":"fair"},"virtualmem":{"time":"O(1)","space":"O(pages)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"callstack":{"time":"O(1)","space":"O(depth)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"heapvsstack":{"time":"O(1)","space":"O(heap)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"jwt":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"webworker":{"time":"O(1)","space":"O(thread)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"gc":{"time":"O(live objects)","space":"O(1)","curve":"O_n","timeRating":"fair","spaceRating":"good"},"bloom":{"time":"O(k)","space":"O(m bits)","curve":"O_1","timeRating":"good","spaceRating":"good"},"lru":{"time":"O(1)","space":"O(capacity)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"debounce":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"promiseAll":{"time":"O(max(t))","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"cors":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"regex":{"time":"O(n)","space":"O(states)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"heapSort":{"time":"O(n log n)","space":"O(1)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good"},"websocket":{"time":"O(1) frames","space":"O(buffer)","curve":"O_1","timeRating":"good","spaceRating":"good"},"vector_embeddings":{"time":"O(d)","space":"O(v * d)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"space":"2D Latent Grid","vocabulary":["king","queen","apple"],"dim":2},{"query":"monarch","coords":[490,190],"status":"vectorized"},{"metric":"Cosine Sim","formula":"dot(A,B)/(||A||*||B||)","angle":"θ ≈ 4°"},{"topNeighbors":["king (0.98)","queen (0.97)"],"rejected":"apple (0.12)"},{"status":"RETRIEVED","searchType":"Approx Nearest Neighbor (ANN)"}]},"perceptron":{"time":"O(inputs)","space":"O(weights)","curve":"O_1","timeRating":"good","spaceRating":"good","vars":[{"x1":1,"x2":0.5,"status":"signals input"},{"w1":0.8,"w2":-0.4,"weightedSum":"(1*0.8) + (0.5*-0.4) = 0.6"},{"bias":0.2,"preActivation_z":"0.6 + 0.2 = 0.8"},{"activationFunc":"Heaviside step(z)","threshold":"z >= 0 ? 1 : 0"},{"output_y":1,"decision":"Neuron Fired (Class 1)"}]},"token_bucket":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good","vars":[{"capacity":4,"tokens":2,"refillRate":"1 token/sec","status":"IDLE"},{"capacity":4,"tokens":4,"status":"BUCKET FULL"},{"incoming":"GET /api/data","tokensAvailable":3,"check":"tokens >= 1"},{"consumed":1,"remaining":2,"httpResponse":"200 OK"},{"burstReq":"Excess traffic","remaining":0,"httpResponse":"429 Too Many Requests"}]}};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const quizzes = {"stack":{"q":{"en":"Which order does a Stack follow for element removal?","fa":"پشته (Stack) از چه ترتیبی برای حذف عناصر پیروی می‌کند؟"},"opts":{"en":["FIFO (First In First Out)","LIFO (Last In First Out)","Random Order"],"fa":["FIFO (اولین ورودی اولین خروجی)","LIFO (آخرین ورودی اولین خروجی)","ترتیب تصادفی"]},"ans":1,"exp":{"en":"Stack is LIFO: the most recently pushed element is the first one popped.","fa":"پشته LIFO است: آخرین عنصری که اضافه شده، اولین عنصری است که حذف می‌شود."}},"queue":{"q":{"en":"Where are new elements added in a Queue?","fa":"در صف (Queue)، عناصر جدید در کدام قسمت اضافه می‌شوند؟"},"opts":{"en":["At the front","At the back (rear)","In the middle"],"fa":["در ابتدا (Front)","در انتها (Rear)","در وسط"]},"ans":1,"exp":{"en":"Queue is FIFO: elements enter at the rear and exit from the front.","fa":"صف FIFO است: عناصر از انتها وارد و از ابتدا خارج می‌شوند."}},"binarysearch":{"q":{"en":"What prerequisite must an array satisfy for Binary Search to work?","fa":"آرایه برای اجرای جستجوی دودویی چه پیش‌شرطی باید داشته باشد؟"},"opts":{"en":["Must have unique values only","Must be sorted in ascending/descending order","Must have an even length"],"fa":["فقط دارای مقادیر یکتا باشد","باید مرتب‌شده (Sorted) باشد","طول آن زوج باشد"]},"ans":1,"exp":{"en":"Binary Search requires a sorted array to divide the search space in half.","fa":"جستجوی دودویی به آرایه مرتب نیاز دارد تا بتواند فضای جستجو را در هر مرحله نصف کند."}},"quicksort":{"q":{"en":"What is the average time complexity of QuickSort?","fa":"پیچیدگی زمانی میانگین الگوریتم QuickSort چقدر است؟"},"opts":{"en":["O(n log n)","O(n²)","O(log n)"],"fa":["O(n log n)","O(n²)","O(log n)"]},"ans":0,"exp":{"en":"On average, dividing around balanced pivots takes O(n log n) time.","fa":"در حالت میانگین با انتخاب مناسب pivot، پیچیدگی O(n log n) حاصل می‌شود."}},"websocket":{"q":{"en":"How does WebSocket differ from standard HTTP request/response?","fa":"وب‌سوکت چه تفاوتی با چرخه درخواست/پاسخ استاندارد HTTP دارد؟"},"opts":{"en":["Requires reconnecting for every request","Provides a persistent, full-duplex bidirectional connection","Only transfers JSON strings"],"fa":["برای هر درخواست نیاز به اتصال مجدد دارد","یک اتصال پایدار و دوطرفه همزمان فراهم می‌کند","فقط رشته‌های JSON منتقل می‌کند"]},"ans":1,"exp":{"en":"WebSocket maintains an open TCP tunnel allowing client and server to stream frames anytime.","fa":"وب‌سوکت یک سوکت باز TCP نگه می‌دارد که هر دو طرف می‌توانند آزادانه داده بفرستند."}},"vector_embeddings":{"q":{"en":"How is semantic similarity between two embedding vectors measured in AI?","fa":"شباهت معنایی بین دو بردار تعبیه در هوش مصنوعی چگونه سنجیده می‌شود؟"},"opts":{"en":["Cosine similarity (angle between vectors)","String length comparison","Alphabetical sorting"],"fa":["شباهت کسینوسی (زاویه بین بردارها)","مقایسه طول رشته‌ها","ترتیب الفبایی"]},"ans":0,"exp":{"en":"Cosine similarity measures the angle between high-dimensional vectors; closer to 1 means semantically related.","fa":"شباهت کسینوسی زاویه بین بردارها را می‌سنجد؛ هرچه به ۱ نزدیک‌تر باشد معنای نزدیک‌تری دارند."}},"perceptron":{"q":{"en":"What is the role of an activation function in a Perceptron neuron?","fa":"نقش تابع فعال‌ساز در نورون پرسپترون چیست؟"},"opts":{"en":["To store database records","To decide whether the neuron fires based on weighted sum + bias","To sort the input array"],"fa":["برای ذخیره رکورد در پایگاه داده","تصمیم‌گیری برای شلیک/فعال‌شدن نورون بر اساس مجموع وزن‌ها و بایاس","مرتب‌سازی آرایه ورودی"]},"ans":1,"exp":{"en":"The activation function introduces non-linearity and maps weighted sum to an output (0 or 1).","fa":"تابع فعال‌ساز مجموع وزن‌دار را به خروجی تصمیم‌گیری (۰ یا ۱) تبدیل می‌کند."}},"token_bucket":{"q":{"en":"What HTTP status code is returned when the token bucket has no tokens left?","fa":"وقتی سطل توکن خالی است، سرور چه کد خطای HTTP برمی‌گرداند؟"},"opts":{"en":["404 Not Found","429 Too Many Requests","500 Internal Server Error"],"fa":["404 Not Found","429 Too Many Requests","500 Internal Server Error"]},"ans":1,"exp":{"en":"HTTP 429 Too Many Requests is the standard status code for rate limiting.","fa":"کد وضعیت 429 نشان‌دهنده فراتر رفتن از سقف مجاز نرخ درخواست‌هاست."}},"observer":{"q":{"en":"Which design pattern is best for decoupling event producers from subscribers?","fa":"کدام الگوی طراحی برای جداسازی تولیدکننده رویداد از شنوندگان مناسب است؟"},"opts":{"en":["Observer Pattern","Singleton Pattern","Factory Pattern"],"fa":["الگوی ناظر (Observer)","الگوی تک‌نمونه (Singleton)","الگوی کارخانه (Factory)"]},"ans":0,"exp":{"en":"Observer pattern maintains a subscriber list and automatically notifies them upon state changes.","fa":"الگوی ناظر با نگه داشتن لیستی از مشترکین، تغییرات را به صورت خودکار به آن‌ها اطلاع می‌دهد."}},"heapvsstack":{"q":{"en":"Where are dynamic objects with unknown lifetime typically allocated in memory?","fa":"اشیاء پویا با طول عمر نامشخص معمولاً در کدام بخش حافظه تخصیص می‌یابند؟"},"opts":{"en":["Stack Memory","Heap Memory","CPU Registers"],"fa":["حافظه پشته (Stack)","حافظه هیپ (Heap)","رجیسترهای CPU"]},"ans":1,"exp":{"en":"The Heap holds dynamically allocated objects managed by Garbage Collection or pointers.","fa":"حافظه هیپ اشیاء با تخصیص پویا را نگهداری می‌کند که توسط زباله‌روب مدیریت می‌شوند."}},"a_star":{"q":{"en":"What does the A* evaluation function f(n) = g(n) + h(n) combine?","fa":"تابع ارزیابی A* یعنی f(n) = g(n) + h(n) چه چیزهایی را ترکیب می‌کند؟"},"opts":{"en":["Random tie-breaking and node depth","Exact cost so far (g) and a heuristic estimate to the goal (h)","Two independent heuristics"],"fa":["تصادفی‌سازی و عمق گره","هزینه دقیق طی‌شده (g) و تخمین heuristic تا هدف (h)","دو heuristic مستقل"]},"ans":1,"exp":{"en":"g is the known path cost; h estimates the remaining cost, guiding search toward the goal.","fa":"g هزینه مسیر طي‌شده است و h هزینه باقی‌مانده را تخمین می‌زند و جستجو را به سمت هدف هدایت می‌کند."}},"n_queens":{"q":{"en":"Why is backtracking dramatically faster than brute force for N-Queens?","fa":"چرا بازگشت‌زنی برای N-وزیر بسیار سریع‌تر از جستجوی حریصانه/کامل است؟"},"opts":{"en":["It uses more memory","It prunes a branch the moment a conflict appears","It sorts the board first"],"fa":["حافظه بیشتری مصرف می‌کند","به‌محض بروز تناقض، شاخه را هرس می‌کند","ابتدا صفحه را مرتب می‌کند"]},"ans":1,"exp":{"en":"Pruning abandons invalid partial solutions early, skipping huge subtrees of the search space.","fa":"هرس کردن جواب‌های ناقص نامعتبر را زود رها می‌کند و زیردرخت‌های بزرگی از فضای جستجو حذف می‌شوند."}},"kadane":{"q":{"en":"In Kadane's algorithm, what is the decision made at each element?","fa":"در الگوریتم کادان در هر عنصر چه تصمیمی گرفته می‌شود؟"},"opts":{"en":["Sort the remaining elements","Extend the current subarray or restart from the current element","Always add the element to the total"],"fa":["مرتب‌سازی عناصر باقی‌مانده","ادامه زیرآرایه فعلی یا شروع مجدد از عنصر فعلی","همیشه عنصر را به مجموع اضافه کن"]},"ans":1,"exp":{"en":"cur = max(nums[i], cur + nums[i]); a negative running sum is dropped by restarting.","fa":"cur = max(nums[i], cur + nums[i])؛ مجموع منفی با شروع مجدد کنار گذاشته می‌شود."}},"union_find":{"q":{"en":"Which two optimizations make Union-Find nearly constant time?","fa":"کدام دو بهینه‌سازی ساختار Union-Find را تقریباً زمان ثابت می‌کند؟"},"opts":{"en":["Union by rank and path compression","Hashing and sorting","Breadth-first and depth-first search"],"fa":["Union by rank و فشرده‌سازی مسیر","هش کردن و مرتب‌سازی","جستجوی سطحی و عمقی"]},"ans":0,"exp":{"en":"Union by rank keeps trees shallow and path compression flattens them during Find, giving O(α(n)).","fa":"Union by rank درخت‌ها را کم‌عمق نگه می‌دارد و فشرده‌سازی مسیر آن‌ها را در Find تخت می‌کند و O(α(n)) حاصل می‌شود."}},"monotonic_stack":{"q":{"en":"What is the classic use case of a monotonic stack?","fa":"کاربرد کلاسیک پشته یکنوا چیست؟"},"opts":{"en":["Sorting an array in place","Finding the next greater/smaller element in O(n)","Implementing recursion"],"fa":["مرتب‌سازی درجای آرایه","یافتن عنصر بزرگ‌تر/کوچک‌تر بعدی در O(n)","پیاده‌سازی بازگشت"]},"ans":1,"exp":{"en":"Each element is pushed and popped at most once, resolving next-greater queries in a single pass.","fa":"هر عنصر حداکثر یک بار push و pop می‌شود و پرسش‌های بزرگ‌تر-بعدی در یک پیمایش حل می‌شوند."}}};
+const badges = [{"id":"first_step","icon":"🌟","title":{"en":"First Step","fa":"اولین گام"},"desc":{"en":"Explored your first visual programming concept","fa":"اولین مفهوم برنامه‌نویسی را مشاهده کردید"}},{"id":"explorer","icon":"🧭","title":{"en":"Explorer","fa":"کاوشگر"},"desc":{"en":"Completed 5 visual concepts","fa":"۵ مفهوم برنامه‌نویسی را یاد گرفتید"}},{"id":"scholar","icon":"📚","title":{"en":"Scholar","fa":"پژوهشگر"},"desc":{"en":"Explored 15 concepts in your journey","fa":"۱۵ مفهوم را در مسیر یادگیری مرور کردید"}},{"id":"ds_master","icon":"🌲","title":{"en":"Data Structure Ace","fa":"استاد ساختار داده"},"desc":{"en":"Explored all foundational Data Structures","fa":"تمام مفاهیم پایه ساختار داده را مشاهده کردید"}},{"id":"algo_ace","icon":"⚡","title":{"en":"Algorithm Master","fa":"قهرمان الگوریتم"},"desc":{"en":"Explored sorting, searching and graph algorithms","fa":"مفاهیم مرتب‌سازی، جستجو و گراف را یاد گرفتید"}},{"id":"ai_pioneer","icon":"🤖","title":{"en":"AI Pioneer","fa":"پیشگام هوش مصنوعی"},"desc":{"en":"Learned Vector Embeddings & Perceptron neural models","fa":"مفاهیم بردارهای تعبیه و پرسپترون عصبی را مرور کردید"}},{"id":"web_guru","icon":"🌐","title":{"en":"Web Architect","fa":"متخصص وب"},"desc":{"en":"Explored WebSocket, HTTP, CORS, and Token Bucket","fa":"مفاهیم وب‌سوکت، CORS و سطل توکن را یاد گرفتید"}},{"id":"week_streak","icon":"🔥","title":{"en":"Week Warrior","fa":"رزمنده هفته"},"desc":{"en":"Maintained a 7-day learning streak","fa":"استریک یادگیری ۷ روزه ثبت کردید"}},{"id":"quiz_whiz","icon":"🎯","title":{"en":"Quiz Whiz","fa":"استاد کوئیز"},"desc":{"en":"Answered concept quiz questions correctly","fa":"به پرسش‌های مفهومی آزمون پاسخ صحیح دادید"}},{"id":"speed_demon","icon":"⚔️","title":{"en":"Speed Demon","fa":"قهرمان سرعت"},"desc":{"en":"Simulated an algorithm showdown in the Battle Arena","fa":"شاهد رقابت زنده دو الگوریتم در میدان نبرد بودید"}},{"id":"drill_master","icon":"⚡","title":{"en":"Drill Master","fa":"استاد آزمون برق‌آسا"},"desc":{"en":"Achieved a perfect score in a 5-question Code Drill","fa":"در آزمون برق‌آسای ۵ سؤالی نمره کامل گرفتید"}}];
+const complexityData = {"stack":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"action":"push('A')","top":"'A'","size":1,"memory":"Stack Frame"},{"action":"push('B')","top":"'B'","size":2,"memory":"Stack Frame"},{"action":"push('C')","top":"'C'","size":3,"memory":"Stack Frame"},{"action":"pop() -> 'C'","top":"'B'","size":2,"memory":"Deallocated"},{"action":"pop() -> 'B'","top":"'A'","size":1,"memory":"Deallocated"}]},"queue":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"action":"enqueue('A')","front":"'A'","rear":"'A'","size":1},{"action":"enqueue('B')","front":"'A'","rear":"'B'","size":2},{"action":"enqueue('C')","front":"'A'","rear":"'C'","size":3},{"action":"dequeue() -> 'A'","front":"'B'","rear":"'C'","size":2},{"action":"dequeue() -> 'B'","front":"'C'","rear":"'C'","size":1}]},"linkedlist":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair","vars":[{"node":"Head","val":10,"next":"0x1A","ptr":"head"},{"node":"Node 1","val":20,"next":"0x2B","ptr":"curr"},{"node":"Node 2","val":30,"next":"null","ptr":"curr.next"},{"action":"insert(25)","prev":"0x1A","new":"0x3C","next":"0x2B"},{"action":"linked","count":4,"status":"traversed"}]},"binarysearch":{"time":"O(log n)","space":"O(1)","curve":"O_log_n","timeRating":"good","spaceRating":"good","vars":[{"low":0,"high":6,"mid":3,"arrMid":31,"target":42,"cmp":"31 < 42"},{"low":4,"high":6,"mid":5,"arrMid":55,"target":42,"cmp":"55 > 42"},{"low":4,"high":4,"mid":4,"arrMid":42,"target":42,"cmp":"42 == 42"},{"status":"FOUND","index":4,"comparisons":3},{"status":"COMPLETED","searchSpace":"1/8 of N","efficiency":"Logarithmic"}]},"recursion":{"time":"O(2ⁿ)","space":"O(n)","curve":"O_2_n","timeRating":"poor","spaceRating":"fair","vars":[{"call":"fib(4)","depth":1,"stackFrames":1},{"call":"fib(3) + fib(2)","depth":2,"stackFrames":3},{"call":"fib(2) + fib(1)","depth":3,"stackFrames":5},{"call":"baseCase fib(1)=1","depth":4,"returning":1},{"call":"unwinding","result":3,"totalCalls":9}]},"bubbleSort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good","vars":[{"pass":1,"i":0,"j":0,"cmp":"arr[0] > arr[1]","swapped":true},{"pass":1,"i":0,"j":2,"cmp":"arr[2] > arr[3]","swapped":true},{"pass":2,"i":1,"j":1,"cmp":"arr[1] < arr[2]","swapped":false},{"pass":3,"i":2,"j":0,"cmp":"in-order","sortedTail":3},{"status":"SORTED","totalPasses":4,"totalSwaps":6}]},"hashmap":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"key":"'name'","hash":"hash('name') % 8","bucket":3},{"action":"store","bucket":3,"val":"'Alice'","collisions":0},{"key":"'age'","hash":"hash('age') % 8","bucket":7},{"action":"store","bucket":7,"val":28,"collisions":0},{"action":"lookup('name')","bucket":3,"found":"'Alice'","time":"O(1)"}]},"observer":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair","vars":[{"event":"register","subscribers":["UI_Logger","Analytics"]},{"event":"register","subscribers":["UI_Logger","Analytics","Notification"]},{"event":"publish('USER_LOGIN')","activeSubscriber":"UI_Logger"},{"event":"notified","activeSubscriber":"Analytics","payload":"{id:42}"},{"event":"complete","totalNotified":3,"decoupled":true}]},"dom":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"closure":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"bintree":{"time":"O(n)","space":"O(h)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"bfs":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"queue":["A"],"visited":["A"],"curr":"A"},{"queue":["B","C"],"visited":["A","B","C"],"curr":"B"},{"queue":["C","D"],"visited":["A","B","C","D"],"curr":"C"},{"queue":["D","E"],"visited":["A","B","C","D","E"],"curr":"D"},{"status":"TRAVERSED","order":"Level-Order","totalVisited":5}]},"dfs":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"stack":["A"],"visited":["A"],"curr":"A"},{"stack":["A","B"],"visited":["A","B"],"curr":"B"},{"stack":["A","B","D"],"visited":["A","B","D"],"curr":"D (leaf)"},{"backtrack":"to B -> to C","stack":["A","C"],"curr":"C"},{"status":"TRAVERSED","order":"Depth-First","totalVisited":5}]},"mergesort":{"time":"O(n log n)","space":"O(n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair","vars":[{"divide":"split [38, 27, 43, 3]","left":"[38, 27]","right":"[43, 3]"},{"divide":"atomic sub-arrays","units":"[38], [27], [43], [3]"},{"conquer":"merge pairs","left":"[27, 38]","right":"[3, 43]"},{"merge":"compare 27 vs 3","result":"[3, ...]"},{"status":"SORTED","result":"[3, 27, 38, 43]","stable":true}]},"quicksort":{"time":"O(n log n)","space":"O(log n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good","vars":[{"pivot":45,"low":0,"high":5,"array":"[23, 76, 12, 89, 45]"},{"partition":"i=0, j=2","swap":"76 <-> 12","pivot":45},{"partition":"pivot placed","index":2,"left":"[23, 12]","right":"[76, 89]"},{"recursive":"left sort [12, 23]","rightSort":"[76, 89]"},{"status":"SORTED","final":"[12, 23, 45, 76, 89]","avgTime":"O(n log n)"}]},"quicksortAvg":{"time":"O(n log n)","space":"O(log n)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good"},"singleton":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"factory":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"promise":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"eventloop":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"http":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"array":{"time":"O(1) access","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"deque":{"time":"O(1)","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"heap":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair"},"trie":{"time":"O(k)","space":"O(ALPHABET * k)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"insertionsort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good"},"selectionsort":{"time":"O(n²)","space":"O(1)","curve":"O_n_2","timeRating":"poor","spaceRating":"good"},"strategy":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"decorator":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"boxmodel":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"flexbox":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"avl":{"time":"O(log n)","space":"O(n)","curve":"O_log_n","timeRating":"good","spaceRating":"fair"},"dijkstra":{"time":"O((V + E) log V)","space":"O(V)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair"},"toposort":{"time":"O(V + E)","space":"O(V)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"fib_dp":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"knapsack":{"time":"O(n * W)","space":"O(n * W)","curve":"O_n_2","timeRating":"fair","spaceRating":"fair"},"virtualmem":{"time":"O(1)","space":"O(pages)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"callstack":{"time":"O(1)","space":"O(depth)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"heapvsstack":{"time":"O(1)","space":"O(heap)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"jwt":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"webworker":{"time":"O(1)","space":"O(thread)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"gc":{"time":"O(live objects)","space":"O(1)","curve":"O_n","timeRating":"fair","spaceRating":"good"},"bloom":{"time":"O(k)","space":"O(m bits)","curve":"O_1","timeRating":"good","spaceRating":"good"},"lru":{"time":"O(1)","space":"O(capacity)","curve":"O_1","timeRating":"good","spaceRating":"fair"},"debounce":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"promiseAll":{"time":"O(max(t))","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair"},"cors":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good"},"regex":{"time":"O(n)","space":"O(states)","curve":"O_n","timeRating":"fair","spaceRating":"fair"},"heapSort":{"time":"O(n log n)","space":"O(1)","curve":"O_n_log_n","timeRating":"good","spaceRating":"good"},"websocket":{"time":"O(1) frames","space":"O(buffer)","curve":"O_1","timeRating":"good","spaceRating":"good"},"vector_embeddings":{"time":"O(d)","space":"O(v * d)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"space":"2D Latent Grid","vocabulary":["king","queen","apple"],"dim":2},{"query":"monarch","coords":[490,190],"status":"vectorized"},{"metric":"Cosine Sim","formula":"dot(A,B)/(||A||*||B||)","angle":"θ ≈ 4°"},{"topNeighbors":["king (0.98)","queen (0.97)"],"rejected":"apple (0.12)"},{"status":"RETRIEVED","searchType":"Approx Nearest Neighbor (ANN)"}]},"perceptron":{"time":"O(inputs)","space":"O(weights)","curve":"O_1","timeRating":"good","spaceRating":"good","vars":[{"x1":1,"x2":0.5,"status":"signals input"},{"w1":0.8,"w2":-0.4,"weightedSum":"(1*0.8) + (0.5*-0.4) = 0.6"},{"bias":0.2,"preActivation_z":"0.6 + 0.2 = 0.8"},{"activationFunc":"Heaviside step(z)","threshold":"z >= 0 ? 1 : 0"},{"output_y":1,"decision":"Neuron Fired (Class 1)"}]},"token_bucket":{"time":"O(1)","space":"O(1)","curve":"O_1","timeRating":"good","spaceRating":"good","vars":[{"capacity":4,"tokens":2,"refillRate":"1 token/sec","status":"IDLE"},{"capacity":4,"tokens":4,"status":"BUCKET FULL"},{"incoming":"GET /api/data","tokensAvailable":3,"check":"tokens >= 1"},{"consumed":1,"remaining":2,"httpResponse":"200 OK"},{"burstReq":"Excess traffic","remaining":0,"httpResponse":"429 Too Many Requests"}]},"a_star":{"time":"O(E log V)","space":"O(V)","curve":"O_n_log_n","timeRating":"good","spaceRating":"fair","vars":[{"openSet":"[(0,0) f=9]","closed":"[]","g":"{start:0}"},{"expand":"(0,0)","f":9,"g":0,"h":9},{"neighbor":"(1,0)","g":1,"h":8,"f":9},{"goalReached":"(6,4)","pathLength":10,"explored":18},{"reconstruct":"trace parents back","path":"10 tiles","optimal":true}]},"n_queens":{"time":"O(N!)","space":"O(N)","curve":"O_2_n","timeRating":"poor","spaceRating":"fair","vars":[{"row":0,"col":0,"board":"Q......."},{"row":1,"col":2,"board":"Q..Q....","safe":true},{"row":2,"col":4,"conflict":"diagonal","action":"prune"},{"row":2,"col":0,"backtracked":true,"tries":3},{"solved":true,"board":"Q...Q...Q...","solutions":92}]},"kadane":{"time":"O(n)","space":"O(1)","curve":"O_n","timeRating":"good","spaceRating":"good","vars":[{"i":0,"cur":-2,"best":-2},{"i":1,"nums":1,"cur":1,"best":1,"decision":"restart"},{"i":3,"nums":4,"cur":4,"best":4},{"i":6,"cur":6,"best":6,"subarray":"[4,-1,2,1]"},{"status":"DONE","maxSum":6,"scanned":9}]},"union_find":{"time":"O(α(n))","space":"O(n)","curve":"O_1","timeRating":"good","spaceRating":"fair","vars":[{"parent":"[0,1,2,3,4]","rank":"all 0"},{"union":"0+1","parent":"[0,0,2,3,4]"},{"find":"4","path":"4 -> 2 -> 3","root":3},{"compress":"4 -> 3","depth":1},{"connected":"0 and 1","result":true,"components":3}]},"monotonic_stack":{"time":"O(n)","space":"O(n)","curve":"O_n","timeRating":"good","spaceRating":"fair","vars":[{"i":0,"push":2,"stack":"[0]"},{"i":3,"val":4,"pop":"2 and 1 and 2","stack":"[]"},{"resolved":"{0:4, 1:2, 2:4}","stackAfter":"[3]"},{"i":4,"peek":3,"topVal":3},{"status":"DONE","stack":"[3, 5]","unresolved":"-1"}]}};
 
 // Badges & Achievements Manager
 let unlockedBadges = new Set(JSON.parse((typeof localStorage !== 'undefined' ? localStorage.getItem("cv_unlocked_badges") : null) || "[]"));
@@ -289,6 +467,7 @@ function checkBadges(stats) {
     else if (b.id === "web_guru" && stats.seenIds && stats.seenIds.has("websocket") && stats.seenIds.has("token_bucket")) unlocked = true;
     else if (b.id === "quiz_whiz" && stats.quizScore >= 3) unlocked = true;
     else if (b.id === "speed_demon" && stats.battleDone) unlocked = true;
+    else if (b.id === "drill_master" && stats.drillPerfect) unlocked = true;
 
     if (unlocked) {
       unlockedBadges.add(b.id);
@@ -302,6 +481,8 @@ function checkBadges(stats) {
     }
     if (typeof playChord === 'function') {
       playChord([587.33, 739.99, 880]); // Celebration fanfare
+    if(typeof burstConfetti==="function")burstConfetti();
+    newlyUnlocked.forEach(b=>{if(typeof cvToast==="function")cvToast(b.icon+" "+(b.title[lang]||b.title.en))}); // cvToastBadgeHook
     }
     renderBadges();
   }
@@ -938,6 +1119,9 @@ renderBadges();
 const qb = document.getElementById("quizBtn"); if(qb) qb.textContent="💡 " + (t("conceptQuiz") || "Quiz");
 const bo = document.getElementById("bigOBtn"); if(bo) bo.textContent="📊 " + (t("bigO") || "Big-O");
 const bt = document.getElementById("battleBtn"); if(bt) bt.textContent="⚔️ " + (t("battle") || "Race");
+const gb2 = document.getElementById("galleryBtn"); if(gb2) gb2.textContent = "🗺️ " + (t("gallery") || "Gallery");
+const dr = document.getElementById("drillBtn"); if(dr) document.getElementById("drillBtnLabel").textContent = t("drill") || "Code Drill";
+const db = document.getElementById("drillModalTitle");
 if(document.getElementById("bigOModalTitle")) document.getElementById("bigOModalTitle").textContent = t("bigOTitle") || "Big-O Complexity Guide";
 if(document.getElementById("battleModalTitle")) document.getElementById("battleModalTitle").textContent = t("battleTitle") || "Algorithm Showdown Arena";
 renderComplexityBadge(currentConcept);
@@ -952,6 +1136,341 @@ updateStats();
 buildCalendar();
 buildLearningPaths();
 }
+
+// ⚡ Code Drill — rapid-fire quiz across already-seen concepts
+let drillState = null;
+
+function startCodeDrill() {
+  const pool = [...seenIds].filter(id => quizzes[id]);
+  const candidates = pool.length >= 3 ? pool : Object.keys(quizzes);
+  const picked = [];
+  const poolCopy = [...candidates];
+  for (let i = 0; i < Math.min(5, poolCopy.length); i++) {
+    picked.push(poolCopy.splice(Math.floor(Math.random() * poolCopy.length), 1)[0]);
+  }
+  drillState = { queue: picked, idx: 0, score: 0, total: picked.length };
+  renderDrill();
+  const modal = document.getElementById("drillModal");
+  if (modal) modal.style.display = "flex";
+}
+
+function closeDrillModal() {
+  const modal = document.getElementById("drillModal");
+  if (modal) modal.style.display = "none";
+}
+
+function renderDrill() {
+  const box = document.getElementById("drillCardBody");
+  if (!box || !drillState) return;
+  if (drillState.idx >= drillState.total) {
+    const perfect = drillState.score === drillState.total;
+    if (perfect && typeof checkBadges === 'function') {
+      checkBadges({ seenCount: seenIds ? seenIds.size : 0, streak: typeof getStreak === 'function' ? getStreak() : 0, seenIds, quizScore: quizScore + drillState.score, drillPerfect: true });
+    }
+    box.innerHTML = '<h3 style="font-size:1.1rem;margin-bottom:10px;color:var(--accent2)">⚡ ' + (t("drillDone") || "Drill complete") + '</h3>' +
+      '<p style="font-size:2.4rem;font-weight:800;margin:18px 0;color:' + (perfect ? '#3fb950' : 'var(--accent2)') + '">' + drillState.score + ' / ' + drillState.total + '</p>' +
+      '<div style="display:flex;justify-content:flex-end;gap:8px">' +
+      '<button class="secondary" onclick="startCodeDrill()">🔄 ' + (t("again") || "Play again") + '</button>' +
+      '<button class="secondary" onclick="closeDrillModal()">' + (t("close") || "Close") + '</button></div>';
+    if (typeof playChord === 'function') playChord(perfect ? [523.25, 659.25, 783.99] : [440, 554.37]);
+    return;
+  }
+  const cid = drillState.queue[drillState.idx];
+  const q = quizzes[cid];
+  const concept = concepts.find(c => c.id === cid);
+  const qText = q.q[lang] || q.q.en;
+  const opts = q.opts[lang] || q.opts.en;
+  const exp = q.exp[lang] || q.exp.en;
+  const title = concept ? (concept.title[lang] || concept.title.en) : cid;
+  let optHtml = opts.map((o, i) => '<button class="secondary drill-opt" data-i="' + i + '" style="text-align:start;padding:10px 14px;border-radius:8px">' + (i + 1) + '. ' + o + '</button>').join("");
+  box.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+    '<h3 style="font-size:1.05rem;color:var(--accent2);margin:0">⚡ ' + (t("drill") || "Code Drill") + ' — ' + (drillState.idx + 1) + '/' + drillState.total + '</h3>' +
+    '<button class="secondary" onclick="closeDrillModal()" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button></div>' +
+    '<div style="font-size:.75rem;color:#8b949e;margin-bottom:8px">' + title + '</div>' +
+    '<p style="font-size:.95rem;margin-bottom:14px;line-height:1.5">' + qText + '</p>' +
+    '<div style="display:flex;flex-direction:column;gap:8px" id="drillOpts">' + optHtml + '</div>' +
+    '<div id="drillFb" style="margin-top:12px;display:none;padding:10px;border-radius:8px;font-size:.9rem"></div>' +
+    '<div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center">' +
+    '<span style="font-size:.8rem;color:#8b949e">' + (t("score") || "Score") + ': <strong>' + drillState.score + '</strong></span>' +
+    '<button class="primary" id="drillNext" style="display:none;padding:8px 18px;border-radius:8px;cursor:pointer">' + (t("next") || "Next") + ' →</button></div>';
+  box.querySelectorAll(".drill-opt").forEach(btn => {
+    btn.onclick = () => {
+      const sel = parseInt(btn.dataset.i);
+      const ok = sel === q.ans;
+      const fb = document.getElementById("drillFb");
+      box.querySelectorAll(".drill-opt").forEach(b => b.disabled = true);
+      if (ok) {
+        drillState.score++;
+        btn.style.borderColor = "var(--green)"; btn.style.background = "rgba(63,185,80,0.15)";
+        fb.style.display = "block"; fb.style.background = "rgba(63,185,80,0.15)"; fb.style.color = "var(--green)";
+        fb.innerHTML = "<strong>✓</strong> " + exp;
+        if (typeof playTone === 'function') { playTone(600, 0.08); setTimeout(() => playTone(800, 0.1), 80); }
+      } else {
+        btn.style.borderColor = "var(--red)"; btn.style.background = "rgba(248,81,73,0.15)";
+        box.querySelectorAll(".drill-opt")[q.ans].style.borderColor = "var(--green)";
+        fb.style.display = "block"; fb.style.background = "rgba(248,81,73,0.15)"; fb.style.color = "var(--red)";
+        fb.innerHTML = "<strong>✗</strong> " + exp;
+        if (typeof playTone === 'function') playTone(220, 0.15, "sawtooth");
+      }
+      const nx = document.getElementById("drillNext");
+      if (nx) { nx.style.display = "inline-block"; nx.onclick = () => { drillState.idx++; renderDrill(); }; }
+    };
+  });
+}
+
+
+// ===== Phase 6: Gallery, XP/Levels, Confetti, Toasts =====
+const CAT_META={ds:{icon:"🌲",color:"#3fb950",en:"Data Structures",fa:"ساختمان داده"},algo:{icon:"⚡",color:"#f0883e",en:"Algorithms",fa:"الگوریتم‌ها"},pattern:{icon:"🧩",color:"#a78bfa",en:"Patterns",fa:"الگوها"},web:{icon:"🌐",color:"#58a6ff",en:"Web",fa:"وب"}};
+let galleryOpen=true;
+
+function renderGallery(){
+  const grid=document.getElementById("galleryGrid");
+  if(!grid)return;
+  let h="";
+  concepts.forEach(c=>{
+    const m=CAT_META[c.category]||{icon:"📘",color:"#8b949e",en:c.category,fa:c.category};
+    const isSeen=seenIds.has(c.id);
+    const title=c.title[lang]||c.title.en;
+    h+='<div class="gallery-card'+(isSeen?" seen":"")+'" onclick="loadConcept(\''+c.id+'\');window.scrollTo({top:0,behavior:\'smooth\'})" title="'+title+'">'+
+      (isSeen?'<span class="g-seen">✓</span>':"")+
+      '<span class="g-icon">'+m.icon+'</span>'+
+      '<span class="g-title">'+title+'</span>'+
+      '<span class="g-cat" style="color:'+m.color+'">'+(m[lang]||m.en)+' · '+t(c.level)+'</span></div>';
+  });
+  grid.innerHTML=h;
+  const gt=document.getElementById("galleryTitle");
+  if(gt)gt.textContent="🗺️ "+(t("gallery")||"Concept Gallery")+" ("+seenIds.size+"/"+concepts.length+")";
+}
+
+function toggleGallery(){
+  galleryOpen=!galleryOpen;
+  const card=document.getElementById("galleryCard");
+  if(card)card.style.display=galleryOpen?"block":"none";
+  if(typeof playTone==="function")playTone(galleryOpen?520:380,0.06);
+}
+
+function computeXp(){
+  return seenIds.size*10+quizScore*5+unlockedBadges.size*25+doneDays.length*15;
+}
+function levelFor(xp){return Math.max(1,Math.floor(Math.sqrt(xp/50))+1)}
+function xpForLevel(lv){return Math.pow(lv-1,2)*50}
+let lastShownLevel=null;
+
+function updateXp(){
+  const chip=document.getElementById("xpText"),ring=document.getElementById("xpChip");
+  if(!chip)return;
+  const xp=computeXp(),lv=levelFor(xp);
+  const cur=xpForLevel(lv),next=xpForLevel(lv+1);
+  const pct=Math.min(100,Math.round(100*(xp-cur)/Math.max(1,next-cur)));
+  chip.innerHTML='<span class="xp-ring" data-lv="'+lv+'" style="--p:'+pct+'%"></span><span>Lv '+lv+' · '+xp+' XP</span>';
+  if(lastShownLevel!==null&&lv>lastShownLevel&&typeof cvToast==="function"){
+    cvToast("🎉 "+(t("levelUp")||"Level Up!")+" — Lv "+lv);
+    if(typeof burstConfetti==="function")burstConfetti();
+  }
+  lastShownLevel=lv;
+}
+
+// Confetti particle burst
+let confettiParticles=[],confettiRAF=null;
+function burstConfetti(n=120){
+  const cv=document.getElementById("confettiCanvas");
+  if(!cv)return;
+  cv.style.display="block";
+  cv.width=window.innerWidth||800;cv.height=window.innerHeight||600;
+  const cx=cv.getContext("2d");
+  const colors=["#8b5cf6","#3fb950","#f0883e","#58a6ff","#f85149","#d2a8ff"];
+  for(let i=0;i<n;i++){
+    confettiParticles.push({x:(window.innerWidth||800)/2+(Math.random()-0.5)*200,y:(window.innerHeight||600)*0.4,vx:(Math.random()-0.5)*12,vy:-Math.random()*14-4,g:0.35,s:Math.random()*7+3,c:colors[i%colors.length],r:Math.random()*Math.PI,vr:(Math.random()-0.5)*0.3,life:90});
+  }
+  if(!confettiRAF)confettiLoop(cv,cx);
+}
+function confettiLoop(cv,cx){
+  cx.clearRect(0,0,cv.width,cv.height);
+  confettiParticles=confettiParticles.filter(p=>p.life>0&&p.y<cv.height+20);
+  confettiParticles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.r+=p.vr;p.life--;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);
+    cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.life/30);
+    cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);cx.restore();
+  });
+  if(confettiParticles.length){confettiRAF=requestAnimationFrame(()=>confettiLoop(cv,cx))}
+  else{confettiRAF=null;cv.style.display="none"}
+}
+
+function cvToast(msg,dur=2600){
+  const host=document.getElementById("cvToastHost");
+  if(!host)return;
+  const el=document.createElement("div");
+  el.className="cv-toast";el.textContent=msg;
+  host.appendChild(el);
+  if(el.classList&&el.classList.add)el.classList.add("show");
+  setTimeout(()=>{try{el.classList.remove("show")}catch(e){}try{el.remove()}catch(e){}},dur);
+}
+
+
+// ===== Phase 7: Heatmap, Zen, Shortcuts, Scroll progress =====
+function renderHeatmap(){
+  const grid=document.getElementById("hmGrid");
+  if(!grid)return;
+  const counts={};
+  doneDays.forEach(d=>{counts[d]=(counts[d]||0)+1});
+  const max=Math.max(1,...Object.values(counts));
+  grid.innerHTML="";
+  const start=new Date();start.setDate(start.getDate()-83);
+  for(let i=0;i<84;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
+    const ds=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    const c=counts[ds]||0;
+    const cell=document.createElement("div");
+    cell.className="hm-cell"+(c>0?" l"+Math.ceil(3*c/max):"")+(ds===today?" today":"");
+    cell.title=ds+" — "+c+" concept"+(c===1?"":"s");
+    grid.appendChild(cell);
+  }
+  const t2=document.getElementById("hmTitle");
+  if(t2)t2.textContent="🔥 "+(t("heatmap")||"Activity Heatmap")+" — "+doneDays.length+" "+(t("totalDays")||"days");
+}
+
+let zenMode=false;
+function toggleZen(){
+  zenMode=!zenMode;
+  document.body.classList.toggle("zen",zenMode);
+  if(typeof cvToast==="function")cvToast(zenMode?"🧘 "+(t("zen")||"Zen Mode"):"👁️ "+(t("play")||"Normal Mode"));
+  if(typeof playTone==="function")playTone(zenMode?300:500,0.08);
+}
+
+function openShortcuts(){
+  const rows=[
+    ["← / →","prevStep / nextStep"],["Space","togglePlay"],["R","random concept"],
+    ["Z","toggle zen"],["G","toggle gallery"],["D","code drill"],["S","share PNG"],["?","this help"]
+  ];
+  const b=document.getElementById("shortcutsBody");
+  if(b)b.innerHTML=rows.map(r2=>'<div class="shortcut-row"><span>'+r2[1]+'</span><span><span class="kbd">'+r2[0]+'</span></span></div>').join("");
+  const m=document.getElementById("shortcutsModal");
+  if(m)m.style.display="flex";
+}
+
+function updateScrollProgress(){
+  const bar=document.getElementById("topProgressBar");
+  if(!bar)return;
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  bar.style.width=(h>0?Math.min(100,100*window.scrollY/h):0)+"%";
+}
+window.addEventListener("scroll",updateScrollProgress,{passive:true});
+
+
+// Phase 8: zen focus scroll
+function zenScrollHook(){
+  if(!zenMode)return;
+  const el=document.querySelector(".concept-card")||document.getElementById("animCanvas");
+  if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+
+// ===== Phase 9: Aurora background + Hero =====
+function initAurora(){
+  const cv=document.getElementById("auroraCanvas");
+  if(!cv)return;
+  const ctx2=cv.getContext("2d");
+  let pts=[],raf=null;
+  function size(){cv.width=window.innerWidth;cv.height=window.innerHeight;
+    const n=Math.max(24,Math.floor(cv.width*cv.height/28000));
+    pts=Array.from({length:n},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+.6}));
+  }
+  size();window.addEventListener("resize",size);
+  function draw(){
+    ctx2.clearRect(0,0,cv.width,cv.height);
+    for(let i=0;i<pts.length;i++){
+      const p=pts[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>cv.width)p.vx*=-1;
+      if(p.y<0||p.y>cv.height)p.vy*=-1;
+      for(let j=i+1;j<pts.length;j++){
+        const q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=dx*dx+dy*dy;
+        if(d<20000){
+          const a=1-d/20000;
+          ctx2.strokeStyle="rgba(139,92,246,"+(a*.28)+")";
+          ctx2.lineWidth=a*.8;
+          ctx2.beginPath();ctx2.moveTo(p.x,p.y);ctx2.lineTo(q.x,q.y);ctx2.stroke();
+        }
+      }
+      ctx2.fillStyle="rgba(167,139,250,.7)";
+      ctx2.beginPath();ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);ctx2.fill();
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  let lastT=0;
+  requestAnimationFrame(function loop(t){
+    if(typeof t!=="number")return;
+    if(!lastT||t-lastT>=16){lastT=t;draw()}
+    requestAnimationFrame(loop);
+  });
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){cancelAnimationFrame(raf);raf=null}
+    else if(!raf)draw();
+  });
+}
+function renderHero(){
+  const dayIndex2=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
+  const daily=concepts[dayIndex2];
+  const ht=document.getElementById("heroTitle"),hs=document.getElementById("heroSub"),he=document.getElementById("heroEyebrow");
+  if(ht)ht.textContent=daily.title[lang]||daily.title.en;
+  if(hs)hs.textContent=daily.desc[lang]||daily.desc.en;
+  if(he)he.textContent="⭐ "+(t("ofTheDay")||"Concept of the day");
+  const hst=document.getElementById("heroStats");
+  if(hst){
+    const xp=computeXp(),lv=levelFor(xp);
+    hst.innerHTML=
+      '<div class="hero-stat"><div class="v">'+lv+'</div><div class="k">'+(t("level")||"Level")+'</div></div>'+
+      '<div class="hero-stat"><div class="v">'+seenIds.size+'</div><div class="k">'+(t("conceptsSeen")||"Seen")+'</div></div>'+
+      '<div class="hero-stat"><div class="v">'+getStreak()+'</div><div class="k">'+(t("streak")||"Streak")+'</div></div>'+
+      '<div class="hero-stat"><div class="v">'+unlockedBadges.size+'</div><div class="k">🏆</div></div>';
+  }
+  const b1=document.getElementById("heroStart"),b2=document.getElementById("heroRandom");
+  if(b1)b1.onclick=()=>{loadConcept(daily);window.scrollTo({top:0,behavior:"smooth"})};
+  if(b2)b2.onclick=()=>{const c=concepts[Math.floor(Math.random()*concepts.length)];loadConcept(c);window.scrollTo({top:0,behavior:"smooth"})};
+}
+
+
+// cvNetBoost — richer particle network (overrides initAurora internals via re-init)
+(function(){
+  const orig=initAurora;
+  initAurora=function(){
+    const cv=document.getElementById("auroraCanvas");
+    if(!cv)return;
+    const ctx2=cv.getContext("2d");
+    let pts=[];
+    function size(){
+      cv.width=window.innerWidth;cv.height=window.innerHeight;
+      const n=Math.max(60,Math.floor(cv.width*cv.height/9000));
+      pts=Array.from({length:n},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.45,r:Math.random()*2.2+.8}));
+    }
+    size();window.addEventListener("resize",size);
+    function draw(){
+      ctx2.clearRect(0,0,cv.width,cv.height);
+      const LINK=130*130;
+      for(let i=0;i<pts.length;i++){
+        const p=pts[i];
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>cv.width)p.vx*=-1;
+        if(p.y<0||p.y>cv.height)p.vy*=-1;
+        for(let j=i+1;j<pts.length;j++){
+          const q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=dx*dx+dy*dy;
+          if(d<LINK){
+            const a=1-d/LINK;
+            ctx2.strokeStyle="rgba(139,92,246,"+(a*.55)+")";
+            ctx2.lineWidth=a*1.4;
+            ctx2.beginPath();ctx2.moveTo(p.x,p.y);ctx2.lineTo(q.x,q.y);ctx2.stroke();
+          }
+        }
+        ctx2.fillStyle="rgba(196,181,253,.95)";
+        ctx2.beginPath();ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);ctx2.fill();
+      }
+      requestAnimationFrame(function loop2(t){if(typeof t!=="number")return;draw()});
+    }
+    requestAnimationFrame(function(t){if(typeof t==="number")draw()});
+  };
+  initAurora();
+})();
 document.getElementById("langBtn").onclick=()=>{lang=lang==="en"?"fa":"en";localStorage.setItem("cv_lang",lang);applyLang()};
 
 let theme=localStorage.getItem("cv_theme")||"dark";
@@ -959,7 +1478,7 @@ function applyTheme(){document.documentElement.setAttribute("data-theme",theme);
 document.getElementById("themeBtn").onclick=()=>{theme=theme==="dark"?"light":"dark";localStorage.setItem("cv_theme",theme);applyTheme()};
 applyTheme();
 
-const concepts=[{"id":"stack","title":{"en":"Stack","fa":"پشته"},"category":"ds","level":"beginner","desc":{"en":"A Last-In-First-Out (LIFO) data structure. Elements are pushed on top and popped from the top.","fa":"ساختمان داده آخر-ورودی-اول-خروجی. عناصر از بالا اضافه و از بالا حذف می‌شوند."},"code":"class Stack {\n  constructor() { this.items = []; }\n  push(item) { this.items.push(item); }\n  pop() { return this.items.pop(); }\n  peek() { return this.items[this.items.length-1]; }\n  isEmpty() { return this.items.length === 0; }\n}","steps":[{"type":"push","val":"A"},{"type":"push","val":"B"},{"type":"push","val":"C"},{"type":"pop"},{"type":"pop"}]},{"id":"queue","title":{"en":"Queue","fa":"صف"},"category":"ds","level":"beginner","desc":{"en":"A First-In-First-Out (FIFO) data structure. Elements are enqueued at the back and dequeued from the front.","fa":"ساختمان داده اول-ورودی-اول-خروجی. عناصر از انتها وارد و از ابتدا خارج می‌شوند."},"code":"class Queue {\n  constructor() { this.items = []; }\n  enqueue(item) { this.items.push(item); }\n  dequeue() { return this.items.shift(); }\n  front() { return this.items[0]; }\n  isEmpty() { return this.items.length === 0; }\n}","steps":[{"type":"enqueue","val":"A"},{"type":"enqueue","val":"B"},{"type":"enqueue","val":"C"},{"type":"dequeue"},{"type":"dequeue"}]},{"id":"linkedlist","title":{"en":"Linked List","fa":"لیست پیوندی"},"category":"ds","level":"intermediate","desc":{"en":"A linear data structure where each element points to the next node, allowing O(1) insertions.","fa":"ساختمان داده خطی که هر عنصر به گره بعدی اشاره می‌کند و درج O(1) را ممکن می‌سازد."},"code":"class Node {\n  constructor(val) {\n    this.val = val;\n    this.next = null;\n  }\n}\nclass LinkedList {\n  append(val) {\n    const node = new Node(val);\n    if (!this.head) { this.head = node; return; }\n    let curr = this.head;\n    while (curr.next) curr = curr.next;\n    curr.next = node;\n  }\n}","steps":[{"type":"add","val":"A"},{"type":"add","val":"B"},{"type":"add","val":"C"},{"type":"traverse"},{"type":"remove"}]},{"id":"binarysearch","title":{"en":"Binary Search","fa":"جستجوی دودویی"},"category":"algo","level":"beginner","desc":{"en":"An efficient search algorithm that divides the sorted array in half each step. O(log n) time complexity.","fa":"الگوریتم جستجوی کارآمد که آرایه مرتب را در هر مرحله نصف می‌کند. پیچیدگی زمانی O(log n)."},"code":"function binarySearch(arr, target) {\n  let low = 0, high = arr.length - 1;\n  while (low <= high) {\n    const mid = Math.floor((low + high) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) low = mid + 1;\n    else high = mid - 1;\n  }\n  return -1;\n}","steps":[{"type":"init","range":[0,15]},{"type":"mid","val":7},{"type":"narrow","dir":"right"},{"type":"mid","val":11},{"type":"found","val":11}]},{"id":"recursion","title":{"en":"Recursion","fa":"بازگشت"},"category":"pattern","level":"intermediate","desc":{"en":"A function that calls itself with a base case to terminate. Each call creates a new frame on the call stack.","fa":"تابعی که خودش را با یک حالت پایه فراخوانی می‌کند. هر فراخوانی فریم جدیدی روی پشته ایجاد می‌کند."},"code":"function factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n\nfactorial(5);\n// 5 * 4 * 3 * 2 * 1 = 120","steps":[{"type":"call","val":5},{"type":"call","val":4},{"type":"call","val":3},{"type":"base","val":1},{"type":"return"}]},{"id":"bubbleSort","title":{"en":"Bubble Sort","fa":"مرتب‌سازی حبابی"},"category":"algo","level":"beginner","desc":{"en":"Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.","fa":"به طور مکرر لیست را پیمایش می‌کند، عناصر مجاور را مقایسه و در صورت نیاز جابجا می‌کند."},"code":"function bubbleSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    for (let j = 0; j < arr.length - i - 1; j++) {\n      if (arr[j] > arr[j+1]) {\n        [arr[j], arr[j+1]] = [arr[j+1], arr[j]];\n      }\n    }\n  }\n  return arr;\n}","steps":[{"type":"compare","i":0,"j":1},{"type":"swap","i":0,"j":1},{"type":"compare","i":1,"j":2},{"type":"pass"},{"type":"done"}]},{"id":"hashmap","title":{"en":"Hash Map","fa":"جدول هش"},"category":"ds","level":"intermediate","desc":{"en":"Stores key-value pairs using a hash function to compute an index into an array of buckets for O(1) average lookup.","fa":"جفت‌های کلید-مقدار را با استفاده از تابع هش برای محاسبه اندیس ذخیره می‌کند. جستجوی متوسط O(1)."},"code":"class HashMap {\n  constructor(size = 16) {\n    this.buckets = new Array(size).fill(null).map(() => []);\n    this.size = size;\n  }\n  hash(key) { return key.toString().length % this.size; }\n  set(key, val) { this.buckets[this.hash(key)].push([key, val]); }\n  get(key) {\n    return this.buckets[this.hash(key)].find(([k]) => k === key)?.[1];\n  }\n}","steps":[{"type":"insert","key":"name","val":"Ali"},{"type":"hash","key":"name","bucket":4},{"type":"insert","key":"age","val":25},{"type":"hash","key":"age","bucket":3},{"type":"lookup","key":"name"}]},{"id":"observer","title":{"en":"Observer Pattern","fa":"الگوی ناظر"},"category":"pattern","level":"advanced","desc":{"en":"A design pattern where an object (subject) maintains a list of observers and notifies them of state changes automatically.","fa":"الگوی طراحی که شیء (موضوع) لیستی از ناظران را نگه می‌دارد و تغییرات حالت را خودکار اطلاع می‌دهد."},"code":"class Subject {\n  constructor() { this.observers = []; }\n  subscribe(fn) { this.observers.push(fn); }\n  notify(data) { this.observers.forEach(fn => fn(data)); }\n}\nconst sub = new Subject();\nsub.subscribe(d => console.log('Got:', d));\nsub.notify('hello');","steps":[{"type":"subscribe","who":"A"},{"type":"subscribe","who":"B"},{"type":"event","val":"update"},{"type":"notify","to":"A"},{"type":"notify","to":"B"}]},{"id":"dom","title":{"en":"DOM Tree","fa":"درخت DOM"},"category":"web","level":"beginner","desc":{"en":"The Document Object Model represents HTML as a tree structure where each node is an object representing a part of the document.","fa":"مدل شیء سند، HTML را به صورت ساختار درختی نمایش می‌دهد که هر گره بخشی از سند است."},"code":"document.querySelector('#app')\n  .addEventListener('click', (e) => {\n    const el = document.createElement('div');\n    el.textContent = 'Clicked!';\n    e.target.appendChild(el);\n  });","steps":[{"type":"build","tag":"html"},{"type":"build","tag":"body"},{"type":"build","tag":"div"},{"type":"event","val":"click"},{"type":"mutate"}]},{"id":"closure","title":{"en":"Closure","fa":"بسته (کلوژر)"},"category":"pattern","level":"advanced","desc":{"en":"A closure is a function that retains access to its lexical scope even when executed outside that scope.","fa":"بسته تابعی است که حتی وقتی خارج از اسکوپ اصلی اجرا شود، به اسکوپ لغوی خود دسترسی دارد."},"code":"function counter() {\n  let count = 0;\n  return {\n    inc: () => ++count,\n    get: () => count\n  };\n}\nconst c = counter();\nc.inc(); c.inc(); c.get(); // 2","steps":[{"type":"create","scope":"outer"},{"type":"capture","var":"count"},{"type":"call","fn":"inc"},{"type":"call","fn":"inc"},{"type":"call","fn":"get"}]},{"id":"bintree","title":{"en":"Binary Tree","fa":"درخت دودویی"},"category":"ds","level":"intermediate","desc":{"en":"A tree data structure where each node has at most two children: left and right.","fa":"ساختمان داده درختی که هر گره حداکثر دو فرزند دارد: چپ و راست."},"code":"class TreeNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n  }\n}\nconst root = new TreeNode(1);\nroot.left = new TreeNode(2);\nroot.right = new TreeNode(3);","steps":[{"type":"root","val":1},{"type":"left","val":2},{"type":"right","val":3},{"type":"traverse"},{"type":"done"}]},{"id":"bfs","title":{"en":"Graph BFS","fa":"پیمایش سطحی گراف"},"category":"algo","level":"intermediate","desc":{"en":"Breadth-First Search explores all neighbors at the current depth before moving deeper.","fa":"جستجوی سطحی تمام همسایه‌ها را در عمق فعلی قبل از رفتن به عمق بیشتر بررسی می‌کند."},"code":"function bfs(graph, start) {\n  const visited = new Set();\n  const queue = [start];\n  while (queue.length) {\n    const node = queue.shift();\n    if (!visited.has(node)) {\n      visited.add(node);\n      for (const n of graph[node]) queue.push(n);\n    }\n  }\n}","steps":[{"type":"visit","val":"A"},{"type":"enqueue","val":"B,C"},{"type":"visit","val":"B"},{"type":"visit","val":"C"},{"type":"done"}]},{"id":"dfs","title":{"en":"Graph DFS","fa":"پیمایش عمقی گراف"},"category":"algo","level":"intermediate","desc":{"en":"Depth-First Search goes as deep as possible along each branch before backtracking.","fa":"جستجوی عمقی تا حد ممکن در هر شاخه پیش می‌رود قبل از بازگشت."},"code":"function dfs(graph, node, visited = new Set()) {\n  if (visited.has(node)) return;\n  visited.add(node);\n  for (const n of graph[node]) dfs(graph, n, visited);\n}","steps":[{"type":"visit","val":"A"},{"type":"go","val":"B"},{"type":"go","val":"D"},{"type":"backtrack"},{"type":"go","val":"C"}]},{"id":"mergesort","title":{"en":"Merge Sort","fa":"مرتب‌سازی ادغامی"},"category":"algo","level":"intermediate","desc":{"en":"Divides the array in half, recursively sorts each half, then merges them back together.","fa":"آرایه را نصف می‌کند، هر نیمه را مرتب و سپس ادغام می‌کند."},"code":"function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}","steps":[{"type":"split","val":"[5,3,8,1]"},{"type":"split","val":"[5,3][8,1]"},{"type":"sort","val":"[3,5][1,8]"},{"type":"merge","val":"[1,3,5,8]"},{"type":"done"}]},{"id":"quicksort","title":{"en":"Quick Sort","fa":"مرتب‌سازی سریع"},"category":"algo","level":"advanced","desc":{"en":"Selects a pivot element and partitions the array so elements less than pivot go left, greater go right.","fa":"یک محور انتخاب و آرایه را طوری تقسیم می‌کند که کوچکترها چپ و بزرگترها راست بروند."},"code":"function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = arr.slice(1).filter(x => x < pivot);\n  const right = arr.slice(1).filter(x => x >= pivot);\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}","steps":[{"type":"pivot","val":5},{"type":"partition"},{"type":"left","val":"[3,1]"},{"type":"right","val":"[8,7]"},{"type":"done"}]},{"id":"singleton","title":{"en":"Singleton Pattern","fa":"الگوی تک‌نمونه"},"category":"pattern","level":"beginner","desc":{"en":"Ensures a class has only one instance and provides a global point of access to it.","fa":"تضمین می‌کند کلاس فقط یک نمونه داشته باشد و دسترسی سراسری به آن فراهم شود."},"code":"class Singleton {\n  static #instance = null;\n  static getInstance() {\n    if (!Singleton.#instance)\n      Singleton.#instance = new Singleton();\n    return Singleton.#instance;\n  }\n}","steps":[{"type":"call1"},{"type":"create"},{"type":"call2"},{"type":"same"},{"type":"done"}]},{"id":"factory","title":{"en":"Factory Pattern","fa":"الگوی کارخانه"},"category":"pattern","level":"intermediate","desc":{"en":"Provides an interface for creating objects without specifying their exact class.","fa":"رابطی برای ساخت اشیاء بدون مشخص کردن کلاس دقیق آن‌ها فراهم می‌کند."},"code":"function createAnimal(type) {\n  const animals = { dog: Dog, cat: Cat };\n  return new animals[type]();\n}\nconst a = createAnimal('dog');\na.speak();","steps":[{"type":"input","val":"dog"},{"type":"lookup"},{"type":"create"},{"type":"return"},{"type":"use"}]},{"id":"promise","title":{"en":"Promise / Async","fa":"پرامیس / ناهمگام"},"category":"web","level":"intermediate","desc":{"en":"A Promise represents a value that may be available now, later, or never. Used for async operations.","fa":"پرامیس مقداری را نشان می‌دهد که الان، بعداً یا هیچوقت موجود است. برای عملیات ناهمگام استفاده می‌شود."},"code":"fetch('/api/data')\n  .then(res => res.json())\n  .then(data => console.log(data))\n  .catch(err => console.error(err));","steps":[{"type":"pending"},{"type":"fetch"},{"type":"resolve"},{"type":"then"},{"type":"done"}]},{"id":"eventloop","title":{"en":"Event Loop","fa":"حلقه رویداد"},"category":"web","level":"advanced","desc":{"en":"The event loop continuously checks the call stack and task queue, pushing tasks to execute.","fa":"حلقه رویداد به طور مداوم پشته فراخوانی و صف وظایف را بررسی و وظایف را اجرا می‌کند."},"code":"console.log('1');\nsetTimeout(() => console.log('2'), 0);\nconsole.log('3');\n// Output: 1, 3, 2","steps":[{"type":"sync","val":"1"},{"type":"queue","val":"setTimeout"},{"type":"sync","val":"3"},{"type":"dequeue"},{"type":"exec","val":"2"}]},{"id":"http","title":{"en":"HTTP Request","fa":"درخواست HTTP"},"category":"web","level":"beginner","desc":{"en":"Client sends an HTTP request to a server, which processes it and returns a response.","fa":"کلاینت درخواست HTTP به سرور می‌فرستد، سرور پردازش و پاسخ برمی‌گرداند."},"code":"const res = await fetch('https://api.example.com/users', {\n  method: 'GET',\n  headers: { 'Content-Type': 'application/json' }\n});\nconst data = await res.json();","steps":[{"type":"client"},{"type":"request"},{"type":"server"},{"type":"response"},{"type":"render"}]},{"id":"array","title":{"en":"Array","fa":"آرایه"},"category":"ds","level":"beginner","desc":{"en":"An ordered collection of elements accessed by numeric index. O(1) random access.","fa":"مجموعه مرتبی از عناصر که با اندیس عددی دسترسی می‌شوند. دسترسی تصادفی O(1)."},"code":"const arr = [10, 20, 30, 40];\narr[0]; // 10\narr.push(50);\narr.splice(1, 1);","steps":[{"type":"init"},{"type":"access","idx":2},{"type":"push","val":50},{"type":"splice","idx":1},{"type":"done"}]},{"id":"deque","title":{"en":"Deque","fa":"صف دوطرفه"},"category":"ds","level":"intermediate","desc":{"en":"A double-ended queue allowing insertion and deletion at both front and back.","fa":"صف دوطرفه که امکان درج و حذف از ابتدا و انتها را فراهم می‌کند."},"code":"class Deque {\n  constructor() { this.items = {}; this.head = 0; this.tail = 0; }\n  addFront(val) { this.items[--this.head] = val; }\n  addBack(val) { this.items[this.tail++] = val; }\n  removeFront() { return this.items[this.head++]; }\n  removeBack() { return this.items[--this.tail]; }\n}","steps":[{"type":"addBack","val":"A"},{"type":"addBack","val":"B"},{"type":"addFront","val":"Z"},{"type":"removeFront"},{"type":"removeBack"}]},{"id":"heap","title":{"en":"Heap","fa":"هیپ"},"category":"ds","level":"advanced","desc":{"en":"A complete binary tree where parent is always smaller (min-heap) or larger (max-heap) than children.","fa":"درخت دودویی کامل که والد همیشه کوچکتر (مین-هیپ) یا بزرگتر (مکس-هیپ) از فرزندان است."},"code":"class MinHeap {\n  constructor() { this.data = []; }\n  insert(val) {\n    this.data.push(val);\n    this.bubbleUp(this.data.length - 1);\n  }\n  extractMin() {\n    const min = this.data[0];\n    const last = this.data.pop();\n    if (this.data.length) { this.data[0] = last; this.sinkDown(0); }\n    return min;\n  }\n}","steps":[{"type":"insert","val":5},{"type":"insert","val":3},{"type":"insert","val":7},{"type":"extract"},{"type":"rebalance"}]},{"id":"trie","title":{"en":"Trie","fa":"درخت پیشوندی"},"category":"ds","level":"advanced","desc":{"en":"A tree-like data structure for efficient prefix searching, commonly used for autocomplete.","fa":"ساختمان داده شبه‌درختی برای جستجوی کارآمد پیشوند، معمولاً برای تکمیل خودکار استفاده می‌شود."},"code":"class TrieNode {\n  constructor() { this.children = {}; this.isEnd = false; }\n}\nclass Trie {\n  insert(word) {\n    let node = this.root;\n    for (const ch of word) {\n      if (!node.children[ch]) node.children[ch] = new TrieNode();\n      node = node.children[ch];\n    }\n    node.isEnd = true;\n  }\n}","steps":[{"type":"insert","val":"cat"},{"type":"insert","val":"car"},{"type":"insert","val":"card"},{"type":"search","val":"car"},{"type":"found"}]},{"id":"insertionsort","title":{"en":"Insertion Sort","fa":"مرتب‌سازی درجی"},"category":"algo","level":"beginner","desc":{"en":"Builds the sorted array one element at a time by inserting each element into its correct position.","fa":"آرایه مرتب را عنصر به عنصر با درج هر عنصر در جایگاه صحیحش می‌سازد."},"code":"function insertionSort(arr) {\n  for (let i = 1; i < arr.length; i++) {\n    const key = arr[i];\n    let j = i - 1;\n    while (j >= 0 && arr[j] > key) { arr[j+1] = arr[j]; j--; }\n    arr[j+1] = key;\n  }\n  return arr;\n}","steps":[{"type":"pick","val":3},{"type":"compare"},{"type":"shift"},{"type":"insert"},{"type":"done"}]},{"id":"selectionsort","title":{"en":"Selection Sort","fa":"مرتب‌سازی انتخابی"},"category":"algo","level":"beginner","desc":{"en":"Repeatedly finds the minimum element from the unsorted part and places it at the beginning.","fa":"به طور مکرر کمینه عنصر بخش نامرتب را پیدا و در ابتدا قرار می‌دهد."},"code":"function selectionSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    let minIdx = i;\n    for (let j = i + 1; j < arr.length; j++)\n      if (arr[j] < arr[minIdx]) minIdx = j;\n    [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];\n  }\n  return arr;\n}","steps":[{"type":"findmin"},{"type":"swap"},{"type":"findmin2"},{"type":"swap2"},{"type":"done"}]},{"id":"strategy","title":{"en":"Strategy Pattern","fa":"الگوی استراتژی"},"category":"pattern","level":"advanced","desc":{"en":"Defines a family of algorithms, encapsulates each one, and makes them interchangeable at runtime.","fa":"خانواده‌ای از الگوریتم‌ها را تعریف، هر کدام را محصور و در زمان اجرا قابل تعویض می‌کند."},"code":"class Sorter {\n  setStrategy(strategy) { this.strategy = strategy; }\n  sort(arr) { return this.strategy.sort(arr); }\n}\nconst s = new Sorter();\ns.setStrategy(new QuickSort());\ns.sort([3,1,2]);","steps":[{"type":"context"},{"type":"setA"},{"type":"execute"},{"type":"setB"},{"type":"execute"}]},{"id":"decorator","title":{"en":"Decorator Pattern","fa":"الگوی تزئین‌کننده"},"category":"pattern","level":"advanced","desc":{"en":"Attaches additional responsibilities to an object dynamically without modifying its structure.","fa":"مسئولیت‌های اضافی را به صورت پویا بدون تغییر ساختار شیء به آن اضافه می‌کند."},"code":"function withLogging(fn) {\n  return function(...args) {\n    console.log('Calling:', fn.name);\n    return fn(...args);\n  };\n}\nconst loggedAdd = withLogging(add);","steps":[{"type":"original"},{"type":"wrap"},{"type":"call"},{"type":"log"},{"type":"result"}]},{"id":"boxmodel","title":{"en":"CSS Box Model","fa":"مدل جعبه CSS"},"category":"web","level":"beginner","desc":{"en":"Every HTML element is a box consisting of content, padding, border, and margin layers.","fa":"هر عنصر HTML یک جعبه شامل لایه‌های محتوا، فاصله داخلی، حاشیه و فاصله خارجی است."},"code":"div {\n  width: 200px;\n  padding: 20px;\n  border: 5px solid;\n  margin: 10px;\n}\n/* Total width = 200 + 40 + 10 + 20 = 270px */","steps":[{"type":"content"},{"type":"padding"},{"type":"border"},{"type":"margin"},{"type":"total"}]},{"id":"flexbox","title":{"en":"Flexbox","fa":"فلکس‌باکس"},"category":"web","level":"intermediate","desc":{"en":"A CSS layout model that distributes space among items in a container along a single axis.","fa":"مدل چیدمان CSS که فضا را بین عناصر در یک کانتینر entlang یک محور توزیع می‌کند."},"code":".container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 10px;\n}","steps":[{"type":"container"},{"type":"items"},{"type":"justify"},{"type":"align"},{"type":"gap"}]},{"id":"avl","title":{"en":"AVL Tree","fa":"درخت AVL"},"category":"ds","level":"advanced","desc":{"en":"Self-balancing binary search tree with height rotation.","fa":"درخت دودویی جستجو با تعادل خودکار با چرخش ارتفاع."},"code":"function getBalance(n){return n?n.left.height-n.right.height:0}\nfunction rotateRight(y){const x=y.left;x.right=y.left;x.height=Math.max(x.left.height,x.right.height)+1;y.height=Math.max(y.left.height,y.right.height)+1;return x}","steps":[{"type":"insert"},{"type":"check"},{"type":"rotate"},{"type":"balance"},{"type":"done"}]},{"id":"dijkstra","title":{"en":"Dijkstra","fa":"دیکسترا"},"category":"algo","level":"advanced","desc":{"en":"Shortest path in weighted graph with non-negative edges.","fa":"کوتاه‌ترین مسیر در گراف وزن‌دار با یک‌جهت‌گیری مثبت."},"code":"function dijkstra(graph,s){const d={},pq=new PriorityQueue();for(const n in graph)d[n]=Infinity;d[s]=0;pq.enqueue([s,0]);while(!pq.isEmpty()){const[u,w]=pq.dequeue();if(w>d[u])continue;for(const[v,c]of graph[u]){if(d[u]+c<d[v]){d[v]=d[u]+c;pq.enqueue([v,d[v]])}}}return d}","steps":[{"type":"init"},{"type":"visit"},{"type":"relax"},{"type":"update"},{"type":"done"}]},{"id":"toposort","title":{"en":"Topological Sort","fa":"مرتب‌سازی شی‌داری"},"category":"algo","level":"advanced","desc":{"en":"Linear ordering of vertices where each edge goes from earlier to later.","fa":"ترتیب خطی رئوی گراف که هر یک‌جهت‌گیری از زودتر به بعد می‌رود."},"code":"function topoSort(g){const v=new Set(),r=[];function visit(n){if(v.has(n))return;v.add(n);for(const x of g[n])visit(x);r.push(n)}for(const n in g)visit(n);return r.reverse()}","steps":[{"type":"start"},{"type":"dfs"},{"type":"reached"},{"type":"add"},{"type":"reverse"}]},{"id":"fib_dp","title":{"en":"Fibonacci DP","fa":"فیبوناچی با پویا"},"category":"algo","level":"intermediate","desc":{"en":"Memoization vs tabulation for optimal substructure.","fa":"حافظه موقت مقابل جدول‌بندی برای زیرساختار بهینه."},"code":"function fibMem(n,c={}){if(n<=1)return n;if(c[n])return c[n];c[n]=fibMemo(n-1,c)+fibMemo(n-2,c);return c[n]}\nfunction fibTab(n){const d=[0,1];for(let i=2;i<=n;i++)d[i]=d[i-1]+d[i-2];return d[n]}","steps":[{"type":"fib0"},{"type":"fib1"},{"type":"fib2"},{"type":"fib3"},{"type":"fib4"},{"type":"fib5"}]},{"id":"knapsack","title":{"en":"0/1 Knapsack","fa":"کپس‌پی"},"category":"algo","level":"advanced","desc":{"en":"Maximize value within weight capacity using dynamic programming.","fa":"بیشینه کردن ارزش در محدودیت وزن با پویای برنامه‌نویسی."},"code":"function knap(items,W){const dp=Array(W+1).fill(0);for(const{w,v}of items)for(let c=W;c>=w;c--)dp[c]=Math.max(dp[c],dp[c-w]+v);return dp[W]}","steps":[{"type":"init"},{"type":"iterate"},{"type":"choose"},{"type":"fill"},{"type":"result"}]},{"id":"virtualmem","title":{"en":"Virtual Memory","fa":"حافظه مجازی"},"category":"ds","level":"advanced","desc":{"en":"Page table translation from virtual to physical addresses.","fa":"ترجمه آدرس مجازی به فیزیکی با جدول صفحه."},"code":"// VirtualAddr: 32-bit\n// Page = VirtualAddr >> 12 (high 20 bits)\n// Offset = VirtualAddr & 0xFFF (low 12 bits)\nphysicalAddr = (pageTable[page] << 12) | offset","steps":[{"type":"virtual"},{"type":"split"},{"type":"lookup"},{"type":"translate"},{"type":"cache"}]},{"id":"callstack","title":{"en":"Call Stack","fa":"پشته فراخوانی"},"category":"web","level":"beginner","desc":{"en":"Function call frames pushed onto and popped from the call stack in LIFO order.","fa":"فریم‌های فراخوانی تابع به صورت LIFO روی پشته فراخوانی افزوده و حذف می‌شوند."},"code":"function outer(){\n  const a=1;        // Stack frame 1\n  function inner(){\n    const b=2;      // Stack frame 2\n    return a+b;\n  }\n  return inner();    // frames: outer->inner->return->pop\n}\nouter();","steps":[{"type":"push"},{"type":"local"},{"type":"nested"},{"type":"return"},{"type":"pop"}]},{"id":"heapvsstack","title":{"en":"Heap vs Stack","fa":"هیپ مقابل پشته"},"category":"ds","level":"intermediate","desc":{"en":"Stack for local vars, heap for objects. GC reclaims unused heap memory.","fa":"پشته برای متغیرهای محلی، هیپ برای اشیاء. GC حافظه هیپ استفاده‌نشده را آزاد می‌کند."},"code":"// Stack: fast allocation, auto cleanup\n// Heap: slower, manual reference counting or GC\nlet primitive = 42;          // Stack\nlet obj = {x:1, y:2};        // Heap\n// When obj refs = 0, GC frees it","steps":[{"type":"stack"},{"type":"heap"},{"type":"alloc"},{"type":"gc"},{"type":"cleanup"}]},{"id":"jwt","title":{"en":"JWT Lifecycle","fa":"چرخه عمر JWT"},"category":"web","level":"intermediate","desc":{"en":"Header, payload, signature - base64url encoded for client-side storage and server verification.","fa":"سربرگ، بار محتوا، امضا - به صورت base64url برای ذخیره‌سازی سمت کلاینت و اعتبارسنجی سرور."},"code":"// Header: {\"alg\":\"HS256\",\"typ\":\"JWT\"}\n// Payload: {\"sub\":123,\"exp\":1234567890}\n// Signature: HMAC(base64(header)+\".\"+base64(payload), secret)\n// Output: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyM30...","steps":[{"type":"header"},{"type":"payload"},{"type":"sign"},{"type":"token"},{"type":"verify"}]},{"id":"webworker","title":{"en":"Web Worker","fa":"ویب ورکر"},"category":"web","level":"advanced","desc":{"en":"Background thread for CPU-intensive tasks without blocking main thread.","fa":"رشته پس‌زمینه برای وظایف سنگین بدون مسدود کردن رشته اصلی."},"code":"// Main thread\nconst w = new Worker('worker.js');\nw.postMessage({cmd:'process',data:largeArray});\nw.onmessage = e => console.log(e.data);\n\n// worker.js\nself.onmessage = e => {\n  const r = e.data.data.reduce((a,b)=>a+b,0);\n  self.postMessage(r);\n};","steps":[{"type":"spawn"},{"type":"post"},{"type":"process"},{"type":"result"},{"type":"terminate"}]},{"id":"gc","title":{"en":"Garbage Collection","fa":"جمع‌آوری زباله"},"category":"ds","level":"advanced","desc":{"en":"Mark-and-sweep: identify reachable objects, mark, then sweep unreachable memory.","fa":"علامت و پاک‌سازی: شناسایی اشیاء قابل‌دسترس، علامت‌گذاری، سپس پاک‌سازی حافظه غیرمرجع."},"code":"// Phase 1: Mark all roots and reachable objects\n// Phase 2: Sweep all unmarked memory regions as garbage\n// Phase 3: Compact heap if fragmentation > threshold\nfunction isGarbage(obj){return !obj.reachableFromGC}","steps":[{"type":"roots"},{"type":"mark"},{"type":"sweep"},{"type":"free"},{"type":"compact"}]},{"id":"bloom","title":{"en":"Bloom Filter","fa":"فیلتر بلوم"},"category":"ds","level":"advanced","desc":{"en":"Space-efficient probabilistic set membership test with false positive rate.","fa":"تست عضویت احتمالی فضای صرفه‌جویی‌شده با نرخ خطای مثبت."},"code":"class BloomFilter{\n  constructor(size,hashCount){this.bits=new Uint8Array(size);this.k=hashCount}\n  add(item){for(const h of this.hash(item))this.bits[h%this.bits.length]=1}\n  mightContain(item){return this.hash(item).every(h=>this.bits[h%this.bits.length]===1)}\n}","steps":[{"type":"init"},{"type":"hash"},{"type":"set"},{"type":"query"},{"type":"result"}]},{"id":"lru","title":{"en":"LRU Cache","fa":"کش LRU"},"category":"ds","level":"intermediate","desc":{"en":"Evict least recently used item when cache is full. Doubly-linked list + hash map for O(1) operations.","fa":"حذف کمترین دسترسی اخیر وقت کش پر است. لیست دوطرفه + جدotle هش برای عملیات O(1)."},"code":"class LRUCache{constructor(k){this.c=k;this.map=new Map()}\nget(k){if(!this.map.has(k))return-1;const v=this.map.get(k);this.map.delete(k);this.map.set(k,v);return v}\nput(k,v){if(this.map.has(k))this.map.delete(k);else if(this.map.size===this.c){const f=this.map.keys().next().value;this.map.delete(f);this.map.set(k,v)}}","steps":[{"type":"get"},{"type":"hit"},{"type":"reorder"},{"type":"miss"},{"type":"evict"}]},{"id":"debounce","title":{"en":"Debounce","fa":"دبانس"},"category":"web","level":"beginner","desc":{"en":"Delay function execution until after a pause. Essential for search input optimization.","fa":"تأخیر اجرای تابع تا پس از یک توقف. ضروری برای بهینه‌سازی ورودی جستجو."},"code":"function debounce(fn, delay){\n  let t;\n  return (...args)=>{\n    clearTimeout(t);\n    t=setTimeout(()=>fn(...args),delay);\n  };\n}\n// Usage: window.addEventListener('resize', debounce(handleResize, 300));","steps":[{"type":"call"},{"type":"wait"},{"type":"cancel"},{"type":"exec"},{"type":"done"}]},{"id":"promiseAll","title":{"en":"Promise.all","fa":"پرامیس.اُل"},"category":"web","level":"intermediate","desc":{"en":"Wait for all promises to resolve or first rejection. Useful for parallel API calls.","fa":"منتظر رسیدن همه پرامیس یا اولین ارجاع خطا. مفید برای فراخوانی‌های موازی API."},"code":"Promise.all([\n  fetch('/api/users'),   // Promise 1\n  fetch('/api/posts'),   // Promise 2\n  fetch('/api/comments')  // Promise 3\n]).then(([users, posts, comments])=>{\n  // All resolved\n  console.log(users, posts, comments);\n}).catch(err=>{\n  // First rejection stops execution\n  console.error('One failed:', err);\n});","steps":[{"type":"start"},{"type":"fetch1"},{"type":"fetch2"},{"type":"fetch3"},{"type":"resolve"}]},{"id":"cors","title":{"en":"CORS","fa":"CORS"},"category":"web","level":"intermediate","desc":{"en":"Cross-Origin Resource Sharing: HTTP headers controlling which origins can access resources.","fa":"تبادل منابع بین‌مرکزی: سرآیندهای HTTP که کنترل دسترسی مناطع را فراهم می‌کنند."},"code":"// Server must send CORS headers:\nAccess-Control-Allow-Origin: https://your-site.com\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE\nAccess-Control-Allow-Headers: Content-Type, Authorization\n\n// Browser blocks cross-origin requests without these headers","steps":[{"type":"request"},{"type":"blocked"},{"type":"header"},{"type":"allowed"},{"type":"cache"}]},{"id":"regex","title":{"en":"Regex","fa":"نگاه منظم"},"category":"web","level":"intermediate","desc":{"en":"Pattern matching with anchors, quantifiers, character classes, and capturing groups.","fa":"جستجوی الگو با نقطه‌گذاری، شمارنده، کلاس‌های کاراکتر و گروه‌های گرفتن."},"code":"// Email validation\nconst email=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;\n\n// Phone number\nconst phone=/\\d{3}-\\d{3}-\\d{4}/;\n\n// Match and extract\ntext.match(email)           // returns array or null\ntext.replace(phone, 'XXX-XXX-XXXX')  // replace","steps":[{"type":"pattern"},{"type":"anchor"},{"type":"match"},{"type":"capture"},{"type":"result"}]},{"id":"heapSort","title":{"en":"Heap Sort","fa":"مرتب‌سازی هیپ"},"category":"algo","level":"advanced","desc":{"en":"Build max-heap then repeatedly extract max for O(n log n) sort.","fa":"ساخت تمام‌گرا سپس استخراج مکرر بیشینه برای مرتب‌سازی O(n log n)."},"code":"function heapSort(arr){\n  heapify(arr, arr.length);\n  for(let i=arr.length-1;i>0;i--){[arr[0],arr[i]]=[arr[i],arr[0]];heapify(arr,i)};\n  return arr;\n}\nfunction heapify(arr,n,i){let l=2*i+1,r=2*i+2,largest=i;\n  if(l<n&&arr[l]>arr[largest])largest=l;\n  if(r<n&&arr[r]>arr[largest])largest=r;\n  if(largest!==i){[arr[i],arr[largest]]=[arr[largest],arr[i]];heapify(arr,n,largest)};\n}","steps":[{"type":"build"},{"type":"swap"},{"type":"restore"},{"type":"extract"},{"type":"sorted"}]},{"id":"websocket","title":{"en":"WebSocket","fa":"وب‌سوکت"},"category":"web","level":"intermediate","desc":{"en":"Full-duplex bidirectional persistent connection over a single TCP socket.","fa":"اتصال دوطرفه همزمان و پایدار بین کلاینت و سرور روی یک سوکت TCP."},"code":"const ws = new WebSocket('wss://api.example.com/live');\nws.onopen = () => {\n  console.log('Connected!');\n  ws.send(JSON.stringify({ type: 'subscribe' }));\n};\nws.onmessage = (event) => {\n  const msg = JSON.parse(event.data);\n  console.log('Update:', msg);\n};\nws.onclose = () => console.log('Closed');","steps":[{"type":"handshake"},{"type":"upgrade"},{"type":"open"},{"type":"bidirectional"},{"type":"close"}]},{"id":"quicksortAvg","title":{"en":"Quick Sort Avg","fa":"مرتب‌سازی سریع میانگین"},"category":"algo","level":"advanced","desc":{"en":"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.","fa":"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},"code":"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}","steps":[{"type":"analysis"},{"type":"average"},{"type":"worst"},{"type":"pivot"},{"type":"optimize"}]},{"id":"vector_embeddings","title":{"en":"Vector Embeddings","fa":"بردارهای تعبیه (AI Embeddings)"},"category":"algo","level":"intermediate","desc":{"en":"Text mapped to high-dimensional geometric vectors where semantic similarity is measured via cosine distance.","fa":"نگاشت متن به بردارهای هندسی در فضای چندبعدی که شباهت معنایی با زاویه کسینوسی بردارها محاسبه می‌شود."},"code":"function cosineSim(vecA, vecB) {\n  let dot = 0, normA = 0, normB = 0;\n  for (let i = 0; i < vecA.length; i++) {\n    dot += vecA[i] * vecB[i];\n    normA += vecA[i] ** 2;\n    normB += vecB[i] ** 2;\n  }\n  return dot / (Math.sqrt(normA) * Math.sqrt(normB));\n}","steps":[{"type":"tokens"},{"type":"project"},{"type":"query"},{"type":"angle"},{"type":"match"}]},{"id":"perceptron","title":{"en":"Perceptron (Neuron)","fa":"پرسپترون (نورون عصبی)"},"category":"algo","level":"intermediate","desc":{"en":"The foundational building block of neural networks: computes weighted sum of inputs plus bias, passed through an activation function.","fa":"واحد بنیادین شبکه‌های عصبی: محاسبه مجموع وزن‌دار ورودی‌ها به اضافه بایاس و عبور از تابع فعال‌ساز."},"code":"function perceptron(inputs, weights, bias) {\n  const z = inputs.reduce((sum, x, i) => sum + x * weights[i], bias);\n  return z >= 0 ? 1 : 0; // Step activation function\n}\n// Activation triggers decision boundary","steps":[{"type":"inputs"},{"type":"weights"},{"type":"sum"},{"type":"activation"},{"type":"output"}]},{"id":"token_bucket","title":{"en":"Token Bucket (Rate Limit)","fa":"سطل توکن (محدودکننده نرخ)"},"category":"web","level":"advanced","desc":{"en":"API rate limiting algorithm: tokens accumulate at fixed intervals; requests consume tokens or get dropped with HTTP 429.","fa":"الگوریتم مدیریت ترافیک و محدودسازی نرخ API: توکن‌ها با نرخ ثابت واریز می‌شوند؛ درخواست‌ها با مصرف توکن عبور کرده یا ریجکت (۴۲۹) می‌شوند."},"code":"class TokenBucket {\n  constructor(capacity, refillRate) {\n    this.capacity = capacity;\n    this.tokens = capacity;\n    this.refillRate = refillRate; // tokens/sec\n    this.lastRefill = Date.now();\n  }\n  allowRequest() {\n    this.refill();\n    if (this.tokens >= 1) { this.tokens--; return true; }\n    return false; // HTTP 429 Too Many Requests\n  }\n}","steps":[{"type":"bucket"},{"type":"refill"},{"type":"request"},{"type":"consume"},{"type":"drop"}]}];
+const concepts=[{"id":"stack","title":{"en":"Stack","fa":"پشته"},"category":"ds","level":"beginner","desc":{"en":"A Last-In-First-Out (LIFO) data structure. Elements are pushed on top and popped from the top.","fa":"ساختمان داده آخر-ورودی-اول-خروجی. عناصر از بالا اضافه و از بالا حذف می‌شوند."},"code":"class Stack {\n  constructor() { this.items = []; }\n  push(item) { this.items.push(item); }\n  pop() { return this.items.pop(); }\n  peek() { return this.items[this.items.length-1]; }\n  isEmpty() { return this.items.length === 0; }\n}","steps":[{"type":"push","val":"A"},{"type":"push","val":"B"},{"type":"push","val":"C"},{"type":"pop"},{"type":"pop"}]},{"id":"queue","title":{"en":"Queue","fa":"صف"},"category":"ds","level":"beginner","desc":{"en":"A First-In-First-Out (FIFO) data structure. Elements are enqueued at the back and dequeued from the front.","fa":"ساختمان داده اول-ورودی-اول-خروجی. عناصر از انتها وارد و از ابتدا خارج می‌شوند."},"code":"class Queue {\n  constructor() { this.items = []; }\n  enqueue(item) { this.items.push(item); }\n  dequeue() { return this.items.shift(); }\n  front() { return this.items[0]; }\n  isEmpty() { return this.items.length === 0; }\n}","steps":[{"type":"enqueue","val":"A"},{"type":"enqueue","val":"B"},{"type":"enqueue","val":"C"},{"type":"dequeue"},{"type":"dequeue"}]},{"id":"linkedlist","title":{"en":"Linked List","fa":"لیست پیوندی"},"category":"ds","level":"intermediate","desc":{"en":"A linear data structure where each element points to the next node, allowing O(1) insertions.","fa":"ساختمان داده خطی که هر عنصر به گره بعدی اشاره می‌کند و درج O(1) را ممکن می‌سازد."},"code":"class Node {\n  constructor(val) {\n    this.val = val;\n    this.next = null;\n  }\n}\nclass LinkedList {\n  append(val) {\n    const node = new Node(val);\n    if (!this.head) { this.head = node; return; }\n    let curr = this.head;\n    while (curr.next) curr = curr.next;\n    curr.next = node;\n  }\n}","steps":[{"type":"add","val":"A"},{"type":"add","val":"B"},{"type":"add","val":"C"},{"type":"traverse"},{"type":"remove"}]},{"id":"binarysearch","title":{"en":"Binary Search","fa":"جستجوی دودویی"},"category":"algo","level":"beginner","desc":{"en":"An efficient search algorithm that divides the sorted array in half each step. O(log n) time complexity.","fa":"الگوریتم جستجوی کارآمد که آرایه مرتب را در هر مرحله نصف می‌کند. پیچیدگی زمانی O(log n)."},"code":"function binarySearch(arr, target) {\n  let low = 0, high = arr.length - 1;\n  while (low <= high) {\n    const mid = Math.floor((low + high) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) low = mid + 1;\n    else high = mid - 1;\n  }\n  return -1;\n}","steps":[{"type":"init","range":[0,15]},{"type":"mid","val":7},{"type":"narrow","dir":"right"},{"type":"mid","val":11},{"type":"found","val":11}]},{"id":"recursion","title":{"en":"Recursion","fa":"بازگشت"},"category":"pattern","level":"intermediate","desc":{"en":"A function that calls itself with a base case to terminate. Each call creates a new frame on the call stack.","fa":"تابعی که خودش را با یک حالت پایه فراخوانی می‌کند. هر فراخوانی فریم جدیدی روی پشته ایجاد می‌کند."},"code":"function factorial(n) {\n  if (n <= 1) return 1;\n  return n * factorial(n - 1);\n}\n\nfactorial(5);\n// 5 * 4 * 3 * 2 * 1 = 120","steps":[{"type":"call","val":5},{"type":"call","val":4},{"type":"call","val":3},{"type":"base","val":1},{"type":"return"}]},{"id":"bubbleSort","title":{"en":"Bubble Sort","fa":"مرتب‌سازی حبابی"},"category":"algo","level":"beginner","desc":{"en":"Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.","fa":"به طور مکرر لیست را پیمایش می‌کند، عناصر مجاور را مقایسه و در صورت نیاز جابجا می‌کند."},"code":"function bubbleSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    for (let j = 0; j < arr.length - i - 1; j++) {\n      if (arr[j] > arr[j+1]) {\n        [arr[j], arr[j+1]] = [arr[j+1], arr[j]];\n      }\n    }\n  }\n  return arr;\n}","steps":[{"type":"compare","i":0,"j":1},{"type":"swap","i":0,"j":1},{"type":"compare","i":1,"j":2},{"type":"pass"},{"type":"done"}]},{"id":"hashmap","title":{"en":"Hash Map","fa":"جدول هش"},"category":"ds","level":"intermediate","desc":{"en":"Stores key-value pairs using a hash function to compute an index into an array of buckets for O(1) average lookup.","fa":"جفت‌های کلید-مقدار را با استفاده از تابع هش برای محاسبه اندیس ذخیره می‌کند. جستجوی متوسط O(1)."},"code":"class HashMap {\n  constructor(size = 16) {\n    this.buckets = new Array(size).fill(null).map(() => []);\n    this.size = size;\n  }\n  hash(key) { return key.toString().length % this.size; }\n  set(key, val) { this.buckets[this.hash(key)].push([key, val]); }\n  get(key) {\n    return this.buckets[this.hash(key)].find(([k]) => k === key)?.[1];\n  }\n}","steps":[{"type":"insert","key":"name","val":"Ali"},{"type":"hash","key":"name","bucket":4},{"type":"insert","key":"age","val":25},{"type":"hash","key":"age","bucket":3},{"type":"lookup","key":"name"}]},{"id":"observer","title":{"en":"Observer Pattern","fa":"الگوی ناظر"},"category":"pattern","level":"advanced","desc":{"en":"A design pattern where an object (subject) maintains a list of observers and notifies them of state changes automatically.","fa":"الگوی طراحی که شیء (موضوع) لیستی از ناظران را نگه می‌دارد و تغییرات حالت را خودکار اطلاع می‌دهد."},"code":"class Subject {\n  constructor() { this.observers = []; }\n  subscribe(fn) { this.observers.push(fn); }\n  notify(data) { this.observers.forEach(fn => fn(data)); }\n}\nconst sub = new Subject();\nsub.subscribe(d => console.log('Got:', d));\nsub.notify('hello');","steps":[{"type":"subscribe","who":"A"},{"type":"subscribe","who":"B"},{"type":"event","val":"update"},{"type":"notify","to":"A"},{"type":"notify","to":"B"}]},{"id":"dom","title":{"en":"DOM Tree","fa":"درخت DOM"},"category":"web","level":"beginner","desc":{"en":"The Document Object Model represents HTML as a tree structure where each node is an object representing a part of the document.","fa":"مدل شیء سند، HTML را به صورت ساختار درختی نمایش می‌دهد که هر گره بخشی از سند است."},"code":"document.querySelector('#app')\n  .addEventListener('click', (e) => {\n    const el = document.createElement('div');\n    el.textContent = 'Clicked!';\n    e.target.appendChild(el);\n  });","steps":[{"type":"build","tag":"html"},{"type":"build","tag":"body"},{"type":"build","tag":"div"},{"type":"event","val":"click"},{"type":"mutate"}]},{"id":"closure","title":{"en":"Closure","fa":"بسته (کلوژر)"},"category":"pattern","level":"advanced","desc":{"en":"A closure is a function that retains access to its lexical scope even when executed outside that scope.","fa":"بسته تابعی است که حتی وقتی خارج از اسکوپ اصلی اجرا شود، به اسکوپ لغوی خود دسترسی دارد."},"code":"function counter() {\n  let count = 0;\n  return {\n    inc: () => ++count,\n    get: () => count\n  };\n}\nconst c = counter();\nc.inc(); c.inc(); c.get(); // 2","steps":[{"type":"create","scope":"outer"},{"type":"capture","var":"count"},{"type":"call","fn":"inc"},{"type":"call","fn":"inc"},{"type":"call","fn":"get"}]},{"id":"bintree","title":{"en":"Binary Tree","fa":"درخت دودویی"},"category":"ds","level":"intermediate","desc":{"en":"A tree data structure where each node has at most two children: left and right.","fa":"ساختمان داده درختی که هر گره حداکثر دو فرزند دارد: چپ و راست."},"code":"class TreeNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n  }\n}\nconst root = new TreeNode(1);\nroot.left = new TreeNode(2);\nroot.right = new TreeNode(3);","steps":[{"type":"root","val":1},{"type":"left","val":2},{"type":"right","val":3},{"type":"traverse"},{"type":"done"}]},{"id":"bfs","title":{"en":"Graph BFS","fa":"پیمایش سطحی گراف"},"category":"algo","level":"intermediate","desc":{"en":"Breadth-First Search explores all neighbors at the current depth before moving deeper.","fa":"جستجوی سطحی تمام همسایه‌ها را در عمق فعلی قبل از رفتن به عمق بیشتر بررسی می‌کند."},"code":"function bfs(graph, start) {\n  const visited = new Set();\n  const queue = [start];\n  while (queue.length) {\n    const node = queue.shift();\n    if (!visited.has(node)) {\n      visited.add(node);\n      for (const n of graph[node]) queue.push(n);\n    }\n  }\n}","steps":[{"type":"visit","val":"A"},{"type":"enqueue","val":"B,C"},{"type":"visit","val":"B"},{"type":"visit","val":"C"},{"type":"done"}]},{"id":"dfs","title":{"en":"Graph DFS","fa":"پیمایش عمقی گراف"},"category":"algo","level":"intermediate","desc":{"en":"Depth-First Search goes as deep as possible along each branch before backtracking.","fa":"جستجوی عمقی تا حد ممکن در هر شاخه پیش می‌رود قبل از بازگشت."},"code":"function dfs(graph, node, visited = new Set()) {\n  if (visited.has(node)) return;\n  visited.add(node);\n  for (const n of graph[node]) dfs(graph, n, visited);\n}","steps":[{"type":"visit","val":"A"},{"type":"go","val":"B"},{"type":"go","val":"D"},{"type":"backtrack"},{"type":"go","val":"C"}]},{"id":"mergesort","title":{"en":"Merge Sort","fa":"مرتب‌سازی ادغامی"},"category":"algo","level":"intermediate","desc":{"en":"Divides the array in half, recursively sorts each half, then merges them back together.","fa":"آرایه را نصف می‌کند، هر نیمه را مرتب و سپس ادغام می‌کند."},"code":"function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}","steps":[{"type":"split","val":"[5,3,8,1]"},{"type":"split","val":"[5,3][8,1]"},{"type":"sort","val":"[3,5][1,8]"},{"type":"merge","val":"[1,3,5,8]"},{"type":"done"}]},{"id":"quicksort","title":{"en":"Quick Sort","fa":"مرتب‌سازی سریع"},"category":"algo","level":"advanced","desc":{"en":"Selects a pivot element and partitions the array so elements less than pivot go left, greater go right.","fa":"یک محور انتخاب و آرایه را طوری تقسیم می‌کند که کوچکترها چپ و بزرگترها راست بروند."},"code":"function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = arr.slice(1).filter(x => x < pivot);\n  const right = arr.slice(1).filter(x => x >= pivot);\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}","steps":[{"type":"pivot","val":5},{"type":"partition"},{"type":"left","val":"[3,1]"},{"type":"right","val":"[8,7]"},{"type":"done"}]},{"id":"singleton","title":{"en":"Singleton Pattern","fa":"الگوی تک‌نمونه"},"category":"pattern","level":"beginner","desc":{"en":"Ensures a class has only one instance and provides a global point of access to it.","fa":"تضمین می‌کند کلاس فقط یک نمونه داشته باشد و دسترسی سراسری به آن فراهم شود."},"code":"class Singleton {\n  static #instance = null;\n  static getInstance() {\n    if (!Singleton.#instance)\n      Singleton.#instance = new Singleton();\n    return Singleton.#instance;\n  }\n}","steps":[{"type":"call1"},{"type":"create"},{"type":"call2"},{"type":"same"},{"type":"done"}]},{"id":"factory","title":{"en":"Factory Pattern","fa":"الگوی کارخانه"},"category":"pattern","level":"intermediate","desc":{"en":"Provides an interface for creating objects without specifying their exact class.","fa":"رابطی برای ساخت اشیاء بدون مشخص کردن کلاس دقیق آن‌ها فراهم می‌کند."},"code":"function createAnimal(type) {\n  const animals = { dog: Dog, cat: Cat };\n  return new animals[type]();\n}\nconst a = createAnimal('dog');\na.speak();","steps":[{"type":"input","val":"dog"},{"type":"lookup"},{"type":"create"},{"type":"return"},{"type":"use"}]},{"id":"promise","title":{"en":"Promise / Async","fa":"پرامیس / ناهمگام"},"category":"web","level":"intermediate","desc":{"en":"A Promise represents a value that may be available now, later, or never. Used for async operations.","fa":"پرامیس مقداری را نشان می‌دهد که الان، بعداً یا هیچوقت موجود است. برای عملیات ناهمگام استفاده می‌شود."},"code":"fetch('/api/data')\n  .then(res => res.json())\n  .then(data => console.log(data))\n  .catch(err => console.error(err));","steps":[{"type":"pending"},{"type":"fetch"},{"type":"resolve"},{"type":"then"},{"type":"done"}]},{"id":"eventloop","title":{"en":"Event Loop","fa":"حلقه رویداد"},"category":"web","level":"advanced","desc":{"en":"The event loop continuously checks the call stack and task queue, pushing tasks to execute.","fa":"حلقه رویداد به طور مداوم پشته فراخوانی و صف وظایف را بررسی و وظایف را اجرا می‌کند."},"code":"console.log('1');\nsetTimeout(() => console.log('2'), 0);\nconsole.log('3');\n// Output: 1, 3, 2","steps":[{"type":"sync","val":"1"},{"type":"queue","val":"setTimeout"},{"type":"sync","val":"3"},{"type":"dequeue"},{"type":"exec","val":"2"}]},{"id":"http","title":{"en":"HTTP Request","fa":"درخواست HTTP"},"category":"web","level":"beginner","desc":{"en":"Client sends an HTTP request to a server, which processes it and returns a response.","fa":"کلاینت درخواست HTTP به سرور می‌فرستد، سرور پردازش و پاسخ برمی‌گرداند."},"code":"const res = await fetch('https://api.example.com/users', {\n  method: 'GET',\n  headers: { 'Content-Type': 'application/json' }\n});\nconst data = await res.json();","steps":[{"type":"client"},{"type":"request"},{"type":"server"},{"type":"response"},{"type":"render"}]},{"id":"array","title":{"en":"Array","fa":"آرایه"},"category":"ds","level":"beginner","desc":{"en":"An ordered collection of elements accessed by numeric index. O(1) random access.","fa":"مجموعه مرتبی از عناصر که با اندیس عددی دسترسی می‌شوند. دسترسی تصادفی O(1)."},"code":"const arr = [10, 20, 30, 40];\narr[0]; // 10\narr.push(50);\narr.splice(1, 1);","steps":[{"type":"init"},{"type":"access","idx":2},{"type":"push","val":50},{"type":"splice","idx":1},{"type":"done"}]},{"id":"deque","title":{"en":"Deque","fa":"صف دوطرفه"},"category":"ds","level":"intermediate","desc":{"en":"A double-ended queue allowing insertion and deletion at both front and back.","fa":"صف دوطرفه که امکان درج و حذف از ابتدا و انتها را فراهم می‌کند."},"code":"class Deque {\n  constructor() { this.items = {}; this.head = 0; this.tail = 0; }\n  addFront(val) { this.items[--this.head] = val; }\n  addBack(val) { this.items[this.tail++] = val; }\n  removeFront() { return this.items[this.head++]; }\n  removeBack() { return this.items[--this.tail]; }\n}","steps":[{"type":"addBack","val":"A"},{"type":"addBack","val":"B"},{"type":"addFront","val":"Z"},{"type":"removeFront"},{"type":"removeBack"}]},{"id":"heap","title":{"en":"Heap","fa":"هیپ"},"category":"ds","level":"advanced","desc":{"en":"A complete binary tree where parent is always smaller (min-heap) or larger (max-heap) than children.","fa":"درخت دودویی کامل که والد همیشه کوچکتر (مین-هیپ) یا بزرگتر (مکس-هیپ) از فرزندان است."},"code":"class MinHeap {\n  constructor() { this.data = []; }\n  insert(val) {\n    this.data.push(val);\n    this.bubbleUp(this.data.length - 1);\n  }\n  extractMin() {\n    const min = this.data[0];\n    const last = this.data.pop();\n    if (this.data.length) { this.data[0] = last; this.sinkDown(0); }\n    return min;\n  }\n}","steps":[{"type":"insert","val":5},{"type":"insert","val":3},{"type":"insert","val":7},{"type":"extract"},{"type":"rebalance"}]},{"id":"trie","title":{"en":"Trie","fa":"درخت پیشوندی"},"category":"ds","level":"advanced","desc":{"en":"A tree-like data structure for efficient prefix searching, commonly used for autocomplete.","fa":"ساختمان داده شبه‌درختی برای جستجوی کارآمد پیشوند، معمولاً برای تکمیل خودکار استفاده می‌شود."},"code":"class TrieNode {\n  constructor() { this.children = {}; this.isEnd = false; }\n}\nclass Trie {\n  insert(word) {\n    let node = this.root;\n    for (const ch of word) {\n      if (!node.children[ch]) node.children[ch] = new TrieNode();\n      node = node.children[ch];\n    }\n    node.isEnd = true;\n  }\n}","steps":[{"type":"insert","val":"cat"},{"type":"insert","val":"car"},{"type":"insert","val":"card"},{"type":"search","val":"car"},{"type":"found"}]},{"id":"insertionsort","title":{"en":"Insertion Sort","fa":"مرتب‌سازی درجی"},"category":"algo","level":"beginner","desc":{"en":"Builds the sorted array one element at a time by inserting each element into its correct position.","fa":"آرایه مرتب را عنصر به عنصر با درج هر عنصر در جایگاه صحیحش می‌سازد."},"code":"function insertionSort(arr) {\n  for (let i = 1; i < arr.length; i++) {\n    const key = arr[i];\n    let j = i - 1;\n    while (j >= 0 && arr[j] > key) { arr[j+1] = arr[j]; j--; }\n    arr[j+1] = key;\n  }\n  return arr;\n}","steps":[{"type":"pick","val":3},{"type":"compare"},{"type":"shift"},{"type":"insert"},{"type":"done"}]},{"id":"selectionsort","title":{"en":"Selection Sort","fa":"مرتب‌سازی انتخابی"},"category":"algo","level":"beginner","desc":{"en":"Repeatedly finds the minimum element from the unsorted part and places it at the beginning.","fa":"به طور مکرر کمینه عنصر بخش نامرتب را پیدا و در ابتدا قرار می‌دهد."},"code":"function selectionSort(arr) {\n  for (let i = 0; i < arr.length; i++) {\n    let minIdx = i;\n    for (let j = i + 1; j < arr.length; j++)\n      if (arr[j] < arr[minIdx]) minIdx = j;\n    [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];\n  }\n  return arr;\n}","steps":[{"type":"findmin"},{"type":"swap"},{"type":"findmin2"},{"type":"swap2"},{"type":"done"}]},{"id":"strategy","title":{"en":"Strategy Pattern","fa":"الگوی استراتژی"},"category":"pattern","level":"advanced","desc":{"en":"Defines a family of algorithms, encapsulates each one, and makes them interchangeable at runtime.","fa":"خانواده‌ای از الگوریتم‌ها را تعریف، هر کدام را محصور و در زمان اجرا قابل تعویض می‌کند."},"code":"class Sorter {\n  setStrategy(strategy) { this.strategy = strategy; }\n  sort(arr) { return this.strategy.sort(arr); }\n}\nconst s = new Sorter();\ns.setStrategy(new QuickSort());\ns.sort([3,1,2]);","steps":[{"type":"context"},{"type":"setA"},{"type":"execute"},{"type":"setB"},{"type":"execute"}]},{"id":"decorator","title":{"en":"Decorator Pattern","fa":"الگوی تزئین‌کننده"},"category":"pattern","level":"advanced","desc":{"en":"Attaches additional responsibilities to an object dynamically without modifying its structure.","fa":"مسئولیت‌های اضافی را به صورت پویا بدون تغییر ساختار شیء به آن اضافه می‌کند."},"code":"function withLogging(fn) {\n  return function(...args) {\n    console.log('Calling:', fn.name);\n    return fn(...args);\n  };\n}\nconst loggedAdd = withLogging(add);","steps":[{"type":"original"},{"type":"wrap"},{"type":"call"},{"type":"log"},{"type":"result"}]},{"id":"boxmodel","title":{"en":"CSS Box Model","fa":"مدل جعبه CSS"},"category":"web","level":"beginner","desc":{"en":"Every HTML element is a box consisting of content, padding, border, and margin layers.","fa":"هر عنصر HTML یک جعبه شامل لایه‌های محتوا، فاصله داخلی، حاشیه و فاصله خارجی است."},"code":"div {\n  width: 200px;\n  padding: 20px;\n  border: 5px solid;\n  margin: 10px;\n}\n/* Total width = 200 + 40 + 10 + 20 = 270px */","steps":[{"type":"content"},{"type":"padding"},{"type":"border"},{"type":"margin"},{"type":"total"}]},{"id":"flexbox","title":{"en":"Flexbox","fa":"فلکس‌باکس"},"category":"web","level":"intermediate","desc":{"en":"A CSS layout model that distributes space among items in a container along a single axis.","fa":"مدل چیدمان CSS که فضا را بین عناصر در یک کانتینر entlang یک محور توزیع می‌کند."},"code":".container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 10px;\n}","steps":[{"type":"container"},{"type":"items"},{"type":"justify"},{"type":"align"},{"type":"gap"}]},{"id":"avl","title":{"en":"AVL Tree","fa":"درخت AVL"},"category":"ds","level":"advanced","desc":{"en":"Self-balancing binary search tree with height rotation.","fa":"درخت دودویی جستجو با تعادل خودکار با چرخش ارتفاع."},"code":"function getBalance(n){return n?n.left.height-n.right.height:0}\nfunction rotateRight(y){const x=y.left;x.right=y.left;x.height=Math.max(x.left.height,x.right.height)+1;y.height=Math.max(y.left.height,y.right.height)+1;return x}","steps":[{"type":"insert"},{"type":"check"},{"type":"rotate"},{"type":"balance"},{"type":"done"}]},{"id":"dijkstra","title":{"en":"Dijkstra","fa":"دیکسترا"},"category":"algo","level":"advanced","desc":{"en":"Shortest path in weighted graph with non-negative edges.","fa":"کوتاه‌ترین مسیر در گراف وزن‌دار با یک‌جهت‌گیری مثبت."},"code":"function dijkstra(graph,s){const d={},pq=new PriorityQueue();for(const n in graph)d[n]=Infinity;d[s]=0;pq.enqueue([s,0]);while(!pq.isEmpty()){const[u,w]=pq.dequeue();if(w>d[u])continue;for(const[v,c]of graph[u]){if(d[u]+c<d[v]){d[v]=d[u]+c;pq.enqueue([v,d[v]])}}}return d}","steps":[{"type":"init"},{"type":"visit"},{"type":"relax"},{"type":"update"},{"type":"done"}]},{"id":"toposort","title":{"en":"Topological Sort","fa":"مرتب‌سازی شی‌داری"},"category":"algo","level":"advanced","desc":{"en":"Linear ordering of vertices where each edge goes from earlier to later.","fa":"ترتیب خطی رئوی گراف که هر یک‌جهت‌گیری از زودتر به بعد می‌رود."},"code":"function topoSort(g){const v=new Set(),r=[];function visit(n){if(v.has(n))return;v.add(n);for(const x of g[n])visit(x);r.push(n)}for(const n in g)visit(n);return r.reverse()}","steps":[{"type":"start"},{"type":"dfs"},{"type":"reached"},{"type":"add"},{"type":"reverse"}]},{"id":"fib_dp","title":{"en":"Fibonacci DP","fa":"فیبوناچی با پویا"},"category":"algo","level":"intermediate","desc":{"en":"Memoization vs tabulation for optimal substructure.","fa":"حافظه موقت مقابل جدول‌بندی برای زیرساختار بهینه."},"code":"function fibMem(n,c={}){if(n<=1)return n;if(c[n])return c[n];c[n]=fibMemo(n-1,c)+fibMemo(n-2,c);return c[n]}\nfunction fibTab(n){const d=[0,1];for(let i=2;i<=n;i++)d[i]=d[i-1]+d[i-2];return d[n]}","steps":[{"type":"fib0"},{"type":"fib1"},{"type":"fib2"},{"type":"fib3"},{"type":"fib4"},{"type":"fib5"}]},{"id":"knapsack","title":{"en":"0/1 Knapsack","fa":"کپس‌پی"},"category":"algo","level":"advanced","desc":{"en":"Maximize value within weight capacity using dynamic programming.","fa":"بیشینه کردن ارزش در محدودیت وزن با پویای برنامه‌نویسی."},"code":"function knap(items,W){const dp=Array(W+1).fill(0);for(const{w,v}of items)for(let c=W;c>=w;c--)dp[c]=Math.max(dp[c],dp[c-w]+v);return dp[W]}","steps":[{"type":"init"},{"type":"iterate"},{"type":"choose"},{"type":"fill"},{"type":"result"}]},{"id":"virtualmem","title":{"en":"Virtual Memory","fa":"حافظه مجازی"},"category":"ds","level":"advanced","desc":{"en":"Page table translation from virtual to physical addresses.","fa":"ترجمه آدرس مجازی به فیزیکی با جدول صفحه."},"code":"// VirtualAddr: 32-bit\n// Page = VirtualAddr >> 12 (high 20 bits)\n// Offset = VirtualAddr & 0xFFF (low 12 bits)\nphysicalAddr = (pageTable[page] << 12) | offset","steps":[{"type":"virtual"},{"type":"split"},{"type":"lookup"},{"type":"translate"},{"type":"cache"}]},{"id":"callstack","title":{"en":"Call Stack","fa":"پشته فراخوانی"},"category":"web","level":"beginner","desc":{"en":"Function call frames pushed onto and popped from the call stack in LIFO order.","fa":"فریم‌های فراخوانی تابع به صورت LIFO روی پشته فراخوانی افزوده و حذف می‌شوند."},"code":"function outer(){\n  const a=1;        // Stack frame 1\n  function inner(){\n    const b=2;      // Stack frame 2\n    return a+b;\n  }\n  return inner();    // frames: outer->inner->return->pop\n}\nouter();","steps":[{"type":"push"},{"type":"local"},{"type":"nested"},{"type":"return"},{"type":"pop"}]},{"id":"heapvsstack","title":{"en":"Heap vs Stack","fa":"هیپ مقابل پشته"},"category":"ds","level":"intermediate","desc":{"en":"Stack for local vars, heap for objects. GC reclaims unused heap memory.","fa":"پشته برای متغیرهای محلی، هیپ برای اشیاء. GC حافظه هیپ استفاده‌نشده را آزاد می‌کند."},"code":"// Stack: fast allocation, auto cleanup\n// Heap: slower, manual reference counting or GC\nlet primitive = 42;          // Stack\nlet obj = {x:1, y:2};        // Heap\n// When obj refs = 0, GC frees it","steps":[{"type":"stack"},{"type":"heap"},{"type":"alloc"},{"type":"gc"},{"type":"cleanup"}]},{"id":"jwt","title":{"en":"JWT Lifecycle","fa":"چرخه عمر JWT"},"category":"web","level":"intermediate","desc":{"en":"Header, payload, signature - base64url encoded for client-side storage and server verification.","fa":"سربرگ، بار محتوا، امضا - به صورت base64url برای ذخیره‌سازی سمت کلاینت و اعتبارسنجی سرور."},"code":"// Header: {\"alg\":\"HS256\",\"typ\":\"JWT\"}\n// Payload: {\"sub\":123,\"exp\":1234567890}\n// Signature: HMAC(base64(header)+\".\"+base64(payload), secret)\n// Output: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyM30...","steps":[{"type":"header"},{"type":"payload"},{"type":"sign"},{"type":"token"},{"type":"verify"}]},{"id":"webworker","title":{"en":"Web Worker","fa":"ویب ورکر"},"category":"web","level":"advanced","desc":{"en":"Background thread for CPU-intensive tasks without blocking main thread.","fa":"رشته پس‌زمینه برای وظایف سنگین بدون مسدود کردن رشته اصلی."},"code":"// Main thread\nconst w = new Worker('worker.js');\nw.postMessage({cmd:'process',data:largeArray});\nw.onmessage = e => console.log(e.data);\n\n// worker.js\nself.onmessage = e => {\n  const r = e.data.data.reduce((a,b)=>a+b,0);\n  self.postMessage(r);\n};","steps":[{"type":"spawn"},{"type":"post"},{"type":"process"},{"type":"result"},{"type":"terminate"}]},{"id":"gc","title":{"en":"Garbage Collection","fa":"جمع‌آوری زباله"},"category":"ds","level":"advanced","desc":{"en":"Mark-and-sweep: identify reachable objects, mark, then sweep unreachable memory.","fa":"علامت و پاک‌سازی: شناسایی اشیاء قابل‌دسترس، علامت‌گذاری، سپس پاک‌سازی حافظه غیرمرجع."},"code":"// Phase 1: Mark all roots and reachable objects\n// Phase 2: Sweep all unmarked memory regions as garbage\n// Phase 3: Compact heap if fragmentation > threshold\nfunction isGarbage(obj){return !obj.reachableFromGC}","steps":[{"type":"roots"},{"type":"mark"},{"type":"sweep"},{"type":"free"},{"type":"compact"}]},{"id":"bloom","title":{"en":"Bloom Filter","fa":"فیلتر بلوم"},"category":"ds","level":"advanced","desc":{"en":"Space-efficient probabilistic set membership test with false positive rate.","fa":"تست عضویت احتمالی فضای صرفه‌جویی‌شده با نرخ خطای مثبت."},"code":"class BloomFilter{\n  constructor(size,hashCount){this.bits=new Uint8Array(size);this.k=hashCount}\n  add(item){for(const h of this.hash(item))this.bits[h%this.bits.length]=1}\n  mightContain(item){return this.hash(item).every(h=>this.bits[h%this.bits.length]===1)}\n}","steps":[{"type":"init"},{"type":"hash"},{"type":"set"},{"type":"query"},{"type":"result"}]},{"id":"lru","title":{"en":"LRU Cache","fa":"کش LRU"},"category":"ds","level":"intermediate","desc":{"en":"Evict least recently used item when cache is full. Doubly-linked list + hash map for O(1) operations.","fa":"حذف کمترین دسترسی اخیر وقت کش پر است. لیست دوطرفه + جدotle هش برای عملیات O(1)."},"code":"class LRUCache{constructor(k){this.c=k;this.map=new Map()}\nget(k){if(!this.map.has(k))return-1;const v=this.map.get(k);this.map.delete(k);this.map.set(k,v);return v}\nput(k,v){if(this.map.has(k))this.map.delete(k);else if(this.map.size===this.c){const f=this.map.keys().next().value;this.map.delete(f);this.map.set(k,v)}}","steps":[{"type":"get"},{"type":"hit"},{"type":"reorder"},{"type":"miss"},{"type":"evict"}]},{"id":"debounce","title":{"en":"Debounce","fa":"دبانس"},"category":"web","level":"beginner","desc":{"en":"Delay function execution until after a pause. Essential for search input optimization.","fa":"تأخیر اجرای تابع تا پس از یک توقف. ضروری برای بهینه‌سازی ورودی جستجو."},"code":"function debounce(fn, delay){\n  let t;\n  return (...args)=>{\n    clearTimeout(t);\n    t=setTimeout(()=>fn(...args),delay);\n  };\n}\n// Usage: window.addEventListener('resize', debounce(handleResize, 300));","steps":[{"type":"call"},{"type":"wait"},{"type":"cancel"},{"type":"exec"},{"type":"done"}]},{"id":"promiseAll","title":{"en":"Promise.all","fa":"پرامیس.اُل"},"category":"web","level":"intermediate","desc":{"en":"Wait for all promises to resolve or first rejection. Useful for parallel API calls.","fa":"منتظر رسیدن همه پرامیس یا اولین ارجاع خطا. مفید برای فراخوانی‌های موازی API."},"code":"Promise.all([\n  fetch('/api/users'),   // Promise 1\n  fetch('/api/posts'),   // Promise 2\n  fetch('/api/comments')  // Promise 3\n]).then(([users, posts, comments])=>{\n  // All resolved\n  console.log(users, posts, comments);\n}).catch(err=>{\n  // First rejection stops execution\n  console.error('One failed:', err);\n});","steps":[{"type":"start"},{"type":"fetch1"},{"type":"fetch2"},{"type":"fetch3"},{"type":"resolve"}]},{"id":"cors","title":{"en":"CORS","fa":"CORS"},"category":"web","level":"intermediate","desc":{"en":"Cross-Origin Resource Sharing: HTTP headers controlling which origins can access resources.","fa":"تبادل منابع بین‌مرکزی: سرآیندهای HTTP که کنترل دسترسی مناطع را فراهم می‌کنند."},"code":"// Server must send CORS headers:\nAccess-Control-Allow-Origin: https://your-site.com\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE\nAccess-Control-Allow-Headers: Content-Type, Authorization\n\n// Browser blocks cross-origin requests without these headers","steps":[{"type":"request"},{"type":"blocked"},{"type":"header"},{"type":"allowed"},{"type":"cache"}]},{"id":"regex","title":{"en":"Regex","fa":"نگاه منظم"},"category":"web","level":"intermediate","desc":{"en":"Pattern matching with anchors, quantifiers, character classes, and capturing groups.","fa":"جستجوی الگو با نقطه‌گذاری، شمارنده، کلاس‌های کاراکتر و گروه‌های گرفتن."},"code":"// Email validation\nconst email=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;\n\n// Phone number\nconst phone=/\\d{3}-\\d{3}-\\d{4}/;\n\n// Match and extract\ntext.match(email)           // returns array or null\ntext.replace(phone, 'XXX-XXX-XXXX')  // replace","steps":[{"type":"pattern"},{"type":"anchor"},{"type":"match"},{"type":"capture"},{"type":"result"}]},{"id":"heapSort","title":{"en":"Heap Sort","fa":"مرتب‌سازی هیپ"},"category":"algo","level":"advanced","desc":{"en":"Build max-heap then repeatedly extract max for O(n log n) sort.","fa":"ساخت تمام‌گرا سپس استخراج مکرر بیشینه برای مرتب‌سازی O(n log n)."},"code":"function heapSort(arr){\n  heapify(arr, arr.length);\n  for(let i=arr.length-1;i>0;i--){[arr[0],arr[i]]=[arr[i],arr[0]];heapify(arr,i)};\n  return arr;\n}\nfunction heapify(arr,n,i){let l=2*i+1,r=2*i+2,largest=i;\n  if(l<n&&arr[l]>arr[largest])largest=l;\n  if(r<n&&arr[r]>arr[largest])largest=r;\n  if(largest!==i){[arr[i],arr[largest]]=[arr[largest],arr[i]];heapify(arr,n,largest)};\n}","steps":[{"type":"build"},{"type":"swap"},{"type":"restore"},{"type":"extract"},{"type":"sorted"}]},{"id":"websocket","title":{"en":"WebSocket","fa":"وب‌سوکت"},"category":"web","level":"intermediate","desc":{"en":"Full-duplex bidirectional persistent connection over a single TCP socket.","fa":"اتصال دوطرفه همزمان و پایدار بین کلاینت و سرور روی یک سوکت TCP."},"code":"const ws = new WebSocket('wss://api.example.com/live');\nws.onopen = () => {\n  console.log('Connected!');\n  ws.send(JSON.stringify({ type: 'subscribe' }));\n};\nws.onmessage = (event) => {\n  const msg = JSON.parse(event.data);\n  console.log('Update:', msg);\n};\nws.onclose = () => console.log('Closed');","steps":[{"type":"handshake"},{"type":"upgrade"},{"type":"open"},{"type":"bidirectional"},{"type":"close"}]},{"id":"quicksortAvg","title":{"en":"Quick Sort Avg","fa":"مرتب‌سازی سریع میانگین"},"category":"algo","level":"advanced","desc":{"en":"Average-case complexity analysis: why quicksort O(n log n) expected despite O(n²) worst case.","fa":"تحلیل پیچیدگی متوسط: چرا مرتب‌سازی سریع O(n log n) متوسط علی‌رغم بدترین حالت O(n²)."},"code":"// Best/Average: O(n log n) -> partition splits data evenly\n// Worst: O(n²) -> already sorted + bad pivot\n// Use random pivot or median-of-three to avoid worst case\nfunction medianOfThree(arr,l,r){const m=l+Math.floor((r-l)/2);return arr[l]<arr[m]?arr[m]<arr[r]?m:r[arr[m]<arr[r]?r:m]:arr[l]<arr[r]?r:m];}","steps":[{"type":"analysis"},{"type":"average"},{"type":"worst"},{"type":"pivot"},{"type":"optimize"}]},{"id":"vector_embeddings","title":{"en":"Vector Embeddings","fa":"بردارهای تعبیه (AI Embeddings)"},"category":"algo","level":"intermediate","desc":{"en":"Text mapped to high-dimensional geometric vectors where semantic similarity is measured via cosine distance.","fa":"نگاشت متن به بردارهای هندسی در فضای چندبعدی که شباهت معنایی با زاویه کسینوسی بردارها محاسبه می‌شود."},"code":"function cosineSim(vecA, vecB) {\n  let dot = 0, normA = 0, normB = 0;\n  for (let i = 0; i < vecA.length; i++) {\n    dot += vecA[i] * vecB[i];\n    normA += vecA[i] ** 2;\n    normB += vecB[i] ** 2;\n  }\n  return dot / (Math.sqrt(normA) * Math.sqrt(normB));\n}","steps":[{"type":"tokens"},{"type":"project"},{"type":"query"},{"type":"angle"},{"type":"match"}]},{"id":"perceptron","title":{"en":"Perceptron (Neuron)","fa":"پرسپترون (نورون عصبی)"},"category":"algo","level":"intermediate","desc":{"en":"The foundational building block of neural networks: computes weighted sum of inputs plus bias, passed through an activation function.","fa":"واحد بنیادین شبکه‌های عصبی: محاسبه مجموع وزن‌دار ورودی‌ها به اضافه بایاس و عبور از تابع فعال‌ساز."},"code":"function perceptron(inputs, weights, bias) {\n  const z = inputs.reduce((sum, x, i) => sum + x * weights[i], bias);\n  return z >= 0 ? 1 : 0; // Step activation function\n}\n// Activation triggers decision boundary","steps":[{"type":"inputs"},{"type":"weights"},{"type":"sum"},{"type":"activation"},{"type":"output"}]},{"id":"token_bucket","title":{"en":"Token Bucket (Rate Limit)","fa":"سطل توکن (محدودکننده نرخ)"},"category":"web","level":"advanced","desc":{"en":"API rate limiting algorithm: tokens accumulate at fixed intervals; requests consume tokens or get dropped with HTTP 429.","fa":"الگوریتم مدیریت ترافیک و محدودسازی نرخ API: توکن‌ها با نرخ ثابت واریز می‌شوند؛ درخواست‌ها با مصرف توکن عبور کرده یا ریجکت (۴۲۹) می‌شوند."},"code":"class TokenBucket {\n  constructor(capacity, refillRate) {\n    this.capacity = capacity;\n    this.tokens = capacity;\n    this.refillRate = refillRate; // tokens/sec\n    this.lastRefill = Date.now();\n  }\n  allowRequest() {\n    this.refill();\n    if (this.tokens >= 1) { this.tokens--; return true; }\n    return false; // HTTP 429 Too Many Requests\n  }\n}","steps":[{"type":"bucket"},{"type":"refill"},{"type":"request"},{"type":"consume"},{"type":"drop"}]},{"id":"a_star","title":{"en":"A* Pathfinding","fa":"مسیریابی A*"},"category":"algo","level":"advanced","desc":{"en":"Informed graph search that picks the node minimizing f(n) = g(n) + h(n): exact cost so far plus a heuristic estimate to the goal. Finds the shortest path while exploring far fewer nodes than Dijkstra.","fa":"جستجوی آگاهانه گراف که گره‌ای را انتخاب می‌کند که f(n) = g(n) + h(n) را کمینه کند: هزینه دقیق طی‌شده به‌علاوه تخمین heuristic تا هدف. کوتاه‌ترین مسیر را با بررسی گره‌های بسیار کمتر از دیکسترا پیدا می‌کند."},"code":"function astar(start, goal, h) {\n  const open = new MinHeap();\n  const g = new Map([[start, 0]]);\n  open.push([start, h(start, goal)]);\n  while (!open.isEmpty()) {\n    const [node, f] = open.pop();\n    if (node === goal) return g.get(node);\n    for (const [next, w] of neighbors(node)) {\n      const tentative = g.get(node) + w;\n      if (tentative < (g.get(next) ?? Infinity)) {\n        g.set(next, tentative);\n        open.push([next, tentative + h(next, goal)]);\n      }\n    }\n  }\n  return -1; // unreachable\n}","steps":[{"type":"start"},{"type":"frontier"},{"type":"expand"},{"type":"goal"},{"type":"path"}]},{"id":"n_queens","title":{"en":"N-Queens Backtracking","fa":"بازگشت‌زنی N-وزیر"},"category":"algo","level":"advanced","desc":{"en":"Place N queens on an N×N board so none attack each other. Backtracking prunes a branch as soon as a conflict is detected, turning a naive N^N brute force into a fast search.","fa":"N وزیر را روی صفحه N×N طوری بچین که هیچ‌کدام به دیگری حمله نکنند. بازگشت‌زنی به‌محض تشخیص تناقض شاخه را هرس می‌کند و جستجوی N^N را به جستجویی سریع تبدیل می‌کند."},"code":"function solveNQueens(n) {\n  const cols = new Set(), d1 = new Set(), d2 = new Set();\n  const board = [];\n  function place(row) {\n    if (row === n) return true;\n    for (let col = 0; col < n; col++) {\n      if (cols.has(col) || d1.has(row - col) || d2.has(row + col)) continue;\n      cols.add(col); d1.add(row - col); d2.add(row + col);\n      board.push(col);\n      if (place(row + 1)) return true;\n      board.pop(); cols.delete(col); d1.delete(row - col); d2.delete(row + col);\n    }\n    return false; // backtrack\n  }\n  place(0);\n  return board;\n}","steps":[{"type":"place"},{"type":"safe"},{"type":"conflict"},{"type":"backtrack"},{"type":"solved"}]},{"id":"kadane","title":{"en":"Kadane (Max Subarray)","fa":"کادان (بیشینه زیرآرایه)"},"category":"algo","level":"intermediate","desc":{"en":"Finds the contiguous subarray with the largest sum in O(n): at each element decide whether to extend the current run or restart from the element itself.","fa":"بزرگ‌ترین مجموع یک زیرآرایه پیوسته را در O(n) پیدا می‌کند: در هر عنصر تصمیم می‌گیرد که ادامه بدهد یا از خود عنصر شروع کند."},"code":"function maxSubarray(nums) {\n  let best = nums[0], cur = nums[0];\n  for (let i = 1; i < nums.length; i++) {\n    cur = Math.max(nums[i], cur + nums[i]);\n    best = Math.max(best, cur);\n  }\n  return best;\n}\n\nmaxSubarray([-2,1,-3,4,-1,2,1,-5,4]); // 6","steps":[{"type":"init"},{"type":"extend"},{"type":"restart"},{"type":"best"},{"type":"result"}]},{"id":"union_find","title":{"en":"Union-Find (DSU)","fa":"ساختار اجتماع-یافتن (DSU)"},"category":"ds","level":"advanced","desc":{"en":"Tracks a partition of elements into disjoint sets. Union joins two sets and Find returns a set's representative; with union-by-rank plus path compression operations are almost O(1).","fa":"تقسیم عناصر به مجموعه‌های ناهم‌پوشان را نگه می‌دارد. Union دو مجموعه را ادغام و Find نماینده مجموعه را برمی‌گرداند؛ با union-by-rank و فشرده‌سازی مسیر عملیات تقریباً O(1) است."},"code":"class DSU {\n  constructor(n) {\n    this.parent = Array.from({ length: n }, (_, i) => i);\n    this.rank = new Array(n).fill(0);\n  }\n  find(x) {\n    if (this.parent[x] !== x) this.parent[x] = this.find(this.parent[x]);\n    return this.parent[x]; // path compression\n  }\n  union(a, b) {\n    const ra = this.find(a), rb = this.find(b);\n    if (ra === rb) return false;\n    if (this.rank[ra] < this.rank[rb]) this.parent[ra] = rb;\n    else if (this.rank[ra] > this.rank[rb]) this.parent[rb] = ra;\n    else { this.parent[rb] = ra; this.rank[ra]++; }\n    return true;\n  }\n}","steps":[{"type":"makeSet"},{"type":"union"},{"type":"find"},{"type":"compress"},{"type":"connected"}]},{"id":"monotonic_stack","title":{"en":"Monotonic Stack","fa":"پشته یکنوا"},"category":"ds","level":"intermediate","desc":{"en":"A stack kept in sorted order that solves 'next greater element' style problems in a single O(n) pass: pop while the top is smaller, then the new element becomes the next greater for everything popped.","fa":"پشته‌ای با ترتیب مرتب که مسائل سبک «عنصر بزرگ‌تر بعدی» را در یک پیمایش O(n) حل می‌کند: تا وقتی سر پشته کوچک‌تر است pop کن، سپس عنصر جدید برای همه‌ی popشده‌ها بزرگ‌تر بعدی می‌شود."},"code":"function nextGreater(nums) {\n  const res = new Array(nums.length).fill(-1);\n  const stack = []; // indices, values decreasing\n  for (let i = 0; i < nums.length; i++) {\n    while (stack.length && nums[stack[stack.length - 1]] < nums[i]) {\n      res[stack.pop()] = nums[i];\n    }\n    stack.push(i);\n  }\n  return res;\n}\n\nnextGreater([2,1,2,4,3,1]); // [4,2,4,-1,-1,-1]","steps":[{"type":"push"},{"type":"pop"},{"type":"resolve"},{"type":"peek"},{"type":"done"}]}];
 
 let currentConcept=null,currentStep=0,isPlaying=false,playInterval=null,animProgress=0,animPrevStep=-1,stepDuration=1200,isFullscreen=false;
 const canvas=document.getElementById("animCanvas"),ctx=canvas.getContext("2d");
@@ -980,7 +1499,52 @@ const today=getLocalToday();
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
 function getStreak(){let s=0,d=new Date();while(true){const ds=fmtLocal(d);if(doneDays.includes(ds)){s++;d.setDate(d.getDate()-1)}else break}return s}
-function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}function updateStreak(){updateStats();buildLearningPaths()}
+function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.length;i++){if(i===0){c=1}else{const p=new Date(sd[i-1]),n2=new Date(sd[i]),d=(n2-p)/86400000;if(d===1)c++;else if(d>1)c=1}if(c>b)b=c}return b}function updateStats(){document.getElementById("streak").textContent=getStreak()+" "+t("streak");document.getElementById("statTotal").textContent=doneDays.length;document.getElementById("statBest").textContent=getBestStreak();document.getElementById("statConcepts").textContent=seenIds.size;document.getElementById("statTotalLbl").textContent=t("totalDays");document.getElementById("statBestLbl").textContent=t("bestStreak");document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderHero==="function")renderHero();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();function updateStreak(){updateStats();buildLearningPaths()}
 
 const learningPaths={beginner:["array","stack","queue","hashmap","bintree","bfs","dfs","insertionsort","selectionsort"],intermediate:["linkedlist","binarysearch","recursion","heap","trie","mergesort","quicksort","heapSort","debounce","promise","promiseAll","cors","regex","lru","heapSort"],advanced:["heap","avl","dijkstra","toposort","quicksortAvg","strategy","decorator","observer","closure","eventloop","virtualmem","callstack","heapvsstack","jwt","webworker","gc","bloom","knapsack","fib_dp","websocket"]};
 function buildLearningPaths(){
@@ -1024,7 +1588,7 @@ d.textContent=i;grid.appendChild(d);
 }}
 document.getElementById("calPrev").onclick=()=>{calMonth--;if(calMonth<0){calMonth=11;calYear--}buildCalendar()};
 document.getElementById("calNext").onclick=()=>{calMonth++;if(calMonth>11){calMonth=0;calYear++}buildCalendar()};
-function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays))}localStorage.setItem("cv_lastConcept",currentConcept?currentConcept.id:"");updateStreak();buildCalendar()}
+function markDone(){if(!doneDays.includes(today)){doneDays.push(today);localStorage.setItem("cv_done",JSON.stringify(doneDays))}localStorage.setItem("cv_lastConcept",currentConcept?currentConcept.id:"");if(typeof burstConfetti==="function")burstConfetti(90);updateStreak();buildCalendar()}
 
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
@@ -1125,6 +1689,26 @@ const extraCode = {
   "token_bucket": {
     "py": "import time\n\nclass TokenBucket:\n    def __init__(self, capacity, refill_rate):\n        self.capacity = capacity\n        self.tokens = capacity\n        self.refill_rate = refill_rate\n        self.last = time.time()\n    def allow_request(self):\n        now = time.time()\n        self.tokens = min(self.capacity, self.tokens + (now - self.last) * self.refill_rate)\n        self.last = now\n        if self.tokens >= 1:\n            self.tokens -= 1\n            return True\n        return False # 429",
     "cpp": "#include <chrono>\n#include <algorithm>\n\nclass TokenBucket {\n    double capacity, tokens, refillRate;\n    std::chrono::steady_clock::time_point lastRefill;\npublic:\n    TokenBucket(double cap, double rate): capacity(cap), tokens(cap), refillRate(rate),\n        lastRefill(std::chrono::steady_clock::now()) {}\n    bool allow() {\n        auto now = std::chrono::steady_clock::now();\n        double elapsed = std::chrono::duration<double>(now - lastRefill).count();\n        tokens = std::min(capacity, tokens + elapsed * refillRate);\n        lastRefill = now;\n        if (tokens >= 1.0) { tokens -= 1.0; return true; }\n        return false;\n    }\n};"
+  },
+  "a_star": {
+    "py": "import heapq\n\ndef astar(start, goal, h, neighbors):\n    open_set = [(h(start, goal), start)]\n    g = {start: 0}\n    while open_set:\n        f, node = heapq.heappop(open_set)\n        if node == goal:\n            return g[node]\n        for nxt, w in neighbors(node):\n            tentative = g[node] + w\n            if tentative < g.get(nxt, float('inf')):\n                g[nxt] = tentative\n                heapq.heappush(open_set, (tentative + h(nxt, goal), nxt))\n    return -1",
+    "cpp": "#include <queue>\n#include <unordered_map>\n#include <vector>\n\ndouble astar(int start, int goal, double (*h)(int,int),\n             std::vector<std::pair<int,double>> (*neighbors)(int)) {\n    std::priority_queue<std::pair<double,int>, std::vector<std::pair<double,int>>, std::greater<>> open;\n    std::unordered_map<int,double> g{{start, 0}};\n    open.push({h(start, goal), start});\n    while (!open.empty()) {\n        auto [f, node] = open.top(); open.pop();\n        if (node == goal) return g[node];\n        for (auto& [nxt, w] : neighbors(node)) {\n            double t = g[node] + w;\n            if (!g.count(nxt) || t < g[nxt]) {\n                g[nxt] = t;\n                open.push({t + h(nxt, goal), nxt});\n            }\n        }\n    }\n    return -1;\n}"
+  },
+  "n_queens": {
+    "py": "def solve_n_queens(n):\n    cols, d1, d2, board, res = set(), set(), set(), [], []\n    def place(row):\n        if row == n:\n            res.append(list(board)); return\n        for col in range(n):\n            if col in cols or (row - col) in d1 or (row + col) in d2:\n                continue\n            cols.add(col); d1.add(row - col); d2.add(row + col); board.append(col)\n            place(row + 1)\n            board.pop(); cols.discard(col); d1.discard(row - col); d2.discard(row + col)\n    place(0)\n    return res",
+    "cpp": "#include <vector>\n#include <unordered_set>\n\nclass NQueens {\n    int n; std::unordered_set<int> cols, d1, d2; std::vector<int> board;\npublic:\n    NQueens(int n): n(n) {}\n    bool place(int row) {\n        if (row == n) return true;\n        for (int col = 0; col < n; col++) {\n            if (cols.count(col) || d1.count(row - col) || d2.count(row + col)) continue;\n            cols.insert(col); d1.insert(row - col); d2.insert(row + col); board.push_back(col);\n            if (place(row + 1)) return true;\n            board.pop_back(); cols.erase(col); d1.erase(row - col); d2.erase(row + col);\n        }\n        return false;\n    }\n};"
+  },
+  "kadane": {
+    "py": "def max_subarray(nums):\n    best = cur = nums[0]\n    for x in nums[1:]:\n        cur = max(x, cur + x)\n        best = max(best, cur)\n    return best",
+    "cpp": "#include <algorithm>\n#include <vector>\n\nint maxSubarray(const std::vector<int>& nums) {\n    int best = nums[0], cur = nums[0];\n    for (size_t i = 1; i < nums.size(); ++i) {\n        cur = std::max(nums[i], cur + nums[i]);\n        best = std::max(best, cur);\n    }\n    return best;\n}"
+  },
+  "union_find": {
+    "py": "class DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n    def find(self, x):\n        while self.parent[x] != x:\n            self.parent[x] = self.parent[self.parent[x]]\n            x = self.parent[x]\n        return x\n    def union(self, a, b):\n        ra, rb = self.find(a), self.find(b)\n        if ra == rb:\n            return False\n        if self.rank[ra] < self.rank[rb]:\n            ra, rb = rb, ra\n        self.parent[rb] = ra\n        if self.rank[ra] == self.rank[rb]:\n            self.rank[ra] += 1\n        return True",
+    "cpp": "#include <vector>\n#include <numeric>\n\nclass DSU {\n    std::vector<int> parent, rank_;\npublic:\n    DSU(int n): parent(n), rank_(n, 0) { std::iota(parent.begin(), parent.end(), 0); }\n    int find(int x) {\n        if (parent[x] != x) parent[x] = find(parent[x]);\n        return parent[x];\n    }\n    bool unite(int a, int b) {\n        int ra = find(a), rb = find(b);\n        if (ra == rb) return false;\n        if (rank_[ra] < rank_[rb]) std::swap(ra, rb);\n        parent[rb] = ra;\n        if (rank_[ra] == rank_[rb]) rank_[ra]++;\n        return true;\n    }\n};"
+  },
+  "monotonic_stack": {
+    "py": "def next_greater(nums):\n    res = [-1] * len(nums)\n    stack = []\n    for i, x in enumerate(nums):\n        while stack and nums[stack[-1]] < x:\n            res[stack.pop()] = x\n        stack.append(i)\n    return res",
+    "cpp": "#include <vector>\n#include <stack>\n\nstd::vector<int> nextGreater(const std::vector<int>& nums) {\n    std::vector<int> res(nums.size(), -1);\n    std::stack<int> st;\n    for (int i = 0; i < (int)nums.size(); ++i) {\n        while (!st.empty() && nums[st.top()] < nums[i]) {\n            res[st.top()] = nums[i]; st.pop();\n        }\n        st.push(i);\n    }\n    return res;\n}"
   }
 };
 
@@ -1302,6 +1886,62 @@ if(filtered.length)loadConcept(filtered[0]);
 function drawStep(){
 if(!currentConcept)return;
 ctx.clearRect(0,0,800,600);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
+renderVariableInspector();
+if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
 renderVariableInspector();
 if(typeof playSonification==="function"&&soundEnabled&&typeof currentStep!=="undefined")playSonification((currentStep+1)*18,0,100);
 renderVariableInspector();
@@ -1962,6 +2602,62 @@ ctx.fillText([
   "Real-time event frames stream both ways instantly",
   "Clean TCP close handshake initiated and completed"
 ][currentStep],400,480);
+}else if(id==="a_star"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+const grid=[[0,1,0,0,0,0],[0,1,0,1,1,0],[0,0,0,1,0,0],[1,1,0,0,0,1],[0,0,0,1,0,0]];
+const cell=70,ox=190,oy=90;
+grid.forEach((row,r)=>row.forEach((v,c)=>{ctx.fillStyle=v?"#21262d":"#0d1117";ctx.fillRect(ox+c*cell,oy+r*cell,cell-4,cell-4);ctx.strokeStyle="#30363d";ctx.strokeRect(ox+c*cell,oy+r*cell,cell-4,cell-4)}));
+const path=[[0,0],[0,1],[1,1],[2,1],[2,2],[3,2],[3,3],[4,3],[4,4]];
+if(currentStep>=3){ctx.fillStyle="#3fb950";path.forEach(([r,c])=>ctx.fillRect(ox+c*cell+10,oy+r*cell+10,cell-24,cell-24))}
+ctx.fillStyle="#f85149";ctx.font="bold 13px monospace";ctx.fillText("START",ox+32,oy+38);ctx.fillText("GOAL",ox+32,oy+4*cell+38);
+if(currentStep===1||currentStep===2){ctx.fillStyle="#a78bfa";ctx.font="12px monospace";ctx.fillText("open: f=g+h  |  closed: visited",ox+2*cell,oy-10);ctx.fillStyle="#8b5cf6";ctx.fillRect(ox+1*cell+10,oy+1*cell+10,cell-24,cell-24)}
+if(currentStep===4){ctx.fillStyle="#3fb950";ctx.font="13px monospace";ctx.fillText("Optimal path: 8 moves, 10 nodes explored (Dijkstra: ~25)",400,540)}
+ctx.fillStyle="#3fb950";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText(["Heuristic h(n) guides the search toward GOAL","Open set picks lowest f(n)=g(n)+h(n)","Expand node; push neighbors with updated g","Goal reached — g(goal) is the shortest cost","Path reconstructed via parent pointers"][currentStep],400,575);
+}else if(id==="n_queens"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+const n=5,cell2=64,qx=240,qy=90;const queens=[];
+if(currentStep>=1)queens.push([0,0]);if(currentStep>=2)queens.push([1,2]);
+if(currentStep===3)queens.push([2,0]);if(currentStep>=4)queens.length=Math.min(queens.length,1);
+for(let r2=0;r2<n;r2++)for(let c=0;c<n;c++){ctx.fillStyle=(r2+c)%2?"#161b22":"#0d1117";ctx.fillRect(qx+c*cell2,qy+r2*cell2,cell2-3,cell2-3);ctx.strokeStyle="#30363d";ctx.strokeRect(qx+c*cell2,qy+r2*cell2,cell2-3,cell2-3)}
+ctx.font="28px serif";ctx.textAlign="center";
+queens.forEach(([r2,c],i)=>{ctx.fillStyle=i===queens.length-1?"#3fb950":"#a78bfa";ctx.fillText("♛",qx+c*cell2+cell2/2-2,qy+r2*cell2+cell2/2+10)});
+if(currentStep===2){ctx.strokeStyle="#f85149";ctx.lineWidth=2;[[0,0],[1,2]].forEach(([r2,c])=>{ctx.beginPath();ctx.arc(qx+c*cell2+cell2/2-2,qy+r2*cell2+cell2/2,cell2/1.6,0,Math.PI*2);ctx.stroke()});ctx.fillStyle="#f85149";ctx.font="13px monospace";ctx.fillText("threat detected → prune branch",400,470)}
+if(currentStep===3){ctx.fillStyle="#a78bfa";ctx.font="13px monospace";ctx.fillText("backtrack: undo & try next column",400,470)}
+if(currentStep===4){ctx.fillStyle="#3fb950";ctx.font="bold 14px monospace";ctx.fillText("solved! 5 queens, no attacks ✓",400,470);[0,2,4,1,3].forEach((c,r2)=>{ctx.fillText("♛",qx+c*cell2+cell2/2-2,qy+r2*cell2+cell2/2+10)})}
+ctx.fillStyle="#3fb950";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText(["Place queen in row 0","Row 1: safe column found","Row 2: conflict → prune subtree","Backtrack: undo last placement","All N queens placed — solution found"][currentStep],400,560);
+}else if(id==="kadane"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+const nums=[-2,1,-3,4,-1,2,1,-5,4];const w=70,sx=95;
+nums.forEach((v,i)=>{const x=sx+i*w;const active=currentStep===0?i===0:currentStep===1?i<=1:currentStep===2?i<=3:currentStep===3?i>=3&&i<=6:i<=8;
+ctx.fillStyle=active?"#8b5cf6":"#161b22";ctx.fillRect(x,220,60,60);ctx.strokeStyle="#30363d";ctx.strokeRect(x,220,60,60);ctx.fillStyle="#fff";ctx.font="bold 20px monospace";ctx.fillText(v,x+30,258)});
+const bests=[-2,1,1,4,4,5,6,6,6];const shown=Math.min(currentStep*2+1,9);
+ctx.font="14px monospace";
+nums.slice(0,shown).forEach((v,i)=>{ctx.fillStyle=bests[i]===6?"#3fb950":"#8b949e";ctx.fillText("best:"+bests[i],sx+i*w+30,320)});
+if(currentStep>=3){ctx.fillStyle="rgba(63,185,80,0.18)";ctx.fillRect(sx+3*w-4,214,4*w+8,72);ctx.strokeStyle="#3fb950";ctx.strokeRect(sx+3*w-4,214,4*w+8,72);ctx.fillStyle="#3fb950";ctx.font="bold 13px monospace";ctx.fillText("max subarray = 6",sxx=sx+7*w-70,205)}
+ctx.fillStyle="#3fb950";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText(["cur=best=-2","extend: cur=max(1, -2+1)=1","restart: cur=max(4, 1-3+4)","running best reaches 6 at [4,-1,2,1]","answer: 6 — single O(n) pass"][currentStep],400,420);
+}else if(id==="union_find"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+const nodes=[{x:200,y:200,l:"0"},{x:400,y:150,l:"1"},{x:400,y:300,l:"2"},{x:600,y:200,l:"3"},{x:600,y:380,l:"4"}];
+const edgesByStep=[[],[[0,1]],[[0,1],[1,2]],[[0,1],[1,2],[2,3]],[[0,1],[1,2],[3,4]]];
+const edges=edgesByStep[currentStep];
+ctx.strokeStyle="#8b5cf6";ctx.lineWidth=3;
+edges.forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(nodes[a].x,nodes[a].y);ctx.lineTo(nodes[b].x,nodes[b].y);ctx.stroke()});
+if(currentStep===3){ctx.strokeStyle="#3fb950";ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(nodes[4].x,nodes[4].y);ctx.lineTo(nodes[2].x,nodes[2].y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#3fb950";ctx.font="12px monospace";ctx.fillText("path compressed → root",560,320)}
+nodes.forEach((nd,i)=>{ctx.fillStyle=i===0?"#3fb950":"#8b5cf6";ctx.beginPath();ctx.arc(nd.x,nd.y,28,0,Math.PI*2);ctx.fill();ctx.fillStyle="#fff";ctx.font="bold 18px monospace";ctx.fillText(nd.l,nd.x,nd.y+6)});
+ctx.fillStyle="#8b949e";ctx.font="13px monospace";ctx.fillText("green = set representative (root)",400,480);
+ctx.fillStyle="#3fb950";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText(["makeSet: every node is its own root","union(0,1): attach by rank","find(2): walk up to representative","path compression flattens the tree","connected(0,2)? same root → true"][currentStep],400,540);
+}else if(id==="monotonic_stack"){
+ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
+const nums=[2,1,2,4,3,1];const mw=90,mx=110;
+const poppedBy={1:[1],3:[0,2]};const resolved=[];
+if(currentStep>=2){resolved.push([1,2])}if(currentStep>=2){resolved.push([0,4])}
+nums.forEach((v,i)=>{const x=mx+i*mw;ctx.fillStyle="#161b22";ctx.fillRect(x,180,70,70);ctx.strokeStyle="#30363d";ctx.strokeRect(x,180,70,70);
+ctx.fillStyle=resolved.some(([ri])=>ri===i)?"#3fb950":"#e6edf3";ctx.font="bold 20px monospace";ctx.fillText(v,x+35,222);
+if(resolved.some(([ri])=>ri===i)){const ng=resolved.find(([ri])=>ri===i)[1];ctx.fillStyle="#3fb950";ctx.font="12px monospace";ctx.fillText("→"+ng,x+35,270)}});
+const st=["[0]","[0,1]","[3]","[3,4]","[3,4,5]"];const stIdx=Math.min(currentStep,4);
+ctx.fillStyle="#8b5cf6";ctx.font="14px monospace";ctx.fillText("stack (indices, values ↓): "+st[stIdx],400,340);
+ctx.fillStyle="#a78bfa";ctx.fillText("pop while top < current → resolve them",400,380);
+ctx.fillStyle="#3fb950";ctx.font="16px 'Segoe UI',sans-serif";ctx.fillText(["push i=0 (value 2)","val 4 pops 1 and 2 → both resolve to 4","resolved so far: [0]→4, [1]→2, [2]→4","peek: top stays (no smaller elements)","remaining indices get -1 — done"][currentStep],400,450);
 }else if(id==="regex"){
 ctx.fillText(currentConcept.title[lang]||currentConcept.title.en,400,40);
 ctx.fillStyle="#0a0e14";ctx.fillRect(100,120,600,80);ctx.fillStyle="#fff";ctx.font="20px monospace";ctx.fillText("email: user@dom.com",400,165);
@@ -2007,6 +2703,15 @@ if(!currentConcept)return;
 document.getElementById("timelineSlider").max=currentConcept.steps.length-1;
 document.getElementById("timelineSlider").value=currentStep;
 }
+document.addEventListener("keydown",(e)=>{
+if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA")return;
+if(e.key==="z"||e.key==="Z"){toggleZen();return}
+if(e.key==="g"||e.key==="G"){toggleGallery();return}
+if(e.key==="d"||e.key==="D"){startCodeDrill();return}
+if(e.key==="s"||e.key==="S"){const b=document.getElementById("shareBtn");if(b)b.click();return}
+if(e.key==="?"){openShortcuts();return}
+if(e.key==="Escape"){["quizModal","bigOModal","battleModal","drillModal","shortcutsModal"].forEach(id=>{const m=document.getElementById(id);if(m)m.style.display="none"})}
+});
 document.addEventListener("keydown",e=>{if(e.target.tagName==="INPUT")return;if(e.key==="ArrowRight")nextStep();else if(e.key==="ArrowLeft")prevStep();else if(e.key===" "){e.preventDefault();togglePlay()}else if(e.key.toLowerCase()==="r")loadConcept(concepts[Math.floor(Math.random()*concepts.length)])});
 
 document.getElementById("shareBtn").onclick=()=>{
@@ -2093,6 +2798,7 @@ const recInt=setInterval(()=>{
 },stepDuration);
 };
 
+initAurora();
 const dayIndex=Math.floor((Date.now()-new Date(new Date().getFullYear(),0,0))/86400000)%concepts.length;
 const savedId=localStorage.getItem("cv_lastConcept");
 const savedConcept=savedId?concepts.find(c=>c.id===savedId):null;
@@ -2102,6 +2808,11 @@ updateStreak();
 buildCalendar();
 renderBadges();
 if(document.getElementById("quizBtn")) document.getElementById("quizBtn").onclick = openConceptQuiz;
+if(document.getElementById("drillBtn")) document.getElementById("drillBtn").onclick = startCodeDrill;
+if(document.getElementById("galleryBtn")) document.getElementById("galleryBtn").onclick = toggleGallery;
+if(document.getElementById("zenExit")) document.getElementById("zenExit").onclick = toggleZen;
+const _tz=toggleZen;toggleZen=function(){_tz();zenScrollHook();};
+if(document.getElementById("shortcutsBtn")) document.getElementById("shortcutsBtn").onclick = openShortcuts;
 if(document.getElementById("bigOBtn")) document.getElementById("bigOBtn").onclick = openBigOModal;
 if(document.getElementById("battleBtn")) document.getElementById("battleBtn").onclick = openBattleModal;
 if(window.location.search.includes("embed=true") || window.location.hash.includes("embed=true")) document.body.classList.add("embed-mode");
@@ -2128,5 +2839,18 @@ if(concept) loadConcept(concept);
 <script>
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js")}
 </script>
+<div id="cvToastHost"></div>
+<button class="quiz-btn" id="zenExit" aria-label="Exit zen mode">✕ Zen</button>
+<button class="quiz-btn" id="shortcutsBtn" aria-label="Keyboard shortcuts">⌨️</button>
+<div class="modal-backdrop" id="shortcutsModal" style="display:none">
+  <div class="modal-card glass" style="max-width:420px;width:95%">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="color:var(--accent2);margin:0">⌨️ Shortcuts</h3>
+      <button class="secondary" onclick="document.getElementById('shortcutsModal').style.display='none'" style="padding:4px 10px;cursor:pointer">✕</button>
+    </div>
+    <div id="shortcutsBody"></div>
+  </div>
+</div>
+<div id="topProgressBar"></div>
 </body>
 </html>

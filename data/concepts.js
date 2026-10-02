@@ -1,4 +1,4 @@
-// 53 Visual Programming Concepts (Data Structures, Algorithms, Patterns, Web APIs, Modern AI)
+// Phase 5 additions
 const concepts = [
   {
     "id": "stack",
@@ -1730,6 +1730,161 @@ const concepts = [
       },
       {
         "type": "drop"
+      }
+    ]
+  },
+  {
+    "id": "a_star",
+    "title": {
+      "en": "A* Pathfinding",
+      "fa": "مسیریابی A*"
+    },
+    "category": "algo",
+    "level": "advanced",
+    "desc": {
+      "en": "Informed graph search that picks the node minimizing f(n) = g(n) + h(n): exact cost so far plus a heuristic estimate to the goal. Finds the shortest path while exploring far fewer nodes than Dijkstra.",
+      "fa": "جستجوی آگاهانه گراف که گره‌ای را انتخاب می‌کند که f(n) = g(n) + h(n) را کمینه کند: هزینه دقیق طی‌شده به‌علاوه تخمین heuristic تا هدف. کوتاه‌ترین مسیر را با بررسی گره‌های بسیار کمتر از دیکسترا پیدا می‌کند."
+    },
+    "code": "function astar(start, goal, h) {\n  const open = new MinHeap();\n  const g = new Map([[start, 0]]);\n  open.push([start, h(start, goal)]);\n  while (!open.isEmpty()) {\n    const [node, f] = open.pop();\n    if (node === goal) return g.get(node);\n    for (const [next, w] of neighbors(node)) {\n      const tentative = g.get(node) + w;\n      if (tentative < (g.get(next) ?? Infinity)) {\n        g.set(next, tentative);\n        open.push([next, tentative + h(next, goal)]);\n      }\n    }\n  }\n  return -1; // unreachable\n}",
+    "steps": [
+      {
+        "type": "start"
+      },
+      {
+        "type": "frontier"
+      },
+      {
+        "type": "expand"
+      },
+      {
+        "type": "goal"
+      },
+      {
+        "type": "path"
+      }
+    ]
+  },
+  {
+    "id": "n_queens",
+    "title": {
+      "en": "N-Queens Backtracking",
+      "fa": "بازگشت‌زنی N-وزیر"
+    },
+    "category": "algo",
+    "level": "advanced",
+    "desc": {
+      "en": "Place N queens on an N×N board so none attack each other. Backtracking prunes a branch as soon as a conflict is detected, turning a naive N^N brute force into a fast search.",
+      "fa": "N وزیر را روی صفحه N×N طوری بچین که هیچ‌کدام به دیگری حمله نکنند. بازگشت‌زنی به‌محض تشخیص تناقض شاخه را هرس می‌کند و جستجوی N^N را به جستجویی سریع تبدیل می‌کند."
+    },
+    "code": "function solveNQueens(n) {\n  const cols = new Set(), d1 = new Set(), d2 = new Set();\n  const board = [];\n  function place(row) {\n    if (row === n) return true;\n    for (let col = 0; col < n; col++) {\n      if (cols.has(col) || d1.has(row - col) || d2.has(row + col)) continue;\n      cols.add(col); d1.add(row - col); d2.add(row + col);\n      board.push(col);\n      if (place(row + 1)) return true;\n      board.pop(); cols.delete(col); d1.delete(row - col); d2.delete(row + col);\n    }\n    return false; // backtrack\n  }\n  place(0);\n  return board;\n}",
+    "steps": [
+      {
+        "type": "place"
+      },
+      {
+        "type": "safe"
+      },
+      {
+        "type": "conflict"
+      },
+      {
+        "type": "backtrack"
+      },
+      {
+        "type": "solved"
+      }
+    ]
+  },
+  {
+    "id": "kadane",
+    "title": {
+      "en": "Kadane (Max Subarray)",
+      "fa": "کادان (بیشینه زیرآرایه)"
+    },
+    "category": "algo",
+    "level": "intermediate",
+    "desc": {
+      "en": "Finds the contiguous subarray with the largest sum in O(n): at each element decide whether to extend the current run or restart from the element itself.",
+      "fa": "بزرگ‌ترین مجموع یک زیرآرایه پیوسته را در O(n) پیدا می‌کند: در هر عنصر تصمیم می‌گیرد که ادامه بدهد یا از خود عنصر شروع کند."
+    },
+    "code": "function maxSubarray(nums) {\n  let best = nums[0], cur = nums[0];\n  for (let i = 1; i < nums.length; i++) {\n    cur = Math.max(nums[i], cur + nums[i]);\n    best = Math.max(best, cur);\n  }\n  return best;\n}\n\nmaxSubarray([-2,1,-3,4,-1,2,1,-5,4]); // 6",
+    "steps": [
+      {
+        "type": "init"
+      },
+      {
+        "type": "extend"
+      },
+      {
+        "type": "restart"
+      },
+      {
+        "type": "best"
+      },
+      {
+        "type": "result"
+      }
+    ]
+  },
+  {
+    "id": "union_find",
+    "title": {
+      "en": "Union-Find (DSU)",
+      "fa": "ساختار اجتماع-یافتن (DSU)"
+    },
+    "category": "ds",
+    "level": "advanced",
+    "desc": {
+      "en": "Tracks a partition of elements into disjoint sets. Union joins two sets and Find returns a set's representative; with union-by-rank plus path compression operations are almost O(1).",
+      "fa": "تقسیم عناصر به مجموعه‌های ناهم‌پوشان را نگه می‌دارد. Union دو مجموعه را ادغام و Find نماینده مجموعه را برمی‌گرداند؛ با union-by-rank و فشرده‌سازی مسیر عملیات تقریباً O(1) است."
+    },
+    "code": "class DSU {\n  constructor(n) {\n    this.parent = Array.from({ length: n }, (_, i) => i);\n    this.rank = new Array(n).fill(0);\n  }\n  find(x) {\n    if (this.parent[x] !== x) this.parent[x] = this.find(this.parent[x]);\n    return this.parent[x]; // path compression\n  }\n  union(a, b) {\n    const ra = this.find(a), rb = this.find(b);\n    if (ra === rb) return false;\n    if (this.rank[ra] < this.rank[rb]) this.parent[ra] = rb;\n    else if (this.rank[ra] > this.rank[rb]) this.parent[rb] = ra;\n    else { this.parent[rb] = ra; this.rank[ra]++; }\n    return true;\n  }\n}",
+    "steps": [
+      {
+        "type": "makeSet"
+      },
+      {
+        "type": "union"
+      },
+      {
+        "type": "find"
+      },
+      {
+        "type": "compress"
+      },
+      {
+        "type": "connected"
+      }
+    ]
+  },
+  {
+    "id": "monotonic_stack",
+    "title": {
+      "en": "Monotonic Stack",
+      "fa": "پشته یکنوا"
+    },
+    "category": "ds",
+    "level": "intermediate",
+    "desc": {
+      "en": "A stack kept in sorted order that solves 'next greater element' style problems in a single O(n) pass: pop while the top is smaller, then the new element becomes the next greater for everything popped.",
+      "fa": "پشته‌ای با ترتیب مرتب که مسائل سبک «عنصر بزرگ‌تر بعدی» را در یک پیمایش O(n) حل می‌کند: تا وقتی سر پشته کوچک‌تر است pop کن، سپس عنصر جدید برای همه‌ی popشده‌ها بزرگ‌تر بعدی می‌شود."
+    },
+    "code": "function nextGreater(nums) {\n  const res = new Array(nums.length).fill(-1);\n  const stack = []; // indices, values decreasing\n  for (let i = 0; i < nums.length; i++) {\n    while (stack.length && nums[stack[stack.length - 1]] < nums[i]) {\n      res[stack.pop()] = nums[i];\n    }\n    stack.push(i);\n  }\n  return res;\n}\n\nnextGreater([2,1,2,4,3,1]); // [4,2,4,-1,-1,-1]",
+    "steps": [
+      {
+        "type": "push"
+      },
+      {
+        "type": "pop"
+      },
+      {
+        "type": "resolve"
+      },
+      {
+        "type": "peek"
+      },
+      {
+        "type": "done"
       }
     ]
   }

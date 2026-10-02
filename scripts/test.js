@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-console.log('Running CodeVis Complete Test Suite across all 53 concepts...');
+console.log('Running CodeVis Complete Test Suite across all 58 concepts...');
 
 const html = fs.readFileSync('index.html', 'utf8');
 
@@ -108,7 +108,7 @@ console.log('1. Script parsed & evaluated in sandbox.');
 // 2. Validate concepts
 const concepts = vm.runInContext('concepts', ctx);
 console.log(`2. Total concepts loaded: ${concepts.length}`);
-if (concepts.length !== 53) throw new Error(`Expected 53 concepts, got ${concepts.length}`);
+if (concepts.length !== 58) throw new Error(`Expected 58 concepts, got ${concepts.length}`);
 
 let totalStepsTested = 0;
 
@@ -126,7 +126,7 @@ let totalStepsTested = 0;
   });
 });
 
-console.log(`3. Verified all 53 concepts across ${totalStepsTested} rendered step passes (EN & FA).`);
+console.log(`3. Verified all 58 concepts across ${totalStepsTested} rendered step passes (EN & FA).`);
 
 // 4. Test Badges
 const badges = vm.runInContext('badges', ctx);
@@ -153,7 +153,7 @@ console.log('7. Quiz modal opens & renders correctly for both standard and AI co
 
 // 6. Test Multi-language snippets
 ['js', 'py', 'cpp'].forEach(l => {
-  ['vector_embeddings', 'perceptron', 'token_bucket', 'websocket', 'stack'].forEach(id => {
+  ['vector_embeddings', 'perceptron', 'token_bucket', 'websocket', 'stack', 'a_star', 'n_queens', 'kadane', 'union_find', 'monotonic_stack'].forEach(id => {
     const code = vm.runInContext(`getCodeForLang(concepts.find(x => x.id === "${id}"), "${l}")`, ctx);
     if (!code || code.length === 0) throw new Error(`Missing ${l} snippet for ${id}`);
   });
@@ -209,6 +209,21 @@ concepts.forEach(c => {
     vm.runInContext(`currentStep = ${s}; renderVariableInspector();`, ctx);
   }
 });
-console.log('13. Variable Inspector verified across all steps of all 53 concepts.');
+console.log('13. Variable Inspector verified across all steps of all 58 concepts.');
 
-console.log('\n--- ALL 13 TEST SUITE SUITES PASSED PERFECTLY! ---');
+// 10. Test Code Drill engine
+console.log('14. Testing Code Drill engine...');
+vm.runInContext('Object.keys(quizzes).forEach(id => seenIds.add(id)); drillState = null; startCodeDrill();', ctx);
+const drillTotal = vm.runInContext('drillState.total', ctx);
+if (drillTotal !== 5) throw new Error('Drill should pick 5 questions, got ' + drillTotal);
+// answer all correctly
+for (let i = 0; i < 5; i++) {
+  const ans = vm.runInContext('quizzes[drillState.queue[drillState.idx]].ans', ctx);
+  vm.runInContext('drillState.score++; drillState.idx++; renderDrill();', ctx);
+}
+const drillScore = vm.runInContext('drillState.score', ctx);
+if (drillScore !== 5) throw new Error('Drill score should be 5, got ' + drillScore);
+if (!unlockedBadges.has('drill_master')) throw new Error('Badge drill_master was not unlocked after perfect drill!');
+console.log('15. Code Drill passed: perfect score unlocked drill_master badge!');
+
+console.log('\n--- ALL 15 TEST SUITES PASSED PERFECTLY! ---');

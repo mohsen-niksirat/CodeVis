@@ -1,4 +1,4 @@
-const CACHE="codevis-v3";
+const CACHE="codevis-v7";
 const ASSETS=["./","./index.html","./manifest.json","./icon.svg"];
 
 self.addEventListener("install",e=>{
