@@ -10,7 +10,7 @@ let patches = 0;
 if (!html.includes('id="resetBtn"')) {
   html = html.replace(
     '<button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>',
-    `<button class="theme-btn" id="resetBtn" aria-label="Reset Progress" title="Reset All Data" onclick="if(confirm('Are you sure you want to reset all progress?')) { localStorage.clear(); location.reload(); }">??</button>
+    `<button class="theme-btn" id="resetBtn" aria-label="Reset Progress" title="Reset All Data" style="color:var(--red);border-color:var(--red);" onclick="if(confirm('Are you sure you want to reset all progress?')) { localStorage.clear(); location.reload(); }">&#x1F5D1;</button>
 <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>`
   );
   patches++;
@@ -20,12 +20,23 @@ if (!html.includes('id="resetBtn"')) {
 if (!html.includes('changeFontSize')) {
   html = html.replace(
     '<div class="code-tabs" id="codeLangTabs"',
-    `<div style="display:flex;gap:4px;align-items:center;">
+    `<div style="display:flex;gap:12px;align-items:center;">
+<div style="display:flex;gap:4px;align-items:center;">
 <button onclick="changeFontSize(-1)" class="code-tab" title="Decrease Font Size" aria-label="Decrease Font Size">A-</button>
 <button onclick="changeFontSize(1)" class="code-tab" title="Increase Font Size" aria-label="Increase Font Size">A+</button>
-<button onclick="toggleCodeCollapse()" class="code-tab" title="Toggle Code Visibility" id="codeToggleBtn" aria-label="Toggle Code">??</button>
+<button onclick="toggleCodeCollapse()" class="code-tab" title="Toggle Code Visibility" id="codeToggleBtn" aria-label="Toggle Code">Hide</button>
 </div>
 <div class="code-tabs" id="codeLangTabs"`
+  );
+  // Close the new flex wrapper after codeLangTabs
+  html = html.replace(
+    '</button>\r\n</div>\r\n</div>',
+    '</button>\r\n</div>\r\n</div>\r\n</div>'
+  );
+  // Also try replacing \n in case it uses LF
+  html = html.replace(
+    '</button>\n</div>\n</div>',
+    '</button>\n</div>\n</div>\n</div>'
   );
   
   const jsLogic = `
@@ -40,10 +51,10 @@ function toggleCodeCollapse() {
     const tb = document.getElementById('codeToggleBtn');
     if (cb.style.display === 'none') {
         cb.style.display = 'block';
-        tb.textContent = '??'; 
+        tb.textContent = 'Hide'; 
     } else {
         cb.style.display = 'none';
-        tb.textContent = '??';
+        tb.textContent = 'Show';
     }
 }
 `;
@@ -56,17 +67,15 @@ function toggleCodeCollapse() {
 
 // Feature 4: Concept Bookmarking (Favorites)
 if (!html.includes('id="favFilter"')) {
-  // Add filter option
   html = html.replace(
     '<select id="categoryFilter"',
     `<select id="favFilter" aria-label="Favorites filter" style="width:110px">
 <option value="all">All</option>
-<option value="fav">?? Favorites</option>
+<option value="fav">&#x2B50; Favorites</option>
 </select>
 <select id="categoryFilter"`
   );
   
-  // Add favorite toggle on card
   const favLogic = `
 let favorites = new Set(JSON.parse(localStorage.getItem('cv_favorites') || '[]'));
 function toggleFav(id, e) {
@@ -82,7 +91,6 @@ function toggleFav(id, e) {
     favLogic + '\n// Dynamic Variable Inspector'
   );
   
-  // Modify gallery card rendering to include star button
   html = html.replace(
     'const seen=seenIds.has(c.id);',
     'const seen=seenIds.has(c.id); const isFav=favorites.has(c.id);'
@@ -93,10 +101,9 @@ function toggleFav(id, e) {
   );
   html = html.replace(
     '${t(c.title)}</h3>`',
-    `\${t(c.title)}</h3><div onclick="toggleFav('\\\${c.id}', event)" style="position:absolute;top:8px;right:8px;cursor:pointer;font-size:1.2rem;z-index:10;opacity:0.8">\${isFav?"\u2B50":"\u2606"}</div>\``
+    `\${t(c.title)}</h3><div onclick="toggleFav('\\\${c.id}', event)" style="position:absolute;top:8px;right:8px;cursor:pointer;font-size:1.2rem;z-index:10;opacity:0.8">\${isFav?"\\u2B50":"\\u2606"}</div>\``
   );
   
-  // Hook the new filter into filterAndLoad
   html = html.replace(
     'q=document.getElementById("search").value.toLowerCase();',
     'q=document.getElementById("search").value.toLowerCase(),fav=document.getElementById("favFilter").value;'
@@ -115,16 +122,14 @@ function toggleFav(id, e) {
 
 // Feature 5: Study Timer (Pomodoro) Widget
 if (!html.includes('pomodoroTimer')) {
-  // Inject timer UI into the header-right area
   html = html.replace(
     '<div class="streak" id="streak" aria-label="Current streak"></div>',
     `<div class="streak" id="streak" aria-label="Current streak"></div>
 <div id="pomodoroTimer" class="streak" style="cursor:pointer;display:flex;align-items:center;gap:4px;" title="Focus Timer" onclick="toggleTimer()">
-<span id="timerDisplay">?? 25:00</span>
+<span id="timerDisplay">&#x23F1; 25:00</span>
 </div>`
   );
   
-  // Inject timer JS
   const timerLogic = `
 let timerInt = null;
 let timeLeft = 25 * 60;
@@ -135,7 +140,7 @@ function toggleTimer() {
         clearInterval(timerInt);
         timerInt = null;
     } else {
-        if (timeLeft === 0) timeLeft = isWorking ? 5 * 60 : 25 * 60; // toggle work/break
+        if (timeLeft === 0) timeLeft = isWorking ? 5 * 60 : 25 * 60;
         timerInt = setInterval(() => {
             timeLeft--;
             if (timeLeft <= 0) {
@@ -156,7 +161,7 @@ function updateTimerDisplay() {
     if (!d) return;
     const m = Math.floor(Math.max(0, timeLeft) / 60).toString().padStart(2, '0');
     const s = (Math.max(0, timeLeft) % 60).toString().padStart(2, '0');
-    d.textContent = (isWorking ? "?? " : "?? ") + m + ":" + s;
+    d.innerHTML = (isWorking ? "&#x1F345; " : "&#x2615; ") + m + ":" + s;
     if (timerInt) d.style.color = "var(--accent)";
     else d.style.color = "";
 }
