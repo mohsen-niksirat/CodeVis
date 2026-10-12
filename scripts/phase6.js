@@ -160,7 +160,7 @@ function cvToast(msg,dur=2600){
 }
 
 // ---------- 5. hooks: updateStats, markDone, badge fanfare, gallery btn, applyLang ----------
-if (!html.includes('updateXp();renderGallery();')) {
+if (!html.includes('if(typeof renderGallery==="function")renderGallery();')) {
   html = html.replace(
     'document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}',
     'document.getElementById("statConceptsLbl").textContent=t("conceptsSeen")}\r\nif(typeof updateXp==="function")updateXp();\r\nif(typeof renderGallery==="function")renderGallery();'

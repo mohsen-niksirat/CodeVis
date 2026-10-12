@@ -549,6 +549,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Active Learning Concept Quiz Controller
 let quizScore = parseInt((typeof localStorage !== 'undefined' ? localStorage.getItem("cv_quiz_score") : null) || "0");
+let quizAttempts = parseInt((typeof localStorage !== 'undefined' ? localStorage.getItem("cv_quiz_attempts") : null) || "0");
 
 function openConceptQuiz() {
   if (typeof quizzes === 'undefined' || !currentConcept) return;
@@ -617,6 +618,10 @@ function renderQuizUI(qData) {
     btn.onclick = () => {
       const selected = parseInt(btn.dataset.idx);
       const isCorrect = selected === qData.ans;
+      quizAttempts++;
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem("cv_quiz_attempts", quizAttempts.toString());
+      }
       const feedback = document.getElementById("quizFeedback");
       optBtns.forEach(b => b.disabled = true);
       
@@ -626,7 +631,7 @@ function renderQuizUI(qData) {
         feedback.style.display = "block";
         feedback.style.background = "rgba(63, 185, 80, 0.15)";
         feedback.style.color = "var(--green)";
-        feedback.innerHTML = `<strong>✓ ${t("correct") || "Correct!"}</strong> ${explanation}`;
+        feedback.innerHTML = `<strong>✓ ${t("correct") || "Correct!"}</strong> ${explanation} <span style="opacity:.75;font-size:.85rem">· ${quizScore}/${quizAttempts}</span>`;
         quizScore++;
         if (typeof localStorage !== 'undefined') {
           localStorage.setItem("cv_quiz_score", quizScore.toString());
@@ -645,7 +650,7 @@ function renderQuizUI(qData) {
         feedback.style.display = "block";
         feedback.style.background = "rgba(248, 81, 73, 0.15)";
         feedback.style.color = "var(--red)";
-        feedback.innerHTML = `<strong>✗ ${t("incorrect") || "Not quite."}</strong> ${explanation}`;
+        feedback.innerHTML = `<strong>✗ ${t("incorrect") || "Not quite."}</strong> ${explanation} <span style="opacity:.75;font-size:.85rem">· ${quizScore}/${quizAttempts}</span>`;
         if (typeof playTone === 'function') {
           playTone(220, 0.15, "sawtooth");
         }
@@ -1625,103 +1630,7 @@ function getBestStreak(){let b=0,c=0,sd=[...doneDays].sort();for(let i=0;i<sd.le
 if(typeof updateXp==="function")updateXp();
 if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
 if(typeof renderHero==="function")renderHero();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
-if(typeof renderGallery==="function")renderGallery();
-if(typeof updateXp==="function")updateXp();
 if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
 if(typeof renderGallery==="function")renderGallery();
@@ -1774,33 +1683,6 @@ function markDone(){if(window.cvCelebrated&&window.cvCelebrated.has(currentConce
 
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
-// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 let soundEnabled = (typeof localStorage !== 'undefined' ? localStorage.getItem("cv_sound") : null) === "true";
 let audioCtx = null;
@@ -2988,7 +2870,9 @@ const codeLines=(currentConcept?currentConcept.code:"").split("\n");
 codeLines.forEach((l,i)=>sx.fillText(l,790,230+i*20));
 
 // Social Share Gamification Pill Badge
-const streakBadgeText = "🔥 " + (typeof getStreak==='function'?getStreak():0) + "d streak  |  🏆 " + (typeof unlockedBadges!=='undefined'?unlockedBadges.size:0) + " badges  |  💡 " + (typeof quizScore!=='undefined'?quizScore:0) + " pts";
+const _qa=(typeof quizAttempts!=='undefined'?quizAttempts:0);
+const _acc=_qa>0?Math.round(((typeof quizScore!=='undefined'?quizScore:0)/_qa)*100):0;
+const streakBadgeText = "🔥 " + (typeof getStreak==='function'?getStreak():0) + "d streak  |  🏆 " + (typeof unlockedBadges!=='undefined'?unlockedBadges.size:0) + " badges  |  🎯 " + _acc + "%";
 sx.fillStyle = "rgba(139, 92, 246, 0.25)";
 sx.beginPath();
 if (sx.roundRect) sx.roundRect(850, 24, 310, 36, 18); else sx.rect(850, 24, 310, 36);

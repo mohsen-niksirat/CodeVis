@@ -212,7 +212,10 @@ console.log('[5/10] Quizzes, Badges, Complexity, Big-O, Battle, and Vars logic s
 // 6. Update Audio with playSonification
 const audioSrc = fs.readFileSync(path.resolve(__dirname, '../src/audio.js'), 'utf8')
   .replace(/if\s*\(typeof module[^}]+}\s*}/g, '');
-const toneStart = html.indexOf('let soundEnabled =');
+html = html.replace(/(?:\/\/\s*Web Audio Melodic Tone[^\r\n]*\r?\n\s*)+/g, '// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer\r\n');
+const audioComment = '// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer';
+let toneStart = html.indexOf(audioComment);
+if (toneStart === -1) toneStart = html.indexOf('let soundEnabled =');
 const toneEnd = html.indexOf('const sBtn = document.getElementById("soundBtn");');
 if (toneStart !== -1 && toneEnd !== -1) {
   html = html.substring(0, toneStart) + audioSrc.replace(/\n/g, '\r\n') + '\r\n' + html.substring(toneEnd);
