@@ -1,6 +1,6 @@
 /* CodeVis Service Worker — network-first for navigation, stale-while-revalidate for assets.
  * Cache name auto-versioned; bump CV_VERSION to invalidate old caches on deploy. */
-const CV_VERSION = "codevis-4ab6e006e7";
+const CV_VERSION = "codevis-45ef672da7";
 const CACHE = CV_VERSION;
 const CORE = ["./", "./index.html", "./manifest.json", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 const ORIGIN = self.location.origin;

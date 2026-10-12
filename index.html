@@ -326,10 +326,10 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
 <button id="playBtn" aria-label="Play animation"></button>
 <button class="secondary" id="nextBtn" aria-label="Next step"></button>
 <span id="speedPresets" class="speed-presets">
-<button class="secondary preset" data-mult="2">0.5x</button>
-<button class="secondary preset active" data-mult="1">1x</button>
-<button class="secondary preset" data-mult="0.5">2x</button>
-<button class="secondary preset" data-mult="0.25">4x</button>
+<button class="secondary preset" data-mult="2" aria-label="Half speed">0.5x</button>
+<button class="secondary preset active" data-mult="1" aria-label="Normal speed">1x</button>
+<button class="secondary preset" data-mult="0.5" aria-label="Double speed">2x</button>
+<button class="secondary preset" data-mult="0.25" aria-label="Quadruple speed">4x</button>
 </span>
 <button class="secondary" id="loopBtn" title="Auto-replay">🔁 Loop</button>
 <span class="step-indicator" id="stepInfo" aria-live="polite"></span>
@@ -356,9 +356,9 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
 </div>
 <div class="calendar">
 <div class="cal-header">
-<button class="cal-nav" id="calPrev">&lt;</button>
+<button class="cal-nav" id="calPrev" aria-label="Previous month">&lt;</button>
 <h3 id="progressTitle"></h3>
-<button class="cal-nav" id="calNext">&gt;</button>
+<button class="cal-nav" id="calNext" aria-label="Next month">&gt;</button>
 </div>
 <div class="cal-grid" id="calGrid"></div>
 </div>
@@ -411,7 +411,7 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
   <div class="modal-card" style="max-width:640px;width:95%">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <h3 style="font-size:1.1rem;color:var(--accent2);margin:0">📊 <span id="bigOModalTitle">Big-O Complexity Guide</span></h3>
-      <button class="secondary" onclick="closeBigOModal()" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button>
+      <button class="secondary" onclick="closeBigOModal()" aria-label="Close dialog" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button>
     </div>
     <div id="bigOConceptInfo"></div>
     <canvas id="bigOCanvas" width="600" height="260" style="width:100%;height:auto;border-radius:8px;border:1px solid var(--border);display:block"></canvas>
@@ -425,7 +425,7 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
   <div class="modal-card" style="max-width:750px;width:95%">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <h3 style="font-size:1.1rem;color:var(--accent2);margin:0">⚔️ <span id="battleModalTitle">Algorithm Showdown Arena</span></h3>
-      <button class="secondary" onclick="closeBattleModal()" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button>
+      <button class="secondary" onclick="closeBattleModal()" aria-label="Close dialog" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
       <button class="secondary" id="matchupSortBtn" onclick="setupBattleMatchup('sort')" style="padding:6px 14px;border-radius:8px;cursor:pointer">🔀 QuickSort vs BubbleSort</button>
@@ -482,6 +482,7 @@ totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:
 };
 let lang=localStorage.getItem("cv_lang")||"en";
 function t(k){return i18n[lang][k]||i18n.en[k]}
+
 
 
 
@@ -1373,7 +1374,7 @@ function renderDrill() {
   let optHtml = opts.map((o, i) => '<button class="secondary drill-opt" data-i="' + i + '" style="text-align:start;padding:10px 14px;border-radius:8px">' + (i + 1) + '. ' + o + '</button>').join("");
   box.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
     '<h3 style="font-size:1.05rem;color:var(--accent2);margin:0">⚡ ' + (t("drill") || "Code Drill") + ' — ' + (drillState.idx + 1) + '/' + drillState.total + '</h3>' +
-    '<button class="secondary" onclick="closeDrillModal()" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button></div>' +
+    '<button class="secondary" onclick="closeDrillModal()" aria-label="Close dialog" style="padding:4px 10px;border-radius:6px;cursor:pointer">✕</button></div>' +
     '<div style="font-size:.75rem;color:#8b949e;margin-bottom:8px">' + title + '</div>' +
     '<p style="font-size:.95rem;margin-bottom:14px;line-height:1.5">' + qText + '</p>' +
     '<div style="display:flex;flex-direction:column;gap:8px" id="drillOpts">' + optHtml + '</div>' +
@@ -1778,6 +1779,8 @@ if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
 if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
 if(typeof renderHero==="function")renderHero();
 if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
@@ -1840,6 +1843,7 @@ function markDone(){if(window.cvCelebrated&&window.cvCelebrated.has(currentConce
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
 
+// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
@@ -3173,7 +3177,7 @@ if("serviceWorker" in navigator && /^https?:$/.test(window.location.protocol)){
   <div class="modal-card glass" style="max-width:420px;width:95%">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <h3 style="color:var(--accent2);margin:0">⌨️ Shortcuts</h3>
-      <button class="secondary" onclick="document.getElementById('shortcutsModal').style.display='none'" style="padding:4px 10px;cursor:pointer">✕</button>
+      <button class="secondary" onclick="document.getElementById('shortcutsModal').style.display='none'" aria-label="Close dialog" style="padding:4px 10px;cursor:pointer">✕</button>
     </div>
     <div id="shortcutsBody"></div>
   </div>
