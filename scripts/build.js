@@ -174,6 +174,8 @@ const badgesSrc = fs.readFileSync(path.resolve(__dirname, '../src/badges.js'), '
   .replace(/if\s*\(typeof module[^}]+}\s*}/g, '');
 const quizSrc = fs.readFileSync(path.resolve(__dirname, '../src/quiz.js'), 'utf8')
   .replace(/if\s*\(typeof module[^}]+}\s*}/g, '');
+const smartquizSrc = fs.readFileSync(path.resolve(__dirname, '../src/smartquiz.js'), 'utf8')
+  .replace(/if\s*\(typeof module[^}]+}\s*}/g, '');
 
 const fullDataBlock = `
 const quizzes = ${JSON.stringify(quizzes)};
@@ -182,6 +184,7 @@ const complexityData = ${JSON.stringify(complexityData)};
 
 ${badgesSrc}
 ${quizSrc}
+${smartquizSrc}
 ${varsSrc}
 ${bigOSrc}
 ${battleSrc}

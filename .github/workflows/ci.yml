@@ -11,18 +11,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Validate HTML/JS syntax
+
+      - name: Syntax-check every JS file (src/, data/, scripts/, sw.js)
         run: |
-          node -e "const fs=require('fs');const h=fs.readFileSync('index.html','utf8');const i=h.indexOf('<script>');const j=h.indexOf('</script>',i);new Function(h.substring(i+8,j));console.log('JS syntax OK')"
+          echo '--- Checking data/ ---' && for f in data/*.js; do node --check "$f" && echo "  OK $f"; done
+          echo '--- Checking src/ ---' && for f in src/*.js; do node --check "$f" && echo "  OK $f"; done
+          echo '--- Checking scripts/ ---' && for f in scripts/*.js; do node --check "$f" && echo "  OK $f"; done
+          echo '--- Checking sw.js ---' && node --check sw.js && echo "  OK sw.js"
+
+      - name: Inline JS syntax of index.html
+        run: |
+          node -e "const fs=require('fs');const h=fs.readFileSync('index.html','utf8');const i=h.indexOf('<script>');const j=h.indexOf('</script>',i);if(i<0||j<0)throw new Error('no <script> block');new Function(h.substring(i+8,j));console.log('inline JS syntax OK')"
+
+      - name: Build idempotency — npm run build produces zero diff
+        run: |
+          set -e
+          sha1sum index.html > /tmp/before.sha
+          npm run build > /tmp/build.log 2>&1 || (cat /tmp/build.log && exit 1)
+          sha1sum -c /tmp/before.sha && echo 'BUILD IS IDEMPOTENT' || (echo 'BUILD NOT IDEMPOTENT — source/output drift!' && git diff index.html && exit 1)
+
       - name: Run Concept Simulation Test Suite
         run: node scripts/test.js
+
+      - name: Verify SEO & PWA essentials
+        run: |
+          node -e "const fs=require('fs');const h=fs.readFileSync('index.html','utf8');const m=JSON.parse(fs.readFileSync('manifest.json','utf8'));const req=['property=\"og:title\"','name=\"description\"','rel=\"canonical\"'];const miss=req.filter(r=>!h.includes(r));if(miss.length){console.error('MISSING SEO:',miss.join(','));process.exit(1)}if(!m.icons.some(i=>i.sizes&&i.sizes.includes('192x192'))){console.error('MISSING PWA 192 icon');process.exit(1)}console.log('SEO/PWA checks pass')"
+
       - name: Run Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: 'https://mohsen-niksirat.github.io/CodeVis/'
           budgetPath: './lighthouse-budget.json'
+          # keep continue-on-error so flaky network/Lighthouse doesn't block merges;
+          # budgets are still reported in the action summary.
         continue-on-error: true

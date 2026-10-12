@@ -8,6 +8,11 @@ function openConceptQuiz() {
   if (!modal) return;
   
   if (!qData) {
+    // Prefer a real, metadata-driven question over the generic fallback.
+    if (typeof generateSmartQuiz === 'function') {
+      const smart = generateSmartQuiz(currentConcept, lang);
+      if (smart) { renderQuizUI(smart); modal.style.display = "flex"; return; }
+    }
     // Generate a default question if specific quiz not defined
     renderQuizUI({
       q: { en: `What is the core purpose of ${currentConcept.title.en}?`, fa: `هدف اصلی مفهوم ${currentConcept.title.fa || currentConcept.title.en} چیست؟` },
