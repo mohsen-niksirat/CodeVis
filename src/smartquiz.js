@@ -28,9 +28,8 @@ const _rotKey = (concept) => `cv_sq_rot_${concept.id}`;
 const _nextVariant = (concept, count) => {
   try {
     const seen = parseInt(localStorage.getItem(_rotKey(concept)) || '0', 10);
-    const next = (seen + 1) % count;
-    localStorage.setItem(_rotKey(concept), String(next));
-    return next;
+    localStorage.setItem(_rotKey(concept), String((seen + 1) % count));
+    return seen % count;
   } catch (_) {
     return _seedOf(concept) % count; // sandbox / private mode fallback
   }

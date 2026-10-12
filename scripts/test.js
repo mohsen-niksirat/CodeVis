@@ -151,6 +151,34 @@ vm.runInContext('currentConcept = concepts[0]; openConceptQuiz();', ctx);
 vm.runInContext('currentConcept = concepts.find(x => x.id === "vector_embeddings"); openConceptQuiz();', ctx);
 console.log('7. Quiz modal opens & renders correctly for both standard and AI concepts.');
 
+// 5b. Smart-quiz coverage: every concept WITHOUT a custom quiz must get a real
+// complexity-backed question from generateSmartQuiz (previously zero coverage).
+vm.runInContext('if (typeof generateSmartQuiz === "undefined") throw new Error("generateSmartQuiz missing from bundle");', ctx);
+const noQuizIds = vm.runInContext('concepts.filter(c => !quizzes[c.id]).map(c => c.id)', ctx);
+console.log(`7b. Concepts without custom quizzes: ${noQuizIds.length}`);
+if (noQuizIds.length === 0) throw new Error('Expected some concepts to use the smart-quiz path');
+noQuizIds.forEach(id => {
+  const q = vm.runInContext(`generateSmartQuiz(concepts.find(x => x.id === "${id}"), "en")`, ctx);
+  if (!q || !q.q.en || !q.opts.en || !q.exp.en) throw new Error(`Bad smart quiz schema for ${id}`);
+  if (!Array.isArray(q.opts.en) || q.opts.en.length < 3) throw new Error(`Need >=3 options for ${id}`);
+  if (typeof q.ans !== 'number' || q.ans < 0 || q.ans >= q.opts.en.length) throw new Error(`Bad answer index for ${id}`);
+  // Variant-agnostic: the picked answer must equal the concept's time OR space metadata.
+  const compT = vm.runInContext(`complexityData["${id}"].time`, ctx);
+  const compS = vm.runInContext(`complexityData["${id}"].space`, ctx);
+  const picked = q.opts.en[q.ans];
+  if (picked !== compT && picked !== compS) throw new Error(`Answer not backed by metadata for ${id} (picked ${picked})`);
+  if (!q.exp.en.includes(compT) || !q.exp.en.includes(compS)) throw new Error(`Explanation missing metadata for ${id}`);
+});
+// Rotation: the same concept must serve the OTHER variant on its next open.
+const rotCheck = vm.runInContext(`(() => { const c0 = concepts.find(x => x.id === "${noQuizIds[0]}"); const a = generateSmartQuiz(c0, "en"); const b = generateSmartQuiz(c0, "en"); return a.q.en !== b.q.en; })()`, ctx);
+if (!rotCheck) throw new Error(`Variant rotation did not alternate for ${noQuizIds[0]}`);
+// End-to-end: opening the quiz on a no-custom-quiz concept renders a real MCQ.
+// (Pin lang=en — the render loop above leaves lang=fa, whose question text is Persian.)
+vm.runInContext('lang = "en"; currentConcept = concepts.find(x => x.id === "' + noQuizIds[1] + '"); openConceptQuiz();', ctx);
+const quizHtml = vm.runInContext('document.getElementById("quizCardBody").innerHTML', ctx);
+if (!quizHtml || (!quizHtml.includes('complexity') && !quizHtml.includes('space'))) throw new Error('Smart-quiz fallback did not render a real question');
+console.log(`7c. Smart-quiz fallback verified for all ${noQuizIds.length} no-custom-quiz concepts (e.g. ${noQuizIds[0]}), with rotation.`);
+
 // 6. Test Multi-language snippets
 ['js', 'py', 'cpp'].forEach(l => {
   ['vector_embeddings', 'perceptron', 'token_bucket', 'websocket', 'stack', 'a_star', 'n_queens', 'kadane', 'union_find', 'monotonic_stack'].forEach(id => {
