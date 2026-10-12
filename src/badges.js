@@ -17,6 +17,7 @@ function checkBadges(stats) {
     else if (b.id === "web_guru" && stats.seenIds && stats.seenIds.has("websocket") && stats.seenIds.has("token_bucket")) unlocked = true;
     else if (b.id === "quiz_whiz" && stats.quizScore >= 3) unlocked = true;
     else if (b.id === "speed_demon" && stats.battleDone) unlocked = true;
+    else if (b.id === "drill_master" && stats.drillPerfect) unlocked = true;
 
     if (unlocked) {
       unlockedBadges.add(b.id);
