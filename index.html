@@ -18,6 +18,9 @@
 <meta name="twitter:image" content="https://mohsen-niksirat.github.io/CodeVis/og-image.png">
 <link rel="canonical" href="https://mohsen-niksirat.github.io/CodeVis/">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 <meta name="robots" content="index, follow">
 <meta name="keywords" content="visualization, algorithms, data structures, computer science, education, interactive learning">
 <meta name="author" content="Mohsen Niksirat">
@@ -479,6 +482,7 @@ totalDays:"کل روزها",bestStreak:"بهترین استریک",conceptsSeen:
 };
 let lang=localStorage.getItem("cv_lang")||"en";
 function t(k){return i18n[lang][k]||i18n.en[k]}
+
 
 
 
@@ -1725,6 +1729,8 @@ if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
 if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
+if(typeof renderGallery==="function")renderGallery();
+if(typeof updateXp==="function")updateXp();
 if(typeof renderHero==="function")renderHero();
 if(typeof renderGallery==="function")renderGallery();
 if(typeof updateXp==="function")updateXp();
@@ -1787,6 +1793,7 @@ function markDone(){if(window.cvCelebrated&&window.cvCelebrated.has(currentConce
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 
 
+// Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
 // Web Audio Melodic Tone, Chord & Harmonic Sonification Synthesizer
