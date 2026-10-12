@@ -29,7 +29,7 @@ A new concept every day — from data structures to design patterns — with ste
 - GitHub-style activity heatmap, Zen mode, keyboard shortcuts (press ?)
 - Code Drill mode (grounded random quiz) with Drill Master badge
 
-- **58 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, OS concepts, and modern AI models (Vector Embeddings, Perceptron, Token Bucket) — plus A* Pathfinding, N-Queens Backtracking, Kadane's Max Subarray, Union-Find (DSU), and Monotonic Stack
+- **62 interactive concepts**: Data structures, algorithms, patterns, DP, web APIs, OS concepts, and modern AI models (Vector Embeddings, Perceptron, Token Bucket) — plus A* Pathfinding, N-Queens Backtracking, Kadane's Max Subarray, Union-Find (DSU), and Monotonic Stack
 - **Algorithm Showdown Arena (⚔️ Race Mode)**: Pit algorithms head-to-head (QuickSort vs BubbleSort, Binary Search vs Linear Search) in real-time with step comparison, operations metrics, and speedup winner detection
 - **Big-O Complexity Analyzer & Cheat Sheet**: Dynamic Time and Space complexity badges on concepts with an interactive canvas modal plotting $O(1), O(\log n), O(n), O(n \log n), O(n^2), O(2^n)$ curves
 - **Dynamic Variable Inspector (Step Debugger HUD)**: Real-time pill indicators tracking live algorithm variables (`low, mid, high, pivot, w1, w2, z, tokens`) on every animation step
@@ -76,7 +76,7 @@ A new concept every day — from data structures to design patterns — with ste
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
 # Open index.html directly in your browser, or:
-npm test        # Run 13-suite simulation tests across all 53 concepts & battle arena
+npm test        # Run 15-suite simulation tests across all 62 concepts & battle arena
 npm run build   # Compile modular data & src into index.html
 ```
 
@@ -90,7 +90,7 @@ npm run build   # Compile modular data & src into index.html
 
 CodeVis maintains single-file zero-dependency distribution while having a clean modular developer structure:
 
-- `data/concepts.js`: Definitions and step sequences for all 53 visual concepts
+- `data/concepts.js`: Definitions and step sequences for all 62 visual concepts
 - `data/complexity.js`: Big-O Time and Space metadata and runtime step variables
 - `data/quizzes.js`: Active recall comprehension quizzes (EN/FA)
 - `data/badges.js`: Achievement specifications and unlocking requirements
@@ -142,7 +142,7 @@ The daily concept is selected based on the day of the year, ensuring a consisten
 - [x] Enhanced social share card with streak and badge metrics
 - [x] Modern AI & system concepts (Vector Embeddings, Perceptron, Token Bucket Rate Limiting)
 - [x] Modular codebase architecture (`src/`, `data/`, `scripts/build.js`, `scripts/test.js`)
-- [x] 53 total concepts fully rendered and tested in EN and FA
+- [x] 62 total concepts fully rendered and tested in EN and FA
 
 ### Phase 5: Advanced Algorithms & Code Drill Mode ✅
 - [x] 5 new advanced concepts: A* Pathfinding, N-Queens Backtracking, Kadane (Max Subarray), Union-Find (DSU), Monotonic Stack — each with canvas renderer, Big-O metadata, Variable Inspector steps, active-recall quiz, and Python/C++ snippets
@@ -182,7 +182,7 @@ MIT
 
 ## ویژگی‌ها
 
-- **۵۸ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، برنامه‌نویسی پویا (DP)، وب، سیستم‌عامل و مدل‌های نوین هوش مصنوعی — به‌علاوه مسیریابی A*، بازگشت‌زنی N-وزیر، کادان (بیشینه زیرآرایه)، ساختار اجتماع-یافتن (DSU) و پشته یکنوا
+- **۶۲ مفهوم تعاملی**: ساختمان داده، الگوریتم‌ها، الگوهای طراحی، برنامه‌نویسی پویا (DP)، وب، سیستم‌عامل و مدل‌های نوین هوش مصنوعی — به‌علاوه مسیریابی A*، بازگشت‌زنی N-وزیر، کادان (بیشینه زیرآرایه)، ساختار اجتماع-یافتن (DSU) و پشته یکنوا
 - **میدان رقابت الگوریتم‌ها (⚔️ Race Mode)**: شبیه‌سازی همزمان و دوطرفه رقابت دو الگوریتم (QuickSort در برابر BubbleSort، جستجوی دودویی در برابر خطی) با شمارش دقیق مقایسه‌ها، جابجایی‌ها و اعلام سرعت برنده
 - **راهنمای پیچیدگی زمانی و حافظه (Big-O Cheat Sheet)**: نشان‌های داینامیک پیچیدگی روی هدر هر مفهوم همراه با مدال تعاملی رسم منحنی‌های $O(1)، O(\log n)، O(n)، O(n \log n)، O(n^2)، O(2^n)$
 - **نمایشگر زنده متغیرها (Step Debugger HUD)**: کپسول‌های پویای وضعیت متغیرهای زنده الگوریتم (`low, mid, high, pivot, w1, w2, z, tokens`) در هر گام انیمیشن
@@ -214,7 +214,7 @@ MIT
 git clone https://github.com/mohsen-niksirat/CodeVis.git
 cd CodeVis
 # باز کردن مستقیم index.html در مرورگر یا:
-npm test        # اجرای تست‌های ۱۵گانه شبیه‌سازی روی تمام ۵۸ مفهوم، میدان نبرد و آزمون برق‌آسا
+npm test        # اجرای تست‌های ۱۵گانه شبیه‌سازی روی تمام ۶۲ مفهوم، میدان نبرد و آزمون برق‌آسا
 npm run build   # کامپایل ماژول‌های src و data درون index.html
 ```
 
@@ -261,7 +261,7 @@ npm run build   # کامپایل ماژول‌های src و data درون index.
 - [x] کارت اشتراک‌گذاری اجتماعی پیشرفته همراه با آمار و استریک
 - [x] مفاهیم مدرن هوش مصنوعی و سیستم (بردار تعبیه، پرسپترون، سطل توکن)
 - [x] معماری ماژولار و اسکریپت‌های بیلد و تست بدون پکیج‌های خارجی
-- [x] رندر و اعتبارسنجی کامل ۵۸ مفهوم به دو زبان فارسی و انگلیسی
+- [x] رندر و اعتبارسنجی کامل ۶۲ مفهوم به دو زبان فارسی و انگلیسی
 
 ### فاز ۵: الگوریتم‌های پیشرفته و آزمون برق‌آسا ✅
 - [x] ۵ مفهوم جدید: مسیریابی A*، بازگشت‌زنی N-وزیر، کادان، اجتماع-یافتن (DSU) و پشته یکنوا — هرکدام با رندر Canvas، متادیتای Big-O، بازرس متغیر، آزمون درک مطلب و کد Python/C++
@@ -274,7 +274,7 @@ npm run build   # کامپایل ماژول‌های src و data درون index.
 - [x] نمایشگر متغیرهای زنده الگوریتم (Step Debugger HUD)
 - [x] سونیکیشن صوتی مقادیر آرایه در الگوریتم‌های مرتب‌سازی
 - [x] حالت ویجت و جاسازی در وبلاگ‌ها (`?embed=true`)
-- [x] ۱۳ مجموعه تست خودکار و پاس شدن ۱۰۰٪ در CI
+- [x] ۱۵ مجموعه تست خودکار و پاس شدن ۱۰۰٪ در CI
 
 ## مشارکت
 

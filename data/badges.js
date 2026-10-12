@@ -59,6 +59,12 @@ const badges = [
     icon: "⚔️",
     title: { en: "Speed Demon", fa: "قهرمان سرعت" },
     desc: { en: "Simulated an algorithm showdown in the Battle Arena", fa: "شاهد رقابت زنده دو الگوریتم در میدان نبرد بودید" }
+  },
+  {
+    id: "drill_master",
+    icon: "⚡",
+    title: { en: "Drill Master", fa: "استاد آزمون برق‌آسا" },
+    desc: { en: "Achieved a perfect score in a 5-question Code Drill", fa: "در آزمون برق‌آسای ۵ سؤالی نمره کامل گرفتید" }
   }
 ];
 

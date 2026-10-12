@@ -6,6 +6,21 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b5cf6">
+<meta name="description" content="Learn computer science visually — 62 interactive canvas animations for data structures, algorithms, and CS concepts with gamification, quizzes, and bilingual (EN/FA) support.">
+<meta property="og:title" content="CodeVis — Visual Programming Concepts">
+<meta property="og:description" content="62 interactive CS concept animations with step-by-step playback, quizzes, gamification, and bilingual support.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mohsen-niksirat.github.io/CodeVis/">
+<meta property="og:image" content="https://mohsen-niksirat.github.io/CodeVis/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CodeVis — Visual Programming Concepts">
+<meta name="twitter:description" content="62 interactive CS concept animations — data structures, algorithms, and more.">
+<meta name="twitter:image" content="https://mohsen-niksirat.github.io/CodeVis/og-image.png">
+<link rel="canonical" href="https://mohsen-niksirat.github.io/CodeVis/">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="visualization, algorithms, data structures, computer science, education, interactive learning">
+<meta name="author" content="Mohsen Niksirat">
 <title>CodeVis</title>
 <!-- Phase 0: Add new concept renderer by adding entry to `concepts` array (line ~150) and creating an `else if(id==="newId"){...}` block in drawStep() -->
 <style>
@@ -76,17 +91,7 @@ input[type="range"]{background:var(--surface);color:var(--text)}
 .playground-bar button{padding:4px 12px;font-size:.8rem;border-radius:6px;cursor:pointer}
 .playground-title{font-size:.8rem;font-weight:600;color:var(--accent2)}
 
-.quiz-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent2);padding:6px 14px;border-radius:20px;font-size:.85rem;cursor:pointer;font-weight:600;transition:opacity .2s}
-.quiz-btn:hover{opacity:.75}
-.badges-shelf{width:100%;max-width:900px;padding:0 20px 24px}
-.badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:10px}
-.badge-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;transition:all .2s;cursor:default}
-.badge-item.unlocked{border-color:var(--accent);box-shadow:0 0 10px rgba(139,92,246,0.25)}
-.badge-item.locked{opacity:0.35;filter:grayscale(1)}
-.badge-icon{font-size:1.5rem}
-.badge-name{font-size:.75rem;font-weight:600;color:var(--text)}
-.modal-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px}
-.modal-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:480px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+
 
 .quiz-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent2);padding:6px 14px;border-radius:20px;font-size:.85rem;cursor:pointer;font-weight:600;transition:opacity .2s}
 .quiz-btn:hover{opacity:.75}
@@ -247,10 +252,10 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
 [data-theme="light"] body.fs-active .step-controls{background:rgba(240,242,246,.92)}
 </style>
 </head>
+<body>
 <canvas id="auroraCanvas" aria-hidden="true"></canvas>
 <div class="cv-bg-wrap" id="cvBg" aria-hidden="true"><div class="cv-gradient-blob cv-blob-1"></div><div class="cv-gradient-blob cv-blob-2"></div><div class="cv-gradient-blob cv-blob-3"></div></div>
 <canvas id="confettiCanvas"></canvas>
-<body>
 <header>
 <h1>CodeVis</h1>
 <div class="header-right">
@@ -259,7 +264,7 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
     <button class="quiz-btn" id="drillBtn" aria-label="Code Drill mode">⚡ <span id="drillBtnLabel">Code Drill</span></button>
     <button class="quiz-btn" id="quizBtn" aria-label="Take concept quiz">💡 Quiz</button>
     <button class="sound-btn" id="soundBtn" aria-label="Toggle sound" title="Sound Effects">🔇</button>
-<button class="theme-btn" id="resetBtn" aria-label="Reset Progress" title="Reset All Data" style="color:var(--red);border-color:var(--red);" onclick="if(confirm('Are you sure you want to reset all progress?')) { localStorage.clear(); location.reload(); }">&#x1F5D1;</button>
+<button class="theme-btn" id="resetBtn" aria-label="Reset Progress" title="Reset All Data" style="color:var(--red);border-color:var(--red);" onclick="if(confirm('Are you sure you want to reset all progress?')) { for(const k of Object.keys(localStorage)) if(k.startsWith('cv_')) localStorage.removeItem(k); location.reload(); }">&#x1F5D1;</button>
 <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>
 <button class="lang-btn" id="langBtn" aria-label="Toggle language">فا</button>
 <div class="streak" id="streak" aria-label="Current streak"></div>
@@ -452,7 +457,7 @@ body.fs-active #animCanvas{max-width:100%;height:auto;max-height:62vh}
   <div class="modal-card" id="drillCardBody" style="max-width:560px;width:95%"></div>
 </div>
 <canvas id="shareCanvas" width="1200" height="675"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
 <script>
 const i18n={
 en:{

@@ -10,7 +10,7 @@ let patches = 0;
 if (!html.includes('id="resetBtn"')) {
   html = html.replace(
     '<button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>',
-    `<button class="theme-btn" id="resetBtn" aria-label="Reset Progress" title="Reset All Data" style="color:var(--red);border-color:var(--red);" onclick="if(confirm('Are you sure you want to reset all progress?')) { localStorage.clear(); location.reload(); }">&#x1F5D1;</button>
+    `<button class="theme-btn" id="resetBtn" aria-label="Reset Progress" title="Reset All Data" style="color:var(--red);border-color:var(--red);" onclick="if(confirm('Are you sure you want to reset all progress?')) { for(const k of Object.keys(localStorage)) if(k.startsWith('cv_')) localStorage.removeItem(k); location.reload(); }">&#x1F5D1;</button>
 <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"></button>`
   );
   patches++;
