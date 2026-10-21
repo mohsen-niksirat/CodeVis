@@ -222,9 +222,6 @@ select,input[type="text"]{scrollbar-width:thin}
 #streakPill,#streakBadge,.streak{font-weight:700}
 [data-theme="light"] .glass{background:rgba(255,255,255,.45)!important}
 
-/* cvPolishFix2 */
-pre, code, .code-area, .codeblock {white-space:pre-wrap!important;word-break:break-word!important;overflow-x:hidden!important}
-.glass{border:1px solid rgba(190,160,255,.65)!important;box-shadow:0 0 0 1px rgba(139,92,246,.25),0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.35),0 0 24px rgba(139,92,246,.15)!important}/* cvPolishFix3 */\r\npre, code, .code-area, .codeblock, .code-block {white-space:pre-wrap!important;word-break:break-word!important;overflow-x:hidden!important}.glass{border:1px solid rgba(190,160,255,.65)!important;box-shadow:0 0 0 1px rgba(139,92,246,.25),0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.35),0 0 24px rgba(139,92,246,.15)!important}
 /* cvPolishFix4 */
 pre, code, .code-area, .codeblock, .code-block {white-space:pre-wrap!important;word-break:break-word!important;overflow-x:hidden!important}
 .glass{border:1px solid rgba(190,160,255,.65)!important;box-shadow:0 0 0 1px rgba(139,92,246,.25),0 12px 48px rgba(0,0,0,.55),inset 0 1.5px 0 rgba(220,200,255,.35),0 0 24px rgba(139,92,246,.15)!important}
@@ -746,6 +743,65 @@ function generateSmartQuiz(concept, lang) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { generateSmartQuiz };
 }
+
+let currentFontSize = 0.8;
+function changeFontSize(delta) {
+  currentFontSize = Math.max(0.5, Math.min(1.5, currentFontSize + delta * 0.1));
+  const cb = document.getElementById("codeBlock");
+  if (cb) cb.style.fontSize = currentFontSize.toFixed(1) + "rem";
+}
+function toggleCodeCollapse() {
+  const cb = document.getElementById("codeBlock");
+  const tb = document.getElementById("codeToggleBtn");
+  if (!cb || !tb) return;
+  const hidden = cb.style.display === "none";
+  cb.style.display = hidden ? "block" : "none";
+  tb.textContent = hidden ? "Hide" : "Show";
+}
+
+let favorites = new Set(JSON.parse(localStorage.getItem("cv_favorites") || "[]"));
+function toggleFav(id, e) {
+  if (e) e.stopPropagation();
+  if (favorites.has(id)) favorites.delete(id); else favorites.add(id);
+  localStorage.setItem("cv_favorites", JSON.stringify([...favorites]));
+  filterAndLoad();
+  renderGallery();
+}
+function isFavorite(id) { return favorites.has(id); }
+
+let timerInt = null;
+let timeLeft = 25 * 60;
+let isWorking = true;
+function toggleTimer() {
+  if (timerInt) {
+    clearInterval(timerInt);
+    timerInt = null;
+  } else {
+    if (timeLeft <= 0) timeLeft = isWorking ? 25 * 60 : 5 * 60;
+    timerInt = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        clearInterval(timerInt);
+        timerInt = null;
+        isWorking = !isWorking;
+        timeLeft = isWorking ? 25 * 60 : 5 * 60;
+        if (typeof cvToast === "function") cvToast(isWorking ? "Break over, back to work!" : "Time for a break!");
+        if (typeof playSonification === "function" && soundEnabled) playSonification(800, 0.1, 1000);
+      }
+      updateTimerDisplay();
+    }, 1000);
+  }
+  updateTimerDisplay();
+}
+function updateTimerDisplay() {
+  const d = document.getElementById("timerDisplay");
+  if (!d) return;
+  const m = Math.floor(Math.max(0, timeLeft) / 60).toString().padStart(2, "0");
+  const s = (Math.max(0, timeLeft) % 60).toString().padStart(2, "0");
+  d.textContent = (isWorking ? "\u{1F345} " : "\u{2615} ") + m + ":" + s;
+  d.style.color = timerInt ? "var(--accent)" : "";
+}
+updateTimerDisplay();
 
 // Dynamic Variable Inspector (Step Debugger HUD)
 function renderVariableInspector() {

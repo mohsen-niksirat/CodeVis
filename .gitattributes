@@ -1,0 +1,13 @@
+# The single-file build (scripts/build.js) and the phase scripts splice with \r\n,
+# so index.html is intentionally CRLF. Pin it so `npm run build` → `git diff` is
+# stable for a Windows checkout and the Linux CI idempotency gate alike.
+index.html text eol=crlf
+
+*.js   text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.css  text eol=lf
+
+*.png binary
+*.ico binary
