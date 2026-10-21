@@ -3,7 +3,7 @@
   "version": "3.1.1",
   "description": "Visual, interactive, and bilingual computer science concept animations with gamification and active recall.",
   "scripts": {
-    "build": "node scripts/build.js && node scripts/phase6.js && node scripts/phase14.js && node scripts/phase15.js && node scripts/phase16.js && node scripts/phase17.js && node scripts/phase26.js && node scripts/phase27.js && node scripts/phase25.js && node scripts/swver.js",
+    "build": "node scripts/build.js && node scripts/phase6.js && node scripts/phase14.js && node scripts/phase15.js && node scripts/phase16.js && node scripts/phase17.js && node scripts/phase26.js && node scripts/phase27.js && node scripts/phase28.js && node scripts/phase25.js && node scripts/swver.js",
     "build:audit": "node scripts/audit.js",
     "test": "node scripts/test.js"
   },

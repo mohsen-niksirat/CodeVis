@@ -35,6 +35,9 @@ jobs:
           npm run build > /tmp/build.log 2>&1 || (cat /tmp/build.log && exit 1)
           sha1sum -c /tmp/before.sha && echo 'BUILD IS IDEMPOTENT' || (echo 'BUILD NOT IDEMPOTENT — source/output drift!' && git diff index.html && exit 1)
 
+       - name: Run audit gate (no inline handler may call an undefined global)
+        run: node scripts/audit.js
+
       - name: Run Concept Simulation Test Suite
         run: node scripts/test.js
 
